@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js - platformer demo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<script src="threejs/three.js"></script>
+		<script src="threejs/PointerLockControls.js"></script>
+		
+		<script src="player_movements.js"></script>
+		<script src="scene.js"></script>
+		
+		<script>
+		var container = document.getElementById("container");
+		
+		var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+		if ( havePointerLock ) {
+
+			var element = document.body;
+
+			var pointerlockchange = function ( event ) {
+
+				if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+					controlsEnabled = true;
+					controls.enabled = true;
+
+
+				} else {
+
+					controls.enabled = false;
+
+					container.style.display = '-webkit-box';
+					container.style.display = '-moz-box';
+					container.style.display = 'box';
+
+				}
+
+			};
+
+			// Hook pointer lock state change events
+			document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+			document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+			document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+
+			container.addEventListener( 'click', function ( event ) {
+
+				// Ask the browser to lock the pointer
+				element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+				element.requestPointerLock();
+
+			}, false );
+
+		} else {
+
+			container.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+		}
+
+
+		// start the game
+
+		var start = function( gameLoop, gameViewportSize ) {
+			var resize = function() {
+				var viewport = gameViewportSize();
+				renderer.setSize( viewport.width, viewport.height );
+				camera.aspect = viewport.width / viewport.height;
+				camera.updateProjectionMatrix();
+			};
+
+			window.addEventListener( 'resize', resize, false );
+			resize();
+
+			var lastTimeStamp;
+			var render = function( timeStamp ) {
+				var timeElapsed = lastTimeStamp ? timeStamp - lastTimeStamp : 0; lastTimeStamp = timeStamp;
+
+				// call our game loop with the time elapsed since last rendering, in ms
+				gameLoop( timeElapsed );
+
+				renderer.render( scene, camera );
+				requestAnimationFrame( render );
+			};
+
+			requestAnimationFrame( render );
+		};
+
+
+		var gameLoop = function( dt ) {
+			resetPlayer();
+			keyboardControls();
+			jumpPads();
+			applyPhysics( dt );
+			updateCamera();
+		};
+
+		var gameViewportSize = function() { return {
+			width: window.innerWidth, height: window.innerHeight
+		}};
+
+		document.getElementById( 'container' ).appendChild( renderer.domElement );
+		
+
+		start( gameLoop, gameViewportSize );
+		</script>
+	</body>
+</html>
