@@ -15,7 +15,7 @@ function makeSkybox( urls, size ) {
         })
     );
 }
-
+var platform;
 function makePlatform( jsonUrl, textureUrl, textureQuality ) {
     var placeholder = new THREE.Object3D();
 
@@ -28,7 +28,7 @@ function makePlatform( jsonUrl, textureUrl, textureQuality ) {
 
         geometry.computeFaceNormals();
 
-        var platform = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial({ map : texture }) );
+        platform = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial({ map : texture }) );
 
         platform.name = "platform";
 
@@ -37,6 +37,7 @@ function makePlatform( jsonUrl, textureUrl, textureQuality ) {
 
     return placeholder;
 }
+
 
 var renderer = new THREE.WebGLRenderer({ antialias : true });
 renderer.setPixelRatio( window.devicePixelRatio );
@@ -60,8 +61,15 @@ scene.add( makeSkybox( [
     'textures/cube/skybox/nz.jpg'  // front
 ], 8000 ));
 
+
 scene.add( makePlatform(
     'models/platform/platform.json',
     'models/platform/platform.jpg',
     renderer.getMaxAnisotropy()
 ));
+
+var gem = new THREE.BoxGeometry(5,5,5);
+var mat = new THREE.MeshBasicMaterial();
+var mesh = new THREE.Mesh(gem,mat);
+
+scene.add(mesh);

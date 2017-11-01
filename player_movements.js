@@ -169,8 +169,10 @@ var updateCamera = (function() {
         euler.x = motion.rotation.x;
         euler.y = motion.rotation.y;
         // controls.getObject().quaternion.setFromEuler( euler );
-
-        controls.getObject().position.copy( motion.position );
+        var delta = 0.1
+        controls.getObject().translateX( motion.velocity.x * delta );
+        controls.getObject().translateY( motion.velocity.y * delta );
+        controls.getObject().translateZ( motion.velocity.z * delta );
 
         controls.getObject().position.y += 3.0;
     };
