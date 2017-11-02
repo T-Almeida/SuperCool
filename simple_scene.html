@@ -11,44 +11,23 @@
 <script src="threejs/three.js"></script>
 <script src="threejs/PointerLockControls.js"></script>
 
-<script src="scene.js"></script>
+<script src="utils.js"></script>
 
-<script src="simple_player_movement.js"></script>
+<script src="scene.js"></script>
+<script src="player.js"></script>
+
 
 
 <script>
 
-
-
     var container = document.getElementById("container");
-
-    var controlsEnabled = false;
 
     var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
+    //verificar se o browser suporta pointerLock
     if ( havePointerLock ) {
 
         var element = document.body;
-
-        var pointerlockchange = function ( event ) {
-
-            if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
-
-                controlsEnabled = true;
-                controls.enabled = true;
-
-
-            } else {
-
-                controls.enabled = false;
-
-                container.style.display = '-webkit-box';
-                container.style.display = '-moz-box';
-                container.style.display = 'box';
-
-            }
-
-        };
 
         // Hook pointer lock state change events
         document.addEventListener( 'pointerlockchange', pointerlockchange, false );
@@ -71,50 +50,63 @@
     }
 
 
-    // resize
-
-    var gameViewportSize = function() { return {
-        width: window.innerWidth, height: window.innerHeight
-    }};
-
-    var resize = function() {
-        var viewport = gameViewportSize();
-        renderer.setSize( viewport.width, viewport.height );
-        camera.aspect = viewport.width / viewport.height;
-        camera.updateProjectionMatrix();
-    };
-
     window.addEventListener( 'resize', resize, false );
     resize();
 
-    // game systems code
-    function resetPlayer() {
-        if( controls.getObject().position.y < -10 ) {
-            controls.getObject().position.set( -2, 40, 25 );
-            velocity.multiplyScalar( 0 );
-        }
-    }
-
     document.getElementById( 'container' ).appendChild( renderer.domElement );
 
+
+    //CRIAR OBJETOS
+    objetos = [];
+
+    var objPlayer = new Player();
+    objetos.push(objPlayer);
+
+    //BIDING EVENTOS
     var pause = false;
+    document.addEventListener('keydown', function (event) {
+        switch (event.keycode){
+            case 80:
+                pause = !pause;
+                break;
+        }
+        objPlayer.onKeyDown(event);//keyDown do player
 
+    } , false);
 
-    function animate() {
+    document.addEventListener('keyup', function (event) {
+        objPlayer.onKeyUp(event);//keyUp do player
+    } , false);
+    //FIM BINDING EVENTOS
+
+    //CALL create e ADICIONAR OBJETOS AO CENARIO
+    for (var i = 0 ; i < objetos.length ; i++){
+        objetos[i].draw();
+        objetos[i].create();
+    }
+
+    var prevTime = performance.now();
+    function gameLoop() {
+        var time = performance.now();
+        var delta = ( time - prevTime ) / 1000;
+
         resetPlayer();
         if (!pause ) {
-            movement();
+            //Call update
+            for (var i = 0 ; i < objetos.length ; i++){
+                objetos[i].update(delta);
+            }
         }
-        requestAnimationFrame( animate );
+        prevTime = time;
+
+        requestAnimationFrame( gameLoop );
         renderer.render( scene, camera );
 
     }
 
 
 
-
-    keybiding();
-    animate();
+    gameLoop();
 
 </script>
 </body>

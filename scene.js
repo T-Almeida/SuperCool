@@ -42,20 +42,17 @@ function makePlatform( jsonUrl, textureUrl, textureQuality ) {
 }
 
 
-
-
 var renderer = new THREE.WebGLRenderer({ antialias : true });
 renderer.setPixelRatio( window.devicePixelRatio );
 
 var camera = new THREE.PerspectiveCamera( 60, 1, 0.1, 9000 );
 
-var scene = new THREE.Scene();
-
-
 // Mover a camara com o rato (FirstPerson)
 var controls = new THREE.PointerLockControls( camera );
 
-scene.add( controls.getObject() );
+var scene = new THREE.Scene();
+
+scene.add( controls.getObject() ); //adiciona camera
 
 scene.add( makeSkybox( [
     'textures/cube/skybox/px.jpg', // right
@@ -73,15 +70,11 @@ scene.add( makePlatform(
     renderer.getMaxAnisotropy()
 ));
 
-var gem = new THREE.BoxGeometry(5,5,5);
-var mat = new THREE.MeshBasicMaterial();
-var mesh = new THREE.Mesh(gem,mat);
-
-
+//RAYCAST DEBUG
 var gem = new THREE.BoxGeometry(0.1,0.5,0.1);
 var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
 var rayInter = new THREE.Mesh(gem, lineMaterial);
-scene.add(rayInter);
+rayInter.name = "DEBUG_RAY";
 
-scene.add(mesh);
+scene.add(rayInter);
