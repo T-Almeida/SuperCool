@@ -11,8 +11,10 @@
 <script src="threejs/three.js"></script>
 <script src="threejs/PointerLockControls.js"></script>
 
-<script src="simple_player_movement.js"></script>
 <script src="scene.js"></script>
+
+<script src="simple_player_movement.js"></script>
+
 
 <script>
 
@@ -87,7 +89,7 @@
 
     // game systems code
     function resetPlayer() {
-        if( controls.getObject().position.y < -123 ) {
+        if( controls.getObject().position.y < -10 ) {
             controls.getObject().position.set( -2, 40, 25 );
             velocity.multiplyScalar( 0 );
         }

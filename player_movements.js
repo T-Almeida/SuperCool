@@ -64,7 +64,7 @@ var keyboardControls = (function() {
             if( Math.abs( combined.y ) >= Math.abs( motion.velocity.y ) ) motion.velocity.y = combined.y;
             if( Math.abs( combined.z ) >= Math.abs( motion.velocity.z ) ) motion.velocity.z = combined.z;
 
-            //jump
+            //isJumping
              var vy = keysPressed[keys.SP] ? 0.7 : 0;
              motion.velocity.y += vy;
         }
@@ -80,7 +80,7 @@ var jumpPads = (function() {
             for( var j = 0, n = pads.length; j < n; j++ ) {
                 if ( pads[j].distanceToSquared( motion.position ) < 2.3 ) {
 
-                    // calculate velocity towards another side of platform from jump pad position
+                    // calculate velocity towards another side of platform from isJumping pad position
                     temp.copy( pads[j] ); temp.y = 0; temp.setLength( -0.8 ); temp.y = 0.7;
 
                     motion.airborne = true; motion.velocity.copy( temp ); break;
@@ -170,9 +170,7 @@ var updateCamera = (function() {
         euler.y = motion.rotation.y;
         // controls.getObject().quaternion.setFromEuler( euler );
         var delta = 0.1
-        controls.getObject().translateX( motion.velocity.x * delta );
-        controls.getObject().translateY( motion.velocity.y * delta );
-        controls.getObject().translateZ( motion.velocity.z * delta );
+        controls.getObject.position.copy(motion.position);
 
         controls.getObject().position.y += 3.0;
     };

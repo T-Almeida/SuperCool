@@ -15,6 +15,7 @@ function makeSkybox( urls, size ) {
         })
     );
 }
+var scale = 2;
 var platform;
 function makePlatform( jsonUrl, textureUrl, textureQuality ) {
     var placeholder = new THREE.Object3D();
@@ -32,11 +33,15 @@ function makePlatform( jsonUrl, textureUrl, textureQuality ) {
 
         platform.name = "platform";
 
+        platform.scale.set(scale, scale,scale);
+
         placeholder.add( platform );
     });
 
     return placeholder;
 }
+
+
 
 
 var renderer = new THREE.WebGLRenderer({ antialias : true });
@@ -71,5 +76,12 @@ scene.add( makePlatform(
 var gem = new THREE.BoxGeometry(5,5,5);
 var mat = new THREE.MeshBasicMaterial();
 var mesh = new THREE.Mesh(gem,mat);
+
+
+var gem = new THREE.BoxGeometry(0.1,0.5,0.1);
+var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+var rayInter = new THREE.Mesh(gem, lineMaterial);
+scene.add(rayInter);
 
 scene.add(mesh);

@@ -1,16 +1,17 @@
-var playerheight = 5;
-var playerJumping = false;
-var playerSpeed = 10;
-var playerJumpSpeed = 75.0;
+var playerheight = 10;
+var playerSpeed = 15;
 var palyerMass = 25.0;
-
-var playerMinThreashool = 1;
+var jumpSpeed = 25;
+var gravity = 2;
 
 var moveForward = false;
 var moveBackward = false;
 var moveLeft = false;
 var moveRight = false;
-var canJump = false;
+var jumpPress = false;
+
+var isJumping = false;
+
 
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
@@ -21,10 +22,6 @@ function keybiding() {
         switch (event.keyCode) {
             case 80:
                 pause = !pause;
-                break;
-            case 38: // up
-                if (canJump === true) velocity.y += 350;
-                canJump = false;
                 break;
             case 87: // w
                 moveForward = true;
@@ -46,11 +43,7 @@ function keybiding() {
                 break;
 
             case 32: // space
-                if (canJump === true) {
-                    velocity.y += playerJumpSpeed;
-                    playerJumping = true;
-                }
-                canJump = false;
+                jumpPress = true;
                 break;
 
         }
@@ -81,6 +74,10 @@ function keybiding() {
                 moveRight = false;
                 break;
 
+            case 32: // space
+                jumpPress = false;
+                break;
+
         }
 
     };
@@ -89,7 +86,7 @@ function keybiding() {
     document.addEventListener('keyup', onKeyUp, false);
 
     //colisao com o chao
-    raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 100 );
+    raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, playerheight + 0.5);
 }
 
 function movement() {
@@ -98,7 +95,7 @@ function movement() {
         var delta = ( time - prevTime ) / 1000;
 
 
-        velocity.y -= 9.8 * palyerMass * delta; // 100.0 = mass
+        velocity.y -= gravity * palyerMass * delta; // 100.0 = mass
 
         if ( moveForward ) controls.getObject().translateZ(-playerSpeed * delta);
         if ( moveBackward ) controls.getObject().translateZ(playerSpeed * delta)
@@ -106,33 +103,39 @@ function movement() {
         if ( moveLeft ) controls.getObject().translateX(-playerSpeed * delta);
         if ( moveRight ) controls.getObject().translateX(playerSpeed * delta);
 
+        if (jumpPress && !isJumping) {
+            velocity.y += jumpSpeed;
+            isJumping = true;
+        }
 
         raycaster.ray.origin.copy(controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
 
 
+
         var intersection = raycaster.intersectObject(platform);
 
 
+        rayInter.visible = false;
         if (intersection.length>=1){
-            if (controls.getObject().position.y <= intersection[0].point.y+playerheight+1) { //colisao com o chao
-
-                if (!playerJumping) {
+            rayInter.visible = true;
+            rayInter.position.copy(intersection[0].point);
+            if (controls.getObject().position.y-playerheight <= intersection[0].point.y) { //colisao com o chao
+                if (velocity.y<0) {
                     velocity.y = 0;
+                    controls.getObject().position.y = intersection[0].point.y+playerheight;
+                    isJumping=false; //deteta qd n esta a salar
                 }
-                playerJumping = false;
 
-                controls.getObject().position.y = intersection[0].point.y+playerheight;
-
-                canJump = true;
 
             }
         }
 
         controls.getObject().translateY(velocity.y * delta);
 
-        console.log("forca gravitica " + velocity.y);
-        console.log("player position x " + controls.getObject().position.x + " z "+  controls.getObject().position.z);
+        console.log("velocidade y " + velocity.y);
+        //console.log("isJumping " + isJumping);
+        //console.log("player position x " + controls.getObject().position.x + " y "+  controls.getObject().position.y +" z "+  controls.getObject().position.z);
 
         prevTime = time;
     }
