@@ -24,20 +24,26 @@ function pointerlockchange( event ) {
 // resize
 function gameViewportSize() { return {
     width: window.innerWidth, height: window.innerHeight
-}};
+}}
 
 function resize() {
     var viewport = gameViewportSize();
     renderer.setSize( viewport.width, viewport.height );
     camera.aspect = viewport.width / viewport.height;
     camera.updateProjectionMatrix();
-};
+}
 
 
 // game systems code
+var min_box = new THREE.Vector3(-50,-50,-50);
+var max_box = new THREE.Vector3(50,50,50);
 function resetPlayer() {
     if( controls.getObject().position.y < -10 ) {
         controls.getObject().position.set( -2, 40, 15 );
         objPlayer.velocity.multiplyScalar( 0 );
     }
+}
+
+function outsideMap(position){
+    return !(new THREE.Box3(min_box,max_box)).containsPoint(position);
 }

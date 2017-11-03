@@ -14,6 +14,7 @@
 <script src="utils.js"></script>
 
 <script src="scene.js"></script>
+<script src="bullet.js"></script>
 <script src="player.js"></script>
 
 
@@ -58,12 +59,14 @@
 
     //CRIAR OBJETOS
     objetos = [];
+    bullets = []; // array separado para acelerar as colisoes
 
     var objPlayer = new Player();
     objetos.push(objPlayer);
 
     //BIDING EVENTOS
     var pause = false;
+    //keyDown
     document.addEventListener('keydown', function (event) {
         switch (event.keycode){
             case 80:
@@ -73,10 +76,21 @@
         objPlayer.onKeyDown(event);//keyDown do player
 
     } , false);
-
+    //keyUp
     document.addEventListener('keyup', function (event) {
         objPlayer.onKeyUp(event);//keyUp do player
     } , false);
+    //mouse down
+    document.addEventListener( 'mousedown', function () {
+        console.log("mouse down");
+        objPlayer.mousedown();
+    }, false );
+
+    //mouse up
+    document.addEventListener( 'mouseup', function () {
+        objPlayer.mouseup();
+    }, false );
+
     //FIM BINDING EVENTOS
 
     //CALL create e ADICIONAR OBJETOS AO CENARIO
@@ -96,8 +110,13 @@
             for (var i = 0 ; i < objetos.length ; i++){
                 objetos[i].update(delta);
             }
+            for (var i = 0 ; i < bullets.length ; i++){
+                bullets[i].updateBullet(delta,i);
+            }
         }
         prevTime = time;
+
+        console.log("Objs em cena " + scene.children.length);
 
         requestAnimationFrame( gameLoop );
         renderer.render( scene, camera );

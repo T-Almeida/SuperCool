@@ -5,6 +5,7 @@ function Player() {
     this.palyerMass = 25.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
+    this.bulletSpeed = 20;
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -12,11 +13,20 @@ function Player() {
     this.moveRight = false;
     this.jumpPress = false;
 
-    this.isJumping = false;
+    this.mousePress = false;
 
     this.velocity = new THREE.Vector3();
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
+
+
+    this.mousedown = function () {
+        this.mousePress = true;
+    };
+    this.mouseup = function () {
+        this.mousePress = false;
+    };
+
 
     this.onKeyDown = function (event) {
 
@@ -81,6 +91,19 @@ function Player() {
 
     };
 
+    this.shootBullet = function () {
+        console.log("Shot ")
+        //criar bala
+
+        var dir = camera.getWorldDirection();
+        var bullet = new Bullet(controls.getObject().position,dir,this.bulletSpeed);
+        //draw bullet
+        scene.add(bullet.draw());
+
+        bullets.push(bullet); // para sofrer update no gameloop
+
+    };
+
     // FUNCAO APENAS EXECUTADO 1 VEZ NO GAME LOOP
     this.create = function () {
 
@@ -102,6 +125,8 @@ function Player() {
 
             if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta);
             if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta);
+
+            if (this.mousePress) this.shootBullet();
 
             if (this.jumpPress && !this.isJumping) {
                 this.velocity.y += this.jumpSpeed;
@@ -133,7 +158,7 @@ function Player() {
 
             controls.getObject().translateY(this.velocity.y * delta);
 
-            console.log("velocidade y " + this.velocity.y);
+            //console.log("velocidade y " + this.velocity.y);
             //console.log("isJumping " + isJumping);
             //console.log("player position x " + controls.getObject().position.x + " y "+  controls.getObject().position.y +" z "+  controls.getObject().position.z);
 
