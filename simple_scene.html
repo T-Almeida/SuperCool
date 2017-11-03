@@ -58,8 +58,7 @@
 
 
     //CRIAR OBJETOS
-    objetos = [];
-    bullets = []; // array separado para acelerar as colisoes
+    var objetos = [];
 
     var objPlayer = new Player();
     objetos.push(objPlayer);
@@ -73,29 +72,12 @@
                 pause = !pause;
                 break;
         }
-        objPlayer.onKeyDown(event);//keyDown do player
-
     } , false);
-    //keyUp
-    document.addEventListener('keyup', function (event) {
-        objPlayer.onKeyUp(event);//keyUp do player
-    } , false);
-    //mouse down
-    document.addEventListener( 'mousedown', function () {
-        console.log("mouse down");
-        objPlayer.mousedown();
-    }, false );
-
-    //mouse up
-    document.addEventListener( 'mouseup', function () {
-        objPlayer.mouseup();
-    }, false );
-
     //FIM BINDING EVENTOS
 
     //CALL create e ADICIONAR OBJETOS AO CENARIO
     for (var i = 0 ; i < objetos.length ; i++){
-        objetos[i].draw();
+        //scene.add(objetos[i].draw());
         objetos[i].create();
     }
 
@@ -108,16 +90,13 @@
         if (!pause ) {
             //Call update
             for (var i = 0 ; i < objetos.length ; i++){
-                objetos[i].update(delta);
-            }
-            for (var i = 0 ; i < bullets.length ; i++){
-                bullets[i].updateBullet(delta,i);
+                objetos[i].update(delta,i);
             }
         }
         prevTime = time;
 
         console.log("Objs em cena " + scene.children.length);
-
+        console.log("Objs aticos " + objetos.length);
         requestAnimationFrame( gameLoop );
         renderer.render( scene, camera );
 

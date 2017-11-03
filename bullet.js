@@ -8,11 +8,11 @@ function Bullet(posicaoOrigem,direcao,speed) {
     this.mesh.position.copy(posicaoOrigem);
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
-    this.updateBullet = function (delta,index) {
+    this.update = function (delta,objectIndex) {
         if (outsideMap(this.mesh.position)){ //destuir bala
             console.log("Bullet destroyed");
             scene.remove(this.mesh); //remover da cena
-
+            objetos.splice(objectIndex,1); //remover dos objetos ativos
             return ;
         }
 
