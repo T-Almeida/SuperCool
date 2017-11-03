@@ -37,6 +37,7 @@ function resize() {
 // game systems code
 var min_box = new THREE.Vector3(-80,-80,-80);
 var max_box = new THREE.Vector3(80,80,80);
+
 function resetPlayer() {
     if( controls.getObject().position.y < -10 ) {
         controls.getObject().position.set( -2, 40, 15 );
@@ -48,7 +49,6 @@ function outsideMap(position){
     return !(new THREE.Box3(min_box,max_box)).containsPoint(position);
 }
 
-function sumVector3(vector1,vector2){
-    return new THREE.Vector3(vector1.x+vector2.x,vector1.y+vector2.y,vector1.z+vector2.z);
-
+function strVector(v) {
+    return v.x + " " + v.y + " " + v.z;
 }

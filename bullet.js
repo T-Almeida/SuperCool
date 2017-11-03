@@ -16,6 +16,7 @@ function Bullet(posicaoOrigem,direcao,speed) {
         }
 
         this.mesh.translateOnAxis( direcao, speed * delta);
+
     };
 
     this.render = function () {

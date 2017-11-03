@@ -5,7 +5,7 @@ function Player() {
     this.palyerMass = 25.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
-    this.bulletSpeed = 20;
+
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -22,6 +22,13 @@ function Player() {
     this.weapon = null;
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
+
+    //add weapon to the player
+    this.weapon = new Weapon(new THREE.Vector3(0.4,-0.2,-0.5));
+    controls.getObject().children[0].add(this.weapon.mesh);
+
+    //adicionar o objeto como objeto ativo
+    objetos.push(this);
 
     this.mousedown = function () {
         self.mousePress = true;
@@ -94,21 +101,12 @@ function Player() {
 
     };
 
-    // FUNCAO APENAS EXECUTADO 1 VEZ NO GAME LOOP
-    this.create = function () {
-        //binding de eventos
-        document.addEventListener('keydown', this.onKeyDown , false);
-        document.addEventListener('keyup', this.onKeyUp , false);
-        document.addEventListener('mousedown', this.mousedown , false);
-        document.addEventListener('mouseup', this.mouseup , false);
 
-        //add weapon to the player
-        this.weapon = new Weapon(new THREE.Vector3(0,0,-0.5));
-
-        this.weapon.render();
-
-
-    };
+    //binding de eventos
+    document.addEventListener('keydown', this.onKeyDown , false);
+    document.addEventListener('keyup', this.onKeyUp , false);
+    document.addEventListener('mousedown', this.mousedown , false);
+    document.addEventListener('mouseup', this.mouseup , false);
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
@@ -123,7 +121,7 @@ function Player() {
             if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta);
             if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta);
 
-            if (this.mousePress) this.shootBullet();
+            if (this.mousePress) this.weapon.shootBullets(delta);
 
             if (this.jumpPress && !this.isJumping) {
                 this.velocity.y += this.jumpSpeed;
@@ -166,15 +164,4 @@ function Player() {
 
     };
 
-
-    this.shootBullet = function () {
-        console.log("Shot ")
-        //criar bala
-
-        var dir = camera.getWorldDirection();
-        var bullet = new Bullet(controls.getObject().position,dir,this.bulletSpeed);
-        //draw bullet
-        bullet.render();
-
-    };
 }

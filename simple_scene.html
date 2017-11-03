@@ -9,6 +9,7 @@
 
 <div id="container"></div>
 <script src="threejs/three.js"></script>
+<script src="threejs/stats.min.js"></script>
 <script src="threejs/PointerLockControls.js"></script>
 
 <script src="utils.js"></script>
@@ -62,7 +63,6 @@
     var objetos = [];
 
     var objPlayer = new Player();
-    objetos.push(objPlayer);
 
     //BIDING EVENTOS
     var pause = false;
@@ -76,16 +76,25 @@
     } , false);
     //FIM BINDING EVENTOS
 
-    //CALL create e ADICIONAR OBJETOS AO CENARIO
-    for (var i = 0 ; i < objetos.length ; i++){
-        //scene.add(objetos[i].draw());
-        objetos[i].create();
-    }
+
+    var stats1 = new Stats();
+    stats1.showPanel(0); // Panel 0 = fps
+    stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
+    document.body.appendChild(stats1.domElement);
+
+    var stats2 = new Stats();
+    stats2.showPanel(1); // Panel 1 = ms
+    stats2.domElement.style.cssText = 'position:absolute;top:0px;left:80px;';
+    document.body.appendChild(stats2.domElement);
 
     var prevTime = performance.now();
     function gameLoop() {
+        stats1.begin();
+        stats2.begin();
         var time = performance.now();
         var delta = ( time - prevTime ) / 1000;
+
+        //console.log("delta " + delta);
 
         resetPlayer();
         if (!pause ) {
@@ -96,14 +105,15 @@
         }
         prevTime = time;
 
-        console.log("Objs em cena THREE JS " + scene.children.length);
-       // console.log("Objs ativos " + objetos.length);
+        //console.log("Objs em cena THREE JS " + scene.children.length);
+        //console.log("Objs ativos " + objetos.length);
+
+        stats1.end();
+        stats2.end();
         requestAnimationFrame( gameLoop );
         renderer.render( scene, camera );
 
     }
-
-
 
     gameLoop();
 

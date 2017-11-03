@@ -2,33 +2,40 @@ function Weapon(position) {
 
     this.position = position;
 
+    this.bulletSpeed = 50;
+    this.rpm = 650;
+
+    this.coolDown = 0;
+
     this.mesh = new THREE.Mesh(
         new THREE.BoxGeometry(0.1,0.1,0.5),
         new THREE.MeshBasicMaterial({color:0x005555}));
 
-    //this.mesh.position.copy(posicaoOrigem);
+    this.mesh.position.copy(position);
 
-    this.create = function () {
-
-    };
+    objetos.push(this);
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
-
-        var camPosWorld = sumVector3(controls.getObject().position,camera.getWorldDirection());//se for com vetor de direcao da camera fica centrado
-
-        this.mesh.position.set( camPosWorld.x,
-            camPosWorld.y,
-            camPosWorld.z);
-        //this.mesh.lookAt(camDirWorld);
-
-        this.mesh.rotation.copy(camera.getWorldRotation());
+        //update  coolDown
+        if (this.coolDown>0) this.coolDown -= delta;
     };
 
+    this.shootBullets = function (delta) {
+        var worldVec = new THREE.Vector3(0,0,0);
+        this.mesh.localToWorld(worldVec);
 
 
-    this.render = function () {
-        scene.add(this.mesh);
-        objetos.push(this);
-    };
+        if (this.coolDown <= 0) {
+            //criar bala
+            var bullet = new Bullet(worldVec, camera.getWorldDirection(), this.bulletSpeed);
+            //draw bullet
+            bullet.render();
+            this.coolDown = 60/this.rpm;
+        }
+
+
+    }
+
+
 }
