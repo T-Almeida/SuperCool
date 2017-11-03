@@ -15,6 +15,7 @@
 
 <script src="scene.js"></script>
 <script src="bullet.js"></script>
+<script src="weapon.js"></script>
 <script src="player.js"></script>
 
 
@@ -95,8 +96,8 @@
         }
         prevTime = time;
 
-        console.log("Objs em cena " + scene.children.length);
-        console.log("Objs aticos " + objetos.length);
+        console.log("Objs em cena THREE JS " + scene.children.length);
+       // console.log("Objs ativos " + objetos.length);
         requestAnimationFrame( gameLoop );
         renderer.render( scene, camera );
 

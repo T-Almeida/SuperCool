@@ -1,4 +1,3 @@
-//Objeto especial para acelerar as colisoes
 function Bullet(posicaoOrigem,direcao,speed) {
 
     this.mesh = new THREE.Mesh(
@@ -19,7 +18,8 @@ function Bullet(posicaoOrigem,direcao,speed) {
         this.mesh.translateOnAxis( direcao, speed * delta);
     };
 
-    this.draw = function () {
-        return this.mesh;
+    this.render = function () {
+        objetos.push(this);
+        scene.add(this.mesh);
     }
 }

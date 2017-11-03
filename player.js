@@ -1,7 +1,7 @@
 function Player() {
 
-    this.playerheight = 10;
-    this.playerSpeed = 15;
+    this.playerheight = 5;
+    this.playerSpeed = 20;
     this.palyerMass = 25.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
@@ -18,6 +18,8 @@ function Player() {
     this.velocity = new THREE.Vector3();
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
+
+    this.weapon = null;
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
@@ -99,6 +101,13 @@ function Player() {
         document.addEventListener('keyup', this.onKeyUp , false);
         document.addEventListener('mousedown', this.mousedown , false);
         document.addEventListener('mouseup', this.mouseup , false);
+
+        //add weapon to the player
+        this.weapon = new Weapon(new THREE.Vector3(0,0,-0.5));
+
+        this.weapon.render();
+
+
     };
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
@@ -165,9 +174,7 @@ function Player() {
         var dir = camera.getWorldDirection();
         var bullet = new Bullet(controls.getObject().position,dir,this.bulletSpeed);
         //draw bullet
-        scene.add(bullet.draw());
-
-        objetos.push(bullet); // para sofrer update no gameloop
+        bullet.render();
 
     };
 }
