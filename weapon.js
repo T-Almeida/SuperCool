@@ -58,8 +58,6 @@ class Gun {
         
         // update do cooldown da disparo
         if (this.fireCooldown>0) this.fireCooldown -= delta;
-        // update do cooldown do recarregamento
-        if (this.reloadCooldown>0) this.reloadCooldown -= delta;
         
         if (this.isShooting && this.fireCooldown <= 0) {
             this.shoot();
