@@ -42,6 +42,7 @@ function resetPlayer() {
     if( controls.getObject().position.y < -10 ) {
         controls.getObject().position.set( -2, 40, 15 );
         objPlayer.velocity.multiplyScalar( 0 );
+        objPlayer.jumpDirection = [false,false,false,false];
     }
 }
 

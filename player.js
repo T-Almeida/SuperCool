@@ -11,7 +11,7 @@ function Player() {
     this.moveLeft = false;
     this.moveRight = false;
     this.jumpPress = false;
-
+    this.jumpDirection = [false,false,false,false];
     this.mousePress = false;
 
     this.velocity = new THREE.Vector3();
@@ -75,21 +75,19 @@ function Player() {
             case 82: // r  reload
                 self.weapons[self.currentWeapon].reload();
                 break;
+
             case 38: // up
             case 87: // w
                 self.moveForward = true;
                 break;
-
             case 37: // left
             case 65: // a
                 self.moveLeft = true;
                 break;
-
             case 40: // down
             case 83: // s
                 self.moveBackward = true;
                 break;
-
             case 39: // right
             case 68: // d
                 self.moveRight = true;
@@ -142,9 +140,7 @@ function Player() {
     document.addEventListener('mousedown', this.mousedown , false);
     document.addEventListener('mouseup', this.mouseup , false);
 
-    //FUNCAO CHAMADA EM TODOS OS FRAMES
-    this.update = function (delta,objectIndex) {
-
+    this.updateGUI = function() {
         // update do div com as balas
         var cw = this.weapons[this.currentWeapon];
         document.getElementById("ammodiv").innerHTML = cw.currentAmmo + " / " + cw.maxAmmo;
@@ -153,30 +149,53 @@ function Player() {
             document.getElementById("reloadingdiv").innerHTML = "RELOADING";
         else
             document.getElementById("reloadingdiv").innerHTML = "";
-        
+    }
+
+    //FUNCAO CHAMADA EM TODOS OS FRAMES
+    this.update = function (delta,objectIndex) {
+        this.updateGUI();
 
         if ( controlsEnabled ) {
 
             this.velocity.y -= this.gravity * this.palyerMass * delta; // 100.0 = mass
 
-            if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta);
-            if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta)
+            // se nao esta a saltar o movimento é normal
+            if (!this.isJumping){
+                if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta);
+                if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta)
+                if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta);
+                if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta);
+    
+                if (this.jumpPress) {
+                    this.velocity.y += this.jumpSpeed;
+                    this.isJumping = true;
+                    this.jumpDirection[0] = this.moveForward;
+                    this.jumpDirection[1] = this.moveBackward;
+                    this.jumpDirection[2] = this.moveLeft;
+                    this.jumpDirection[3] = this.moveRight;
+                }
+            } else {
+                // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
+                
+                // Inércia
+                var inertiaFactor = 0.6;
+                if ( this.jumpDirection[0] ) controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor);
+                if ( this.jumpDirection[1] ) controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor)
+                if ( this.jumpDirection[2] ) controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor);
+                if ( this.jumpDirection[3] ) controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor);
 
-            if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta);
-            if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta);
-
-            if (this.jumpPress && !this.isJumping) {
-                this.velocity.y += this.jumpSpeed;
-                this.isJumping = true;
+                var movementFactor = 0.4;
+                if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor);
+                if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta * movementFactor)
+                if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta * movementFactor);
+                if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta * movementFactor);
             }
+            
 
             this.raycaster.ray.origin.copy(controls.getObject().position);
             //raycaster.ray.origin.y -= 10;
 
-
-
             var intersection = this.raycaster.intersectObject(platform);
-
 
             rayInter.visible = false; //OBJETO DO CENARIO DEBUG
             if (intersection.length>=1){
