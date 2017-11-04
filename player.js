@@ -4,6 +4,9 @@ function Player() {
     this.palyerMass = 25.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
+    this.superHotSlowDown = 0.01;
+    this.bbSizeX = 2;
+    this.bbSizeZ = 1;
 
 
     this.moveForward = false;
@@ -19,16 +22,20 @@ function Player() {
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
-    
+
+    //BoundingBox
+    this.playerBB = new THREE.Box3(new THREE.Vector3(controls.getObject().position.x-this.bbSizeX,controls.getObject().position.y-this.playerheight,controls.getObject().position.z-this.bbSizeZ),
+                                    new THREE.Vector3(controls.getObject().position.x+this.bbSizeX,controls.getObject().position.y+1,controls.getObject().position.z+this.bbSizeZ));
+
     // ARMAS
     this.weapons = [];
 
-    var w1 = new Pistol(new THREE.Vector3(0.4,-0.2,-0.5));
+    var w1 = new Pistol(new THREE.Vector3(0.4,-0.2,-0.5),Bullet);
     this.weapons.push(w1);
     objetos.push(w1);
     controls.getObject().children[0].add(w1.mesh);
 
-    var w2 = new Automatic(new THREE.Vector3(0.4,-0.2,-0.5));
+    var w2 = new Automatic(new THREE.Vector3(0.4,-0.2,-0.5),Bullet);
     this.weapons.push(w2);
     objetos.push(w2);
     controls.getObject().children[0].add(w2.mesh);
@@ -48,7 +55,7 @@ function Player() {
 
         this.weapons[weaponId].mesh.visible = true;
         this.currentWeapon = weaponId;
-    }
+    };
 
     //adicionar o objeto como objeto ativo
     objetos.push(this);
@@ -79,18 +86,22 @@ function Player() {
             case 38: // up
             case 87: // w
                 self.moveForward = true;
+                superHotConstant = superHotMax;
                 break;
             case 37: // left
             case 65: // a
                 self.moveLeft = true;
+                superHotConstant = superHotMax;
                 break;
             case 40: // down
             case 83: // s
                 self.moveBackward = true;
+                superHotConstant = superHotMax;
                 break;
             case 39: // right
             case 68: // d
                 self.moveRight = true;
+                superHotConstant = superHotMax;
                 break;
 
             case 32: // space
@@ -108,21 +119,25 @@ function Player() {
             case 38: // up
             case 87: // w
                 self.moveForward = false;
+                superHotConstant = superHotMin;
                 break;
 
             case 37: // left
             case 65: // a
                 self.moveLeft = false;
+                superHotConstant = superHotMin;
                 break;
 
             case 40: // down
             case 83: // s
                 self.moveBackward = false;
+                superHotConstant = superHotMin;
                 break;
 
             case 39: // right
             case 68: // d
                 self.moveRight = false;
+                superHotConstant = superHotMin;
                 break;
 
             case 32: // space
@@ -149,7 +164,31 @@ function Player() {
             document.getElementById("reloadingdiv").innerHTML = "RELOADING";
         else
             document.getElementById("reloadingdiv").innerHTML = "";
-    }
+    };
+
+    this.detectCollision = function () {
+        //detecao colisao com balas e futuramente outros
+        for (var i = 0;i<objetos.length ; i++){
+            if (!(objetos[i] instanceof EnemyBullet)) continue;
+            if (this.playerBB.containsPoint(objetos[i].mesh.position)){
+                console.log("Colisão com o player");
+                objetos[i].destroy(i);
+            }
+        }
+    };
+
+
+    this.updateBB = function () {
+
+
+        this.playerBB.min.set(controls.getObject().position.x-this.bbSizeX,controls.getObject().position.y-this.playerheight,controls.getObject().position.z-1);
+        this.playerBB.max.set(controls.getObject().position.x+this.bbSizeX,controls.getObject().position.y+1,controls.getObject().position.z+1);
+        //this.playerBB.min.applyQuaternion(controls.getObject().getWorldQuaternion());
+        //this.playerBB.max.applyQuaternion(controls.getObject().getWorldQuaternion());
+        //console.log("My pos " + strVector(controls.getObject().position));
+        //console.log("BB " + strVector(this.playerBB.min) + " " + strVector(this.playerBB.max))
+    };
+
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
@@ -159,6 +198,8 @@ function Player() {
 
             this.velocity.y -= this.gravity * this.palyerMass * delta; // 100.0 = mass
 
+            this.updateBB();
+            this.detectCollision();
             // se nao esta a saltar o movimento é normal
             if (!this.isJumping){
                 if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta);

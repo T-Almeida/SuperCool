@@ -69,8 +69,9 @@
     var objetos = [];
 
     var objPlayer = new Player();
-    var enemy = new Enemy();
-    enemy.render();
+    new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
+    //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
+
     //BIDING EVENTOS
     var pause = false;
     //keyDown
@@ -82,8 +83,9 @@
         }
     } , false);
     //FIM BINDING EVENTOS
-
-
+    var superHotMin = 0.01;
+    var superHotMax = 1;
+    var superHotConstant = superHotMin;
 
     var stats1 = new Stats();
     stats1.showPanel(0); // Panel 0 = fps

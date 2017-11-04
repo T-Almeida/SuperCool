@@ -1,5 +1,5 @@
 class Gun {
-    constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime){
+    constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime, bulletType){
         this.mesh = mesh;
         this.mesh.visible = false;
         this.damage = damage;
@@ -12,6 +12,7 @@ class Gun {
         this.reloadCooldown = 0;
         this.isShooting = false;
         this.isReloading = false;
+        this.bulletType = bulletType;
     }
 
     startShooting(){
@@ -30,7 +31,7 @@ class Gun {
 
         if (this.fireCooldown <= 0) {
             //criar bala
-            var bullet = new Bullet(worldVec, camera.getWorldDirection(), this.bulletSpeed);
+            var bullet = new this.bulletType(worldVec, new THREE.Vector3(0,0,-1).applyQuaternion(this.mesh.getWorldQuaternion()), this.bulletSpeed);
             //draw bullet
             bullet.render();
             this.fireCooldown = 1/this.fireRate;
@@ -65,7 +66,7 @@ class Gun {
     }
 
     reload() {
-        if (this.currentAmmo == this.maxAmmo)
+        if (this.currentAmmo == this.maxAmmo || this.isReloading)
             return;
         this.isReloading = true;
         this.reloadCooldown = this.reloadTime;
@@ -82,18 +83,18 @@ class Gun {
 }
 
 class Pistol extends Gun {
-    constructor(position){
+    constructor(position,bulletType){
         var mesh = new THREE.Mesh(
             new THREE.BoxGeometry(0.1,0.1,0.5),
             new THREE.MeshBasicMaterial({color:0x550000}));
         mesh.position.copy(position);
 
         var damage = 20;
-        var bulletSpeed = 70;
+        var bulletSpeed = 60;
         var fireRate = 100; // balas por segundo
         var maxAmmo = 10;
         var reloadTime = 1;
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime)
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
 
         this.canShot = true; // um disparo por clique do botao
     }
@@ -113,17 +114,17 @@ class Pistol extends Gun {
 }
 
 class Automatic extends Gun {  // TODO mudar o nome
-    constructor(position){
+    constructor(position,bulletType){
         var mesh = new THREE.Mesh(
             new THREE.BoxGeometry(0.12,0.15,0.7),
             new THREE.MeshBasicMaterial({color:0x005500}));
         mesh.position.copy(position);
 
         var damage = 5;
-        var bulletSpeed = 100;
+        var bulletSpeed = 80;
         var fireRate = 8; // balas por segundo
         var maxAmmo = 40;
         var reloadTime = 2.5;
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime)
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
     }
 }
