@@ -1,5 +1,4 @@
 function Player() {
-
     this.playerheight = 5;
     this.playerSpeed = 20;
     this.palyerMass = 25.0;
@@ -19,29 +18,65 @@ function Player() {
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
 
-    this.weapon = null;
-
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
+    
+    // ARMAS
+    this.weapons = [];
 
-    //add weapon to the player
-    this.weapon = new Weapon(new THREE.Vector3(0.4,-0.2,-0.5));
-    controls.getObject().children[0].add(this.weapon.mesh);
+    var w1 = new Pistol(new THREE.Vector3(0.4,-0.2,-0.5));
+    this.weapons.push(w1);
+    objetos.push(w1);
+    controls.getObject().children[0].add(w1.mesh);
+
+    var w2 = new Automatic(new THREE.Vector3(0.4,-0.2,-0.5));
+    this.weapons.push(w2);
+    objetos.push(w2);
+    controls.getObject().children[0].add(w2.mesh);
+
+    this.currentWeapon = null;
+
+    this.switchWeapon = function(weaponId) {
+        if (this.currentWeapon == weaponId)
+            return;
+        for (i=0; i<this.weapons.length; i++){
+            var w = this.weapons[i];
+            w.stopShooting();
+            w.isReloading = false;
+            w.mesh.visible = false;
+        }
+
+        this.weapons[weaponId].mesh.visible = true;
+        this.currentWeapon = weaponId;
+    }
+
+    this.switchWeapon(0);
 
     //adicionar o objeto como objeto ativo
     objetos.push(this);
 
     this.mousedown = function () {
-        self.mousePress = true;
+        self.weapons[self.currentWeapon].startShooting();
     };
     this.mouseup = function () {
-        self.mousePress = false;
+        self.weapons[self.currentWeapon].stopShooting();
     };
 
+    // Muda a arma para a que esta no index passado
+    // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
+    
 
     this.onKeyDown = function (event) {
-
         switch (event.keyCode) {
-
+            case 49: // 1 weapon
+                self.switchWeapon(0);
+                break;
+            case 50: // 2 weapon
+                self.switchWeapon(1);
+                break;
+            case 82: // r  reload
+                self.weapons[self.currentWeapon].reload();
+                break;
+            case 38: // up
             case 87: // w
                 self.moveForward = true;
                 break;
@@ -111,6 +146,16 @@ function Player() {
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
 
+        // update do div com as balas
+        var cw = this.weapons[this.currentWeapon];
+        document.getElementById("ammodiv").innerHTML = cw.currentAmmo + " / " + cw.maxAmmo;
+        // update da div que diz se esta a recarregar
+        if (cw.isReloading)
+            document.getElementById("reloadingdiv").innerHTML = "RELOADING";
+        else
+            document.getElementById("reloadingdiv").innerHTML = "";
+        
+
         if ( controlsEnabled ) {
 
             this.velocity.y -= this.gravity * this.palyerMass * delta; // 100.0 = mass
@@ -120,8 +165,6 @@ function Player() {
 
             if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta);
             if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta);
-
-            if (this.mousePress) this.weapon.shootBullets(delta);
 
             if (this.jumpPress && !this.isJumping) {
                 this.velocity.y += this.jumpSpeed;
