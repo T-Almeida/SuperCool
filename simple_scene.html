@@ -23,6 +23,7 @@
 <script src="bullet.js"></script>
 <script src="weapon.js"></script>
 <script src="player.js"></script>
+<script src="enemy.js"></script>
 
 
 
@@ -68,7 +69,8 @@
     var objetos = [];
 
     var objPlayer = new Player();
-
+    var enemy = new Enemy();
+    enemy.render();
     //BIDING EVENTOS
     var pause = false;
     //keyDown
@@ -80,6 +82,7 @@
         }
     } , false);
     //FIM BINDING EVENTOS
+
 
 
     var stats1 = new Stats();

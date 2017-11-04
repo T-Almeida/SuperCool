@@ -6,12 +6,12 @@ function Bullet(posicaoOrigem,direcao,speed) {
 
     this.mesh.position.copy(posicaoOrigem);
 
+    var self = this;
+
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
         if (outsideMap(this.mesh.position)){ //destuir bala
-            console.log("Bullet destroyed");
-            scene.remove(this.mesh); //remover da cena
-            objetos.splice(objectIndex,1); //remover dos objetos ativos
+            this.destroy(objectIndex);
             return ;
         }
 
@@ -22,5 +22,11 @@ function Bullet(posicaoOrigem,direcao,speed) {
     this.render = function () {
         objetos.push(this);
         scene.add(this.mesh);
+    };
+
+    this.destroy = function(index){
+        console.log("Bullet destroyed");
+        scene.remove(this.mesh); //remover da cena
+        objetos.splice(index,1); //remover dos objetos ativos
     }
 }
