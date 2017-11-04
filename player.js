@@ -33,7 +33,8 @@ function Player() {
     objetos.push(w2);
     controls.getObject().children[0].add(w2.mesh);
 
-    this.currentWeapon = null;
+    this.currentWeapon = 0;
+    this.weapons[0].mesh.visible = true;
 
     this.switchWeapon = function(weaponId) {
         if (this.currentWeapon == weaponId)
@@ -41,15 +42,13 @@ function Player() {
         for (i=0; i<this.weapons.length; i++){
             var w = this.weapons[i];
             w.stopShooting();
-            w.isReloading = false;
+            w.stopReloading();
             w.mesh.visible = false;
         }
 
         this.weapons[weaponId].mesh.visible = true;
         this.currentWeapon = weaponId;
     }
-
-    this.switchWeapon(0);
 
     //adicionar o objeto como objeto ativo
     objetos.push(this);

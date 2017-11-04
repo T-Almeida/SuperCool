@@ -1,6 +1,7 @@
 class Gun {
     constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime){
         this.mesh = mesh;
+        this.mesh.visible = false;
         this.damage = damage;
         this.bulletSpeed = bulletSpeed;
         this.fireRate = fireRate;
@@ -74,6 +75,14 @@ class Gun {
         this.isReloading = true;
         this.reloadCooldown = this.reloadTime;
         this.mesh.rotateX(Math.PI / 4);
+    }
+
+    stopReloading() {
+        if (this.isReloading){
+            this.isReloading = false;
+            this.mesh.rotateX( - Math.PI / 4);
+        }
+        
     }
 }
 
