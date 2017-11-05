@@ -25,22 +25,19 @@ class Gun {
 
     shoot() {
         this.currentAmmo -= 1;
-
         var worldVec = new THREE.Vector3(0,0,0);
         this.mesh.localToWorld(worldVec);
 
-        if (this.fireCooldown <= 0) {
-            //criar bala
-            var bullet = new this.bulletType(worldVec, new THREE.Vector3(0,0,-1).applyQuaternion(this.mesh.getWorldQuaternion()), this.bulletSpeed);
-            //draw bullet
-            bullet.render();
-            this.fireCooldown = 1/this.fireRate;
-        }
+        //criar bala
+        var bullet = new this.bulletType(worldVec, new THREE.Vector3(0,0,-1).applyQuaternion(this.mesh.getWorldQuaternion()), this.bulletSpeed);
+        //draw bullet
+        bullet.render();
+        this.fireCooldown = 1/this.fireRate;
     }
 
     update(delta, objectIndex) {
         if (this.isReloading){
-            this.reloadCooldown -= delta;
+            this.reloadCooldown -= delta * currentTimeSpeed;
             if (this.reloadCooldown <= 0) {
                 this.currentAmmo = this.maxAmmo;
                 this.isReloading = false;   
@@ -56,7 +53,7 @@ class Gun {
         }
         
         // update do cooldown da disparo
-        if (this.fireCooldown>0) this.fireCooldown -= delta;
+        if (this.fireCooldown>0) this.fireCooldown -= delta * currentTimeSpeed;
         
         if (this.isShooting && this.fireCooldown <= 0) {
             this.shoot();
@@ -89,11 +86,11 @@ class Pistol extends Gun {
             new THREE.MeshBasicMaterial({color:0x550000}));
         mesh.position.copy(position);
 
-        var damage = 20;
-        var bulletSpeed = 60;
-        var fireRate = 100; // balas por segundo
+        var damage = 100;
+        var bulletSpeed = 40;
+        var fireRate = 4; // balas por segundo
         var maxAmmo = 10;
-        var reloadTime = 1;
+        var reloadTime = 1.5;
         super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
 
         this.canShot = true; // um disparo por clique do botao
@@ -120,11 +117,11 @@ class Automatic extends Gun {  // TODO mudar o nome
             new THREE.MeshBasicMaterial({color:0x005500}));
         mesh.position.copy(position);
 
-        var damage = 5;
-        var bulletSpeed = 80;
+        var damage = 100;
+        var bulletSpeed = 40;
         var fireRate = 8; // balas por segundo
         var maxAmmo = 40;
-        var reloadTime = 2.5;
+        var reloadTime = 3.5;
         super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
     }
 }

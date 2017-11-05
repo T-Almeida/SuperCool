@@ -1,13 +1,11 @@
 function Player() {
     this.playerheight = 5;
-    this.playerSpeed = 20;
+    this.playerSpeed = 10;
     this.palyerMass = 25.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
-    this.superHotSlowDown = 0.01;
     this.bbSizeX = 2;
     this.bbSizeZ = 1;
-
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -43,6 +41,8 @@ function Player() {
     this.currentWeapon = 0;
     this.weapons[0].mesh.visible = true;
 
+    // Muda a arma para a que esta no index passado
+    // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
     this.switchWeapon = function(weaponId) {
         if (this.currentWeapon == weaponId)
             return;
@@ -67,10 +67,6 @@ function Player() {
         self.weapons[self.currentWeapon].stopShooting();
     };
 
-    // Muda a arma para a que esta no index passado
-    // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
-    
-
     this.onKeyDown = function (event) {
         switch (event.keyCode) {
             case 49: // 1 weapon
@@ -86,68 +82,50 @@ function Player() {
             case 38: // up
             case 87: // w
                 self.moveForward = true;
-                superHotConstant = superHotMax;
                 break;
             case 37: // left
             case 65: // a
                 self.moveLeft = true;
-                superHotConstant = superHotMax;
                 break;
             case 40: // down
             case 83: // s
                 self.moveBackward = true;
-                superHotConstant = superHotMax;
                 break;
             case 39: // right
             case 68: // d
                 self.moveRight = true;
-                superHotConstant = superHotMax;
                 break;
 
             case 32: // space
                 self.jumpPress = true;
                 break;
-
         }
-
     };
 
     this.onKeyUp = function (event) {
-
         switch (event.keyCode) {
-
             case 38: // up
             case 87: // w
                 self.moveForward = false;
-                superHotConstant = superHotMin;
                 break;
-
             case 37: // left
             case 65: // a
                 self.moveLeft = false;
-                superHotConstant = superHotMin;
                 break;
-
             case 40: // down
             case 83: // s
                 self.moveBackward = false;
-                superHotConstant = superHotMin;
                 break;
-
             case 39: // right
             case 68: // d
                 self.moveRight = false;
-                superHotConstant = superHotMin;
                 break;
 
             case 32: // space
                 self.jumpPress = false;
                 break;
-
         }
-
     };
-
 
     //binding de eventos
     document.addEventListener('keydown', this.onKeyDown , false);
@@ -155,9 +133,9 @@ function Player() {
     document.addEventListener('mousedown', this.mousedown , false);
     document.addEventListener('mouseup', this.mouseup , false);
 
-    this.updateGUI = function() {
+    this.updateGUI = function(cw) {
         // update do div com as balas
-        var cw = this.weapons[this.currentWeapon];
+        
         document.getElementById("ammodiv").innerHTML = cw.currentAmmo + " / " + cw.maxAmmo;
         // update da div que diz se esta a recarregar
         if (cw.isReloading)
@@ -180,7 +158,6 @@ function Player() {
 
     this.updateBB = function () {
 
-
         this.playerBB.min.set(controls.getObject().position.x-this.bbSizeX,controls.getObject().position.y-this.playerheight,controls.getObject().position.z-1);
         this.playerBB.max.set(controls.getObject().position.x+this.bbSizeX,controls.getObject().position.y+1,controls.getObject().position.z+1);
         //this.playerBB.min.applyQuaternion(controls.getObject().getWorldQuaternion());
@@ -189,23 +166,24 @@ function Player() {
         //console.log("BB " + strVector(this.playerBB.min) + " " + strVector(this.playerBB.max))
     };
 
-
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
-        this.updateGUI();
+        var cw = this.weapons[this.currentWeapon];
+    
+        this.updateGUI(cw);
 
         if ( controlsEnabled ) {
-
-            this.velocity.y -= this.gravity * this.palyerMass * delta; // 100.0 = mass
+            this.velocity.y -= this.gravity * this.palyerMass * delta * currentTimeSpeed;  // força gravitica
 
             this.updateBB();
             this.detectCollision();
+
             // se nao esta a saltar o movimento é normal
             if (!this.isJumping){
-                if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta);
-                if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta)
-                if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta);
-                if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta);
+                if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta * currentTimeSpeed);
+                if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta * currentTimeSpeed)
+                if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta * currentTimeSpeed);
+                if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta * currentTimeSpeed);
     
                 if (this.jumpPress) {
                     this.velocity.y += this.jumpSpeed;
@@ -215,16 +193,14 @@ function Player() {
                     this.jumpDirection[2] = this.moveLeft;
                     this.jumpDirection[3] = this.moveRight;
                 }
-            } else {
-                // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
-                
-                // Inércia
+            } 
+            // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
+            else {
                 var inertiaFactor = 0.6;
                 if ( this.jumpDirection[0] ) controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor);
                 if ( this.jumpDirection[1] ) controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor)
                 if ( this.jumpDirection[2] ) controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor);
                 if ( this.jumpDirection[3] ) controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor);
-
                 var movementFactor = 0.4;
                 if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor);
                 if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta * movementFactor)
@@ -248,8 +224,6 @@ function Player() {
                         controls.getObject().position.y = intersection[0].point.y+this.playerheight;
                         this.isJumping=false; //deteta qd n esta a salar
                     }
-
-
                 }
             }
 
@@ -258,12 +232,26 @@ function Player() {
             //console.log("velocidade y " + this.velocity.y);
             //console.log("isJumping " + isJumping);
             //console.log("player position x " + controls.getObject().position.x + " y "+  controls.getObject().position.y +" z "+  controls.getObject().position.z);
-
+            
+            // update da velocidade do tempo
+            var acceleratingTimeStep = 5;
+            var stoppingTimeStep = 5;
+            if (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight || this.isJumping ) {
+                var tempTimeSpeed = currentTimeSpeed + acceleratingTimeStep * delta ;
+                currentTimeSpeed = Math.min(tempTimeSpeed, maxTimeSpeed);
+            }
+            else if ( cw.isShooting || cw.isReloading) { 
+                /* TODO refazer isto, o tempo so devia andar se a arma disparar
+                    Esta logica provavelmente deve passar para a arma (o oponent usa a mesma arma por isso nao passei agora)
+                    se a arma nao tiver balas tambem nao devia parar
+                */
+                currentTimeSpeed = maxTimeSpeed;
+            } 
+            else {
+                var tempTimeSpeed = currentTimeSpeed - stoppingTimeStep * delta ;
+                currentTimeSpeed = Math.max(tempTimeSpeed, minTimeSpeed);
+            }
+            console.log(currentTimeSpeed);
         }
     };
-    
-    this.draw = function () {
-
-    };
-
 }

@@ -15,7 +15,7 @@ function Bullet(posicaoOrigem,direcao,speed) {
             return ;
         }
 
-        this.mesh.translateOnAxis( direcao, speed * delta * superHotConstant);
+        this.mesh.translateOnAxis( direcao, speed * delta * currentTimeSpeed);
 
     };
 
@@ -49,7 +49,7 @@ function EnemyBullet(posicaoOrigem,direcao,speed) {
             return ;
         }
 
-        this.mesh.translateOnAxis( direcao, speed * delta * superHotConstant);
+        this.mesh.translateOnAxis( direcao, speed * delta * currentTimeSpeed);
 
     };
 

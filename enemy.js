@@ -9,7 +9,7 @@ function Enemy(position) {
     this.meshBB = new THREE.Box3(new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,0));
     this.meshBB.setFromObject(this.mesh);
 
-    this.weapon = new Pistol(new THREE.Vector3(1.5,0,-2),EnemyBullet);
+    this.weapon = new Pistol(new THREE.Vector3(1.5,0,-2), EnemyBullet);
     this.weapon.mesh.visible = true;
     objetos.push(this.weapon);
 
@@ -37,7 +37,7 @@ function Enemy(position) {
 
         if (this.weapon.currentAmmo==0) this.weapon.reload();
 
-        if (this.fireCooldown>0) this.fireCooldown -= delta;
+        if (this.fireCooldown>0) this.fireCooldown -= delta * currentTimeSpeed;
 
     };
 
