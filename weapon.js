@@ -81,12 +81,7 @@ class Gun {
 }
 
 class Pistol extends Gun {
-    constructor(position,bulletType){
-        var mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(0.1,0.1,0.5),
-            new THREE.MeshBasicMaterial({color:0x550000}));
-        mesh.position.copy(position);
-
+    constructor(mesh,bulletType){
         var damage = 100;
         var bulletSpeed = 40;
         var fireRate = 4; // balas por segundo
@@ -119,5 +114,23 @@ class Automatic extends Gun {  // TODO mudar o nome
         var maxAmmo = 40;
         var reloadTime = 3.5;
         super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
+    }
+}
+
+class EnemyPistol extends Gun {
+    constructor(position,bulletType){
+        var mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(0.1,0.1,0.5),
+            new THREE.MeshBasicMaterial({color:0x550000}));
+        mesh.position.copy(position);
+
+        var damage = 100;
+        var bulletSpeed = 40;
+        var fireRate = 4; // balas por segundo
+        var maxAmmo = 10;
+        var reloadTime = 1.5;
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
+
+        this.canShot = true; // um disparo por clique do botao
     }
 }

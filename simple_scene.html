@@ -33,6 +33,9 @@
     <script src="threejs/OBJLoader.js"></script>
     <script src="threejs/MTLLoader.js"></script>
     <script src="threejs/DDSLoader.js"></script>
+    <script src="threejs/TDSLoader.js"></script>
+    <script src="threejs/TGALoader.js"></script>
+    <script src="threejs/ColladaLoader.js"></script>
 
     <script src="utils.js"></script>
 
@@ -91,7 +94,8 @@
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 
 
-        objPlayer.addWeapon(new Pistol(new THREE.Vector3(0.4,-0.2,-0.5),Bullet));
+        objPlayer.addWeapon(new EnemyPistol(new THREE.Vector3(0.4,-0.2,-0.5),Bullet));
+
         // Gun models
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
@@ -100,11 +104,52 @@
             }
         };
         var onError = function ( xhr ) { };
+        
+
+        var texture = new THREE.TextureLoader().load( "models/1911/Textures/Tex_0008_1.png" );
+        texture.minFilter = THREE.LinearFilter;
 
         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
         var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setPath( 'models/submachine/' );
-        mtlLoader.load( 'M24_R_Low_Poly_Version_obj.mtl', function( materials ) {
+        mtlLoader.setPath( 'models/mp5/' );
+        mtlLoader.load( 'mp5k.mtl', function( materials ) {
+            materials.preload();
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials( materials );
+            objLoader.setPath( 'models/mp5/' );
+            objLoader.load( 'mp5k.obj', function ( obj ) {
+                //obj.scale.x = 0.3, obj.scale.y = 0.3, obj.scale.z = 0.3;
+                //obj.position.x = 1.1, obj.position.y = -0.6, obj.position.z = -1.4;
+                // objPlayer.addWeapon(new Pistol(obj, Bullet));
+                console.log("obj");
+                console.log(obj);
+                //obj.map = texture;
+                // scene.add( obj );
+            }, onProgress, onError );
+        });
+
+        // instantiate a loader
+        var loader = new THREE.TGALoader();
+
+        // load a resource
+        var texture = loader.load('models/glock/glock18c.tga');
+
+        //3ds files dont store normal maps
+        var loader = new THREE.TDSLoader( );
+        loader.setPath( 'models/glock/' );
+        loader.load( 'models/glock/glock18c.3ds', function ( object ) {
+            console.log("object");
+            console.log(object);
+            object.children[0].material.map = texture;
+            objPlayer.addWeapon(new Automatic(object, Bullet));
+            scene.add( object );
+            });
+                
+    
+
+        var mtlLoader2 = new THREE.MTLLoader();
+        mtlLoader2.setPath( 'models/submachine/' );
+        mtlLoader2.load( 'M24_R_Low_Poly_Version_obj.mtl', function( materials ) {
             materials.preload();
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials( materials );
@@ -116,7 +161,7 @@
                 //obj.rotateY(185 * Math.PI / 180); // 185 graus
                 //obj.rotateX(-2 * Math.PI / 180); // -2 graus
                 
-                objPlayer.addWeapon(new Automatic(obj, Bullet));
+                //objPlayer.addWeapon(new Automatic(obj, Bullet));
                 //scene.add( obj );
             }, onProgress, onError );
         });

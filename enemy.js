@@ -9,7 +9,7 @@ function Enemy(position) {
     this.meshBB = new THREE.Box3(new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,0));
     this.meshBB.setFromObject(this.mesh);
 
-    this.weapon = new Pistol(new THREE.Vector3(1.5,0,-2), EnemyBullet);
+    this.weapon = new EnemyPistol(new THREE.Vector3(1.5,0,-2), EnemyBullet);
     this.weapon.mesh.visible = true;
     objetos.push(this.weapon);
 
