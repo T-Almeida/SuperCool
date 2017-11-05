@@ -1,7 +1,6 @@
 body { margin: 0; }
-
 #container { width: 100%; height: 100% }
-
+canvas {display: block}
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
@@ -12,18 +11,79 @@ body { margin: 0; }
                                     supported by Chrome and Opera */
   }
 
-#ammodiv {
-    position: absolute; 
-    top:50px; 
-    left:50px;
-} 
-#reloadingdiv {
-    position: absolute; 
-    top:70px; 
-    left:50px;
-} 
 #crosshairdiv {
     position: absolute; 
     top:50%; 
     left:50%;
 } 
+
+.transpGUI {
+    opacity: 0.8;
+}
+.progressBar{
+    background: white;
+    box-shadow: 2px 2px 0px rgb(31, 31, 31);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.progressBarBG {
+    background: rgba(196, 196, 196, 0.1);
+    
+}
+/* Time Speed Styles */
+#timespeedcontainerdiv {
+    position: absolute;
+    left: 5px;
+    bottom: 24%;
+    height: 60%;
+    width: 5px;
+}
+
+/* Weapon Indicators Styles */
+.weapon {
+    position: absolute;
+    bottom: 5px;
+    height: 60px;
+    background: red;
+
+    left: calc(50% - 105px);
+    /* Firefox */
+    left: -moz-calc(50% - 105px);
+    /* WebKit */
+    left: -webkit-calc(50% - 105px);
+    /* Opera */
+    left: -o-calc(50% - 105px);
+    /* Standard */
+    left: calc(50% - 105px);
+}
+#weaponicon {
+    position: absolute;
+    left: 0px;
+    width: 100px;
+    height: 60px;
+}
+#reload {
+    position: absolute;
+    left: 100px;
+    width: 5px;
+    height: 100%;
+    
+}
+#maxAmmo {
+    position: absolute;
+    left: 110px;
+    bottom: 0px;
+    font-size: 10px;
+}
+#currentAmmo {
+    position: absolute;
+    left: 110px;
+    top: 0px;
+    font-size: 30px;
+}
+.ammo {
+    font-family: 'Arima Madurai', cursive;
+    text-shadow: 2px 2px 0px rgb(31, 31, 31);
+    color: white;
+}

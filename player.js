@@ -1,7 +1,7 @@
 function Player() {
     this.playerheight = 5;
-    this.playerSpeed = 10;
-    this.palyerMass = 25.0;
+    this.playerSpeed = 15;
+    this.palyerMass = 20.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
     this.bbSizeX = 2;
@@ -41,6 +41,19 @@ function Player() {
     this.currentWeapon = 0;
     this.weapons[0].mesh.visible = true;
 
+
+    this.updateWeaponGUI = function() {
+        switch (this.currentWeapon){
+            case 0:
+                document.getElementById("weaponicon").src = "icons/pistol.png";
+                break;
+            case 1:
+                document.getElementById("weaponicon").src = "icons/auto.png";
+                break;
+            
+        }
+    }
+
     // Muda a arma para a que esta no index passado
     // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
     this.switchWeapon = function(weaponId) {
@@ -55,6 +68,8 @@ function Player() {
 
         this.weapons[weaponId].mesh.visible = true;
         this.currentWeapon = weaponId;
+
+        this.updateWeaponGUI();
     };
 
     //adicionar o objeto como objeto ativo
@@ -135,13 +150,17 @@ function Player() {
 
     this.updateGUI = function(cw) {
         // update do div com as balas
+        document.getElementById("currentAmmo").innerHTML = cw.currentAmmo;
+        document.getElementById("maxAmmo").innerHTML = cw.maxAmmo;
         
-        document.getElementById("ammodiv").innerHTML = cw.currentAmmo + " / " + cw.maxAmmo;
         // update da div que diz se esta a recarregar
-        if (cw.isReloading)
-            document.getElementById("reloadingdiv").innerHTML = "RELOADING";
-        else
-            document.getElementById("reloadingdiv").innerHTML = "";
+        var reloadBar = document.getElementById("currentreload"); 
+        var relHeight = cw.reloadCooldown / cw.reloadTime * 100;
+        reloadBar.style.height = relHeight + '%'; 
+        // time speed update
+        var timeBar = document.getElementById("timespeeddiv"); 
+        var timeHeight = 100 - currentTimeSpeed / maxTimeSpeed * 100;
+        timeBar.style.height = timeHeight + '%'; 
     };
 
     this.detectCollision = function () {
@@ -235,23 +254,22 @@ function Player() {
             
             // update da velocidade do tempo
             var acceleratingTimeStep = 5;
-            var stoppingTimeStep = 5;
-            if (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight || this.isJumping ) {
-                var tempTimeSpeed = currentTimeSpeed + acceleratingTimeStep * delta ;
-                currentTimeSpeed = Math.min(tempTimeSpeed, maxTimeSpeed);
-            }
-            else if ( cw.isShooting || cw.isReloading) { 
+            var stoppingTimeStep = 2;
+            if ( cw.isShooting || cw.isReloading) { 
                 /* TODO refazer isto, o tempo so devia andar se a arma disparar
                     Esta logica provavelmente deve passar para a arma (o oponent usa a mesma arma por isso nao passei agora)
                     se a arma nao tiver balas tambem nao devia parar
                 */
                 currentTimeSpeed = maxTimeSpeed;
             } 
+            else if (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight || this.isJumping ) {
+                var tempTimeSpeed = currentTimeSpeed + acceleratingTimeStep * delta ;
+                currentTimeSpeed = Math.min(tempTimeSpeed, maxTimeSpeed);
+            }
             else {
                 var tempTimeSpeed = currentTimeSpeed - stoppingTimeStep * delta ;
                 currentTimeSpeed = Math.max(tempTimeSpeed, minTimeSpeed);
             }
-            console.log(currentTimeSpeed);
         }
     };
 }

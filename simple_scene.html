@@ -5,130 +5,144 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Arima+Madurai" rel="stylesheet"> 
 </head>
 <body>
 
-<div id="container"></div>
-<div id="ammodiv" class="noselect">--/--</div>
-<div id="reloadingdiv" class="noselect"></div>
-<div id="crosshairdiv" class="noselect">+</div>
+    <div id="container"></div>
+    <div id="crosshairdiv" class="noselect">+</div>
 
-<script src="threejs/three.js"></script>
-<script src="threejs/stats.min.js"></script>
-<script src="threejs/PointerLockControls.js"></script>
+    <div id="timespeedcontainerdiv" class="noselect progressBarBG">
+        <div id="timespeeddiv" class="progressBar transpGUI"></div>
+    </div>
 
-<script src="utils.js"></script>
-
-<script src="scene.js"></script>
-<script src="bullet.js"></script>
-<script src="weapon.js"></script>
-<script src="player.js"></script>
-<script src="enemy.js"></script>
-
+    <div class="weapon">
+        <img id="weaponicon" class="noselect transpGUI" src="icons/pistol.png"/>
+        <div id="reload" class="noselect progressBarBG">
+            <div id="currentreload" class="progressBar transpGUI"></div>
+        </div>
+        <div id="maxAmmo" class="ammo noselect transpGUI"></div>
+        <div id="currentAmmo" class="ammo noselect transpGUI"></div>
+    </div>
 
 
-<script>
+    <!-- SCRIPTS -->
+    <script src="threejs/three.js"></script>
+    <script src="threejs/stats.min.js"></script>
+    <script src="threejs/PointerLockControls.js"></script>
 
-    var container = document.getElementById("container");
+    <script src="utils.js"></script>
 
-    var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
-    //verificar se o browser suporta pointerLock
-    if ( havePointerLock ) {
-
-        var element = document.body;
-
-        // Hook pointer lock state change events
-        document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-        document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-        document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+    <script src="scene.js"></script>
+    <script src="bullet.js"></script>
+    <script src="weapon.js"></script>
+    <script src="player.js"></script>
+    <script src="enemy.js"></script>
 
 
-        container.addEventListener( 'click', function ( event ) {
 
-            // Ask the browser to lock the pointer
-            element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-            element.requestPointerLock();
+    <script>
 
-        }, false );
+        var container = document.getElementById("container");
 
-    } else {
+        var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-        container.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+        //verificar se o browser suporta pointerLock
+        if ( havePointerLock ) {
 
-    }
+            var element = document.body;
 
-
-    window.addEventListener( 'resize', resize, false );
-    resize();
-
-    document.getElementById( 'container' ).appendChild( renderer.domElement );
+            // Hook pointer lock state change events
+            document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+            document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+            document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
 
 
-    //CRIAR OBJETOS
-    var objetos = [];
+            container.addEventListener( 'click', function ( event ) {
 
-    var objPlayer = new Player();
-    new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
-    //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
+                // Ask the browser to lock the pointer
+                element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+                element.requestPointerLock();
 
-    //BIDING EVENTOS
-    var pause = false;
-    //keyDown
-    document.addEventListener('keydown', function (event) {
-        switch (event.keycode){
-            case 80:
-                pause = !pause;
-                break;
+            }, false );
+
+        } else {
+
+            container.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
         }
-    } , false);
-    //FIM BINDING EVENTOS
 
-    // gestao do tempo 
-    var minTimeSpeed = 0.01;
-    var maxTimeSpeed = 1;
-    var currentTimeSpeed = maxTimeSpeed;
 
-    var stats1 = new Stats();
-    stats1.showPanel(0); // Panel 0 = fps
-    stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
-    document.body.appendChild(stats1.domElement);
+        window.addEventListener( 'resize', resize, false );
+        resize();
 
-    var stats2 = new Stats();
-    stats2.showPanel(1); // Panel 1 = ms
-    stats2.domElement.style.cssText = 'position:absolute;top:0px;left:80px;';
-    document.body.appendChild(stats2.domElement);
+        document.getElementById( 'container' ).appendChild( renderer.domElement );
 
-    var prevTime = performance.now();
-    function gameLoop() {
-        stats1.begin();
-        stats2.begin();
-        var time = performance.now();
-        var delta = ( time - prevTime ) / 1000;
 
-        //console.log("delta " + delta);
+        //CRIAR OBJETOS
+        var objetos = [];
 
-        resetPlayer();
-        if (!pause ) {
-            //Call update
-            for (var i = 0 ; i < objetos.length ; i++){
-                objetos[i].update(delta,i);
+        var objPlayer = new Player();
+        new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
+        //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
+
+        //BIDING EVENTOS
+        var pause = false;
+        //keyDown
+        document.addEventListener('keydown', function (event) {
+            switch (event.keycode){
+                case 80:
+                    pause = !pause;
+                    break;
             }
+        } , false);
+        //FIM BINDING EVENTOS
+
+        // gestao do tempo 
+        var minTimeSpeed = 0.01;
+        var maxTimeSpeed = 1;
+        var currentTimeSpeed = maxTimeSpeed;
+
+        var stats1 = new Stats();
+        stats1.showPanel(0); // Panel 0 = fps
+        stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
+        document.body.appendChild(stats1.domElement);
+
+        var stats2 = new Stats();
+        stats2.showPanel(1); // Panel 1 = ms
+        stats2.domElement.style.cssText = 'position:absolute;top:0px;left:80px;';
+        document.body.appendChild(stats2.domElement);
+
+        var prevTime = performance.now();
+        function gameLoop() {
+            stats1.begin();
+            stats2.begin();
+            var time = performance.now();
+            var delta = ( time - prevTime ) / 1000;
+
+            //console.log("delta " + delta);
+
+            resetPlayer();
+            if (!pause ) {
+                //Call update
+                for (var i = 0 ; i < objetos.length ; i++){
+                    objetos[i].update(delta,i);
+                }
+            }
+            prevTime = time;
+
+            //console.log("Objs em cena THREE JS " + scene.children.length);
+            //console.log("Objs ativos " + objetos.length);
+
+            stats1.end();
+            stats2.end();
+            requestAnimationFrame( gameLoop );
+            renderer.render( scene, camera );
+
         }
-        prevTime = time;
 
-        //console.log("Objs em cena THREE JS " + scene.children.length);
-        //console.log("Objs ativos " + objetos.length);
+        gameLoop();
 
-        stats1.end();
-        stats2.end();
-        requestAnimationFrame( gameLoop );
-        renderer.render( scene, camera );
-
-    }
-
-    gameLoop();
-
-</script>
+    </script>
 </body>
 </html>

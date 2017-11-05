@@ -73,6 +73,7 @@ class Gun {
     stopReloading() {
         if (this.isReloading){
             this.isReloading = false;
+            this.reloadCooldown = 0;
             this.mesh.rotateX( - Math.PI / 4);
         }
         
