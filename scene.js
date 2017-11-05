@@ -86,32 +86,4 @@ var directionalLight = new THREE.DirectionalLight( 0xe2c3a4 );
 directionalLight.position.set( 0, 0, 1 ).normalize();
 scene.add( directionalLight );
 
-// Gun models
-var onProgress = function ( xhr ) {
-    if ( xhr.lengthComputable ) {
-        var percentComplete = xhr.loaded / xhr.total * 100;
-        console.log( Math.round(percentComplete, 2) + '% downloaded' );
-    }
-};
-var onError = function ( xhr ) { };
 
-THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-var mtlLoader = new THREE.MTLLoader();
-mtlLoader.setPath( 'models/submachine/' );
-mtlLoader.load( 'M24_R_Low_Poly_Version_obj.mtl', function( materials ) {
-    materials.preload();
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials( materials );
-    objLoader.setPath( 'models/submachine/' );
-    objLoader.load( 'M24_R_Low_Poly_Version_obj.obj', function ( obj ) {
-        obj.scale.x = 0.3, obj.scale.y = 0.3, obj.scale.z = 0.3;
-        obj.position.x = 1.1, obj.position.y = -0.6, obj.position.z = -1.4;
-        obj.rotateY(185 * Math.PI / 180); // 185 graus
-        obj.rotateX(-2 * Math.PI / 180); // -2 graus
-        
-        controls.getObject().children[0].add(obj);
-        
-        //scene.add( obj );
-    }, onProgress, onError );
-});
-//

@@ -27,19 +27,13 @@ function Player() {
 
     // ARMAS
     this.weapons = [];
-
-    var w1 = new Pistol(new THREE.Vector3(0.4,-0.2,-0.5),Bullet);
-    this.weapons.push(w1);
-    objetos.push(w1);
-    controls.getObject().children[0].add(w1.mesh);
-
-    var w2 = new Automatic(new THREE.Vector3(0.4,-0.2,-0.5),Bullet);
-    this.weapons.push(w2);
-    objetos.push(w2);
-    controls.getObject().children[0].add(w2.mesh);
-
     this.currentWeapon = 0;
-    this.weapons[0].mesh.visible = true;
+    
+    this.addWeapon = function(weapon) {
+        this.weapons.push(weapon);
+        objetos.push(weapon);
+        controls.getObject().children[0].add(weapon.mesh);
+    }
 
 
     this.updateWeaponGUI = function() {
@@ -188,7 +182,8 @@ function Player() {
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
         var cw = this.weapons[this.currentWeapon];
-    
+        cw.mesh.visible = true;
+
         this.updateGUI(cw);
 
         if ( controlsEnabled ) {

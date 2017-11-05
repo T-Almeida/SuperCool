@@ -112,12 +112,7 @@ class Pistol extends Gun {
 }
 
 class Automatic extends Gun {  // TODO mudar o nome
-    constructor(position,bulletType){
-        var mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(0.12,0.15,0.7),
-            new THREE.MeshBasicMaterial({color:0x005500}));
-        mesh.position.copy(position);
-
+    constructor(mesh, bulletType){
         var damage = 100;
         var bulletSpeed = 40;
         var fireRate = 8; // balas por segundo
