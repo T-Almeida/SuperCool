@@ -1,5 +1,5 @@
 class Gun {
-    constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime, bulletType){
+    constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime, bulletType,pointBulletSpawn,accuracyDistance){
         this.mesh = mesh;
         this.mesh.visible = false;
         this.damage = damage;
@@ -13,6 +13,13 @@ class Gun {
         this.isShooting = false;
         this.isReloading = false;
         this.bulletType = bulletType;
+
+        this.pointBulletSpawn = pointBulletSpawn;
+
+        this.accuracyDistance = accuracyDistance;
+        this.point = new THREE.Object3D();
+        this.point.position.z = - this.accuracyDistance;
+        controls.getObject().children[0].add(this.point);
     }
 
     startShooting(){
@@ -25,11 +32,15 @@ class Gun {
 
     shoot() {
         this.currentAmmo -= 1;
-        var worldVec = new THREE.Vector3(0,0,0);
-        this.mesh.localToWorld(worldVec);
 
+        var pointBulletVec = new THREE.Vector3(0,0,0);
+        this.pointBulletSpawn.localToWorld(pointBulletVec);
+
+        var accPoint = new THREE.Vector3(0,0,0);
+        this.point.localToWorld(accPoint);
+        accPoint.sub(pointBulletVec);
         //criar bala
-        var bullet = new this.bulletType(worldVec, new THREE.Vector3(0,0,-1).applyQuaternion(this.mesh.getWorldQuaternion()), this.bulletSpeed);
+        var bullet = new this.bulletType(pointBulletVec, accPoint.normalize(), this.bulletSpeed);
         //draw bullet
         bullet.render();
         this.fireCooldown = 1/this.fireRate;
@@ -81,15 +92,23 @@ class Gun {
 }
 
 class Pistol extends Gun {
-    constructor(mesh,bulletType){
+    constructor(mesh,bulletType,accuracyDistance){
         var damage = 100;
         var bulletSpeed = 40;
         var fireRate = 4; // balas por segundo
         var maxAmmo = 10;
         var reloadTime = 1.5;
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
+
+        //var pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.1), new THREE.MeshBasicMaterial({color:0x0000ff}));// usar isto para encontrar o ponto
+        var pointBulletSpawn = new THREE.Object3D();
+        pointBulletSpawn.position.z = -0.2;
+        mesh.add(pointBulletSpawn);
+
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn,accuracyDistance);
 
         this.canShot = true; // um disparo por clique do botao
+        
+
     }
 
     stopShooting(){
@@ -107,13 +126,16 @@ class Pistol extends Gun {
 }
 
 class Automatic extends Gun {  // TODO mudar o nome
-    constructor(mesh, bulletType){
+    constructor(mesh, bulletType,accuracyDistance){
         var damage = 100;
         var bulletSpeed = 40;
         var fireRate = 8; // balas por segundo
         var maxAmmo = 40;
         var reloadTime = 3.5;
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
+        var pointBulletSpawn = new THREE.Object3D();
+        pointBulletSpawn.position.z = -0.2;
+        mesh.add(pointBulletSpawn);
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn,accuracyDistance);
     }
 }
 
@@ -129,7 +151,11 @@ class EnemyPistol extends Gun {
         var fireRate = 4; // balas por segundo
         var maxAmmo = 10;
         var reloadTime = 1.5;
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType)
+        //var pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.1), new THREE.MeshBasicMaterial({color:0x0000ff}));// usar isto para encontrar o ponto
+        var pointBulletSpawn = new THREE.Object3D();
+        pointBulletSpawn.position.z = -0.2;
+        mesh.add(pointBulletSpawn);
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn);
 
         this.canShot = true; // um disparo por clique do botao
     }

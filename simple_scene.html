@@ -93,8 +93,14 @@
         new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 
+        var pistolMest = new THREE.Mesh(
+            new THREE.BoxGeometry(0.1,0.1,0.5),
+            new THREE.MeshBasicMaterial({color:0x550000}));
 
-        objPlayer.addWeapon(new EnemyPistol(new THREE.Vector3(0.4,-0.2,-0.5),Bullet));
+        pistolMest.position.set(0.4,-0.2,-0.5);
+        console.log("Pistol pos " + strVector(pistolMest.position));
+        var pistol = new Pistol(pistolMest,Bullet,20);
+        objPlayer.addWeapon(pistol);
 
         // Gun models
         var onProgress = function ( xhr ) {
@@ -141,7 +147,7 @@
             console.log("object");
             console.log(object);
             object.children[0].material.map = texture;
-            objPlayer.addWeapon(new Automatic(object, Bullet));
+            objPlayer.addWeapon(new Automatic(object, Bullet,10));
             scene.add( object );
             });
                 
@@ -179,8 +185,8 @@
         } , false);
         //FIM BINDING EVENTOS
 
-        // gestao do tempo 
-        var minTimeSpeed = 0.01;
+        // gestao do tempo
+        var minTimeSpeed = 1;
         var maxTimeSpeed = 1;
         var currentTimeSpeed = maxTimeSpeed;
 
@@ -212,7 +218,7 @@
             }
             prevTime = time;
 
-            //console.log("Objs em cena THREE JS " + scene.children.length);
+           //console.log(pistol);
             //console.log("Objs ativos " + objetos.length);
 
             stats1.end();
