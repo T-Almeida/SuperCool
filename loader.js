@@ -54,16 +54,15 @@ function Loader(){
         console.log("Game.loadModels()");
 
 
-        this.loadObj(gun1, 'M24_R_Low_Poly_Version_obj.obj', 'M24_R_Low_Poly_Version_obj.mtl', 'models/submachine/');
-        this.loadObj(gun2, 'gun.obj', 'gun.mtl', 'models/deagle/');
-        this.load3ds(gun3, 'models/glock/glock18c.3ds', 'models/glock/glock18c.tga','models/glock/');
+        this.loadObj(this.gun1, 'M24_R_Low_Poly_Version_obj.obj', 'M24_R_Low_Poly_Version_obj.mtl', 'models/submachine/');
+        this.loadObj(this.gun2, 'gun.obj', 'gun.mtl', 'models/deagle/');
+        this.load3ds(this.gun3, 'models/glock/glock18c.3ds', 'models/glock/glock18c.tga','models/glock/');
 
-        while (gun1!=undefined || gun2!=undefined || gun3!=undefined);
-        progress.visible = false;
+        while (this.gun1!=undefined || this.gun2!=undefined || this.gun3!=undefined);
+        console.log("Finished loading");
+        progress.style.visibility = "hidden" ;
+        progressBar.style.visibility = "hidden" ;
     }
 
 
 }
-
-var loader = new Loader();
-loader.loadModels();

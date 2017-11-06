@@ -25,6 +25,10 @@
         <div id="currentAmmo" class="ammo noselect transpGUI"></div>
     </div>
 
+    <div id="loading">
+        <div id="loadingBar"></div>
+    </div>
+
 
     <!-- SCRIPTS -->
     <script src="threejs/three.js"></script>
@@ -44,11 +48,13 @@
     <script src="weapon.js"></script>
     <script src="player.js"></script>
     <script src="enemy.js"></script>
+    <script src="loader.js"></script>
 
 
 
     <script>
-        
+        var loader = new Loader();
+        loader.loadModels();
 
         var container = document.getElementById("container");
 
