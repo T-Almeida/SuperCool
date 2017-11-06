@@ -87,3 +87,22 @@ canvas {display: block}
     text-shadow: 2px 2px 0px rgb(31, 31, 31);
     color: white;
 }
+
+
+#loading {
+    width: 200px;
+    height: 20px;
+    background: #000;
+    border: 2px solid #000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+#loadingBar {
+    width: 200px;
+    height: 20px;
+    background: red;
+    border: none;
+    position: absolute;
+    left: 0;
+}
