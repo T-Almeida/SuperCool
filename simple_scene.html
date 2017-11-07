@@ -10,13 +10,14 @@
 <body>
 
     <div id="container"></div>
+
     <div id="crosshairdiv" class="noselect">+</div>
 
     <div id="timespeedcontainerdiv" class="noselect progressBarBG">
         <div id="timespeeddiv" class="progressBar transpGUI"></div>
     </div>
 
-    <div class="weapon">
+    <div id="weaponui" class="weapon" >
         <img id="weaponicon" class="noselect transpGUI" src="icons/pistol.png"/>
         <div id="reload" class="noselect progressBarBG">
             <div id="currentreload" class="progressBar transpGUI"></div>
@@ -29,6 +30,14 @@
         <div id="loadingBar"></div>
     </div>
 
+    <div id="blocker">
+        <div id="instructions">
+            <span style="font-size:40px">Click to play</span>
+            <br />
+            (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around and shoot, 1-2 = Select a gun)
+        </div>
+    </div>
+
 
     <!-- SCRIPTS -->
     <script src="threejs/three.js"></script>
@@ -39,203 +48,55 @@
     <script src="threejs/DDSLoader.js"></script>
     <script src="threejs/TDSLoader.js"></script>
     <script src="threejs/TGALoader.js"></script>
-    <script src="threejs/ColladaLoader.js"></script>
 
     <script src="utils.js"></script>
-
-    <script src="scene.js"></script>
     <script src="bullet.js"></script>
     <script src="weapon.js"></script>
     <script src="player.js"></script>
     <script src="enemy.js"></script>
     <script src="loader.js"></script>
-
+    <script src="game.js"></script>
+    
 
 
     <script>
-        var loader = new Loader();
-        loader.loadModels();
+        var loader, game;
 
         var container = document.getElementById("container");
+        var blocker = document.getElementById("blocker");
+        var instructions = document.getElementById( 'instructions' );
 
-        var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+        // carregamento dos modelos 3d
+        loader = new Loader();
+        loader.loadModels();
 
-        //verificar se o browser suporta pointerLock
-        if ( havePointerLock ) {
+        waitForLoad();
 
-            var element = document.body;
-
-            // Hook pointer lock state change events
-            document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-            document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-            document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
-
-
-            container.addEventListener( 'click', function ( event ) {
-
-                // Ask the browser to lock the pointer
-                element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-                element.requestPointerLock();
-
-            }, false );
-
-        } else {
-
-            container.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
-
+        // espera até todos os modelos estarem carregados
+        function waitForLoad() {
+            if (loader.gun1==undefined || loader.gun2==undefined || loader.gun3==undefined) {
+                setTimeout(waitForLoad,200);
+            } else {
+                console.log("finished loading")
+                startGame();
+            }
         }
 
-
-        window.addEventListener( 'resize', resize, false );
-        resize();
-
-        document.getElementById( 'container' ).appendChild( renderer.domElement );
-
-
-        //CRIAR OBJETOS
-        var objetos = [];
-
-        var objPlayer = new Player();
-        new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
-        //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
-
-        var pistolMest = new THREE.Mesh(
-            new THREE.BoxGeometry(0.1,0.1,0.5),
-            new THREE.MeshBasicMaterial({color:0x550000}));
-
-        pistolMest.position.set(0.4,-0.2,-0.5);
-        console.log("Pistol pos " + strVector(pistolMest.position));
-        var pistol = new Pistol(pistolMest,Bullet,20);
-        objPlayer.addWeapon(pistol);
-
-        // Gun models
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round(percentComplete, 2) + '% downloaded' );
-            }
-        };
-        var onError = function ( xhr ) { };
+        function startGame() {
+            document.getElementById("loading").style.display  = "none" ;
+            document.getElementById("loadingBar").style.display  = "none" ;
+            blocker.style.display  = "block" ;
+            loadGUI();
+            game = new Game();
+            game.init();
+            game.animate();
+        }
         
-
-        var texture = new THREE.TextureLoader().load( "models/1911/Textures/Tex_0008_1.png" );
-        texture.minFilter = THREE.LinearFilter;
-
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-        var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setPath( 'models/mp5/' );
-        mtlLoader.load( 'mp5k.mtl', function( materials ) {
-            materials.preload();
-            var objLoader = new THREE.OBJLoader();
-            objLoader.setMaterials( materials );
-            objLoader.setPath( 'models/mp5/' );
-            objLoader.load( 'mp5k.obj', function ( obj ) {
-                //obj.scale.x = 0.3, obj.scale.y = 0.3, obj.scale.z = 0.3;
-                //obj.position.x = 1.1, obj.position.y = -0.6, obj.position.z = -1.4;
-                // objPlayer.addWeapon(new Pistol(obj, Bullet));
-                console.log("obj");
-                console.log(obj);
-                //obj.map = texture;
-                // scene.add( obj );
-            }, onProgress, onError );
-        });
-
-        // instantiate a loader
-        var loader = new THREE.TGALoader();
-
-        // load a resource
-        var texture = loader.load('models/glock/glock18c.tga');
-
-        //3ds files dont store normal maps
-        var loader = new THREE.TDSLoader( );
-        loader.setPath( 'models/glock/' );
-        loader.load( 'models/glock/glock18c.3ds', function ( object ) {
-            console.log("object");
-            console.log(object);
-            object.children[0].material.map = texture;
-            objPlayer.addWeapon(new Automatic(object, Bullet,10));
-            scene.add( object );
-            });
-                
-    
-
-        var mtlLoader2 = new THREE.MTLLoader();
-        mtlLoader2.setPath( 'models/submachine/' );
-        mtlLoader2.load( 'M24_R_Low_Poly_Version_obj.mtl', function( materials ) {
-            materials.preload();
-            var objLoader = new THREE.OBJLoader();
-            objLoader.setMaterials( materials );
-            objLoader.setPath( 'models/submachine/' );
-            objLoader.load( 'M24_R_Low_Poly_Version_obj.obj', function ( obj ) {
-                obj.scale.x = 0.3, obj.scale.y = 0.3, obj.scale.z = 0.3;
-                obj.position.x = 1.1, obj.position.y = -0.6, obj.position.z = -1.4;
-                //obj.rotation.y = 185 * Math.PI / 180
-                //obj.rotateY(185 * Math.PI / 180); // 185 graus
-                //obj.rotateX(-2 * Math.PI / 180); // -2 graus
-                
-                //objPlayer.addWeapon(new Automatic(obj, Bullet));
-                //scene.add( obj );
-            }, onProgress, onError );
-        });
-        //
-
-        //BIDING EVENTOS
-        var pause = false;
-        //keyDown
-        document.addEventListener('keydown', function (event) {
-            switch (event.keycode){
-                case 80:
-                    pause = !pause;
-                    break;
-            }
-        } , false);
-        //FIM BINDING EVENTOS
-
-        // gestao do tempo
-        var minTimeSpeed = 1;
-        var maxTimeSpeed = 1;
-        var currentTimeSpeed = maxTimeSpeed;
-
-        var stats1 = new Stats();
-        stats1.showPanel(0); // Panel 0 = fps
-        stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
-        document.body.appendChild(stats1.domElement);
-
-        var stats2 = new Stats();
-        stats2.showPanel(1); // Panel 1 = ms
-        stats2.domElement.style.cssText = 'position:absolute;top:0px;left:80px;';
-        document.body.appendChild(stats2.domElement);
-
-        var prevTime = performance.now();
-        function gameLoop() {
-            stats1.begin();
-            stats2.begin();
-            var time = performance.now();
-            var delta = ( time - prevTime ) / 1000;
-
-            //console.log("delta " + delta);
-
-            resetPlayer();
-            if (!pause ) {
-                //Call update
-                for (var i = 0 ; i < objetos.length ; i++){
-                    objetos[i].update(delta,i);
-                }
-            }
-            prevTime = time;
-
-           //console.log(pistol);
-            //console.log("Objs ativos " + objetos.length);
-
-            stats1.end();
-            stats2.end();
-            requestAnimationFrame( gameLoop );
-            renderer.render( scene, camera );
-
+        function loadGUI() {
+            document.getElementById("weaponui").style.display  = "block" ;
+            document.getElementById("crosshairdiv").style.display  = "block" ;
+            document.getElementById("timespeedcontainerdiv").style.display  = "block" ;
         }
-
-        gameLoop();
-
     </script>
 </body>
 </html>

@@ -15,19 +15,19 @@ function Bullet(posicaoOrigem,direcao,speed) {
             return ;
         }
 
-        this.mesh.translateOnAxis( direcao, speed * delta * currentTimeSpeed);
+        this.mesh.translateOnAxis( direcao, speed * delta * game.currentTimeSpeed);
 
     };
 
     this.render = function () {
-        objetos.push(this);
-        scene.add(this.mesh);
+        game.objects.push(this);
+        game.scene.add(this.mesh);
     };
 
     this.destroy = function(index){
         console.log("Bullet destroyed");
-        scene.remove(this.mesh); //remover da cena
-        objetos.splice(index,1); //remover dos objetos ativos
+        game.scene.remove(this.mesh); //remover da cena
+        game.objects.splice(index,1); //remover dos objetos ativos
     }
 }
 
@@ -49,18 +49,18 @@ function EnemyBullet(posicaoOrigem,direcao,speed) {
             return ;
         }
 
-        this.mesh.translateOnAxis( direcao, speed * delta * currentTimeSpeed);
+        this.mesh.translateOnAxis( direcao, speed * delta * game.currentTimeSpeed);
 
     };
 
     this.render = function () {
-        objetos.push(this);
-        scene.add(this.mesh);
+        game.objects.push(this);
+        game.scene.add(this.mesh);
     };
 
     this.destroy = function(index){
         console.log("Bullet destroyed");
-        scene.remove(this.mesh); //remover da cena
-        objetos.splice(index,1); //remover dos objetos ativos
+        game.scene.remove(this.mesh); //remover da cena
+        game.objects.splice(index,1); //remover dos objetos ativos
     }
 }

@@ -5,64 +5,74 @@ function Loader(){
 
     THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
-    var progress = document.getElementById("loading");
-    var progressBar = document.getElementById("loadingBar");
+    // Loading manager para o progress bar
     var manager = new THREE.LoadingManager();
     manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-        progressBar.style.width = (itemsLoaded / itemsTotal * 100) + '%';
+        document.getElementById("loadingBar").style.width = (itemsLoaded / itemsTotal * 100) + '%';
     };
     manager.onError = function ( url ) {
         console.log( 'There was an error loading ' + url );
     };
 
-    this.loadObj = function(model, obj, mtl, path) { 
+    this.loadGun1 = function() {
         var mtlLoader = new THREE.MTLLoader(manager);
-        mtlLoader.setPath(path);
+        mtlLoader.setPath('models/submachine/');
         mtlLoader.load( 
-            mtl, 
+            'M24_R_Low_Poly_Version_obj.mtl', 
             function( materials ) {
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath(path);
+                objLoader.setPath('models/submachine/');
                 objLoader.load( 
-                    obj, 
+                    'M24_R_Low_Poly_Version_obj.obj', 
                     function ( object ) {
-                        model = object;
+                        loader.gun1 = object;
                     } 
                 );
             }
         );
     }
 
-    this.load3ds = function(model, tds, tga, path) {
+    this.loadGun2 = function() {
+        var mtlLoader = new THREE.MTLLoader(manager);
+        mtlLoader.setPath('models/deagle/');
+        mtlLoader.load( 
+            'gun.mtl', 
+            function( materials ) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials( materials );
+                objLoader.setPath('models/deagle/');
+                objLoader.load( 
+                    'gun.obj', 
+                    function ( object ) {
+                        loader.gun2 = object;
+                    } 
+                );
+            }
+        );
+    }
+    
+    this.loadGun3 = function() {
         var tgaLoader = new THREE.TGALoader(manager);
-        var glockTexture = tgaLoader.load(tga);
+        var glockTexture = tgaLoader.load('models/glock/glock18c.tga');
         //3ds files dont store normal maps
         var tdsLoader = new THREE.TDSLoader(manager);
-        tdsLoader.setPath(path);
+        tdsLoader.setPath('models/glock/');
         tdsLoader.load( 
-            tds, 
+            'models/glock/glock18c.3ds', 
             function ( object ) {
                 object.children[0].material.map = glockTexture;
-                model = object;
+                loader.gun3 = object;
             }
         );
     }
 
     this.loadModels = function() {
         console.log("Game.loadModels()");
-
-
-        this.loadObj(this.gun1, 'M24_R_Low_Poly_Version_obj.obj', 'M24_R_Low_Poly_Version_obj.mtl', 'models/submachine/');
-        this.loadObj(this.gun2, 'gun.obj', 'gun.mtl', 'models/deagle/');
-        this.load3ds(this.gun3, 'models/glock/glock18c.3ds', 'models/glock/glock18c.tga','models/glock/');
-
-        while (this.gun1!=undefined || this.gun2!=undefined || this.gun3!=undefined);
-        console.log("Finished loading");
-        progress.style.visibility = "hidden" ;
-        progressBar.style.visibility = "hidden" ;
+        this.loadGun1();
+        this.loadGun2();
+        this.loadGun3();
     }
-
-
 }

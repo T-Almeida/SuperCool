@@ -22,8 +22,8 @@ function Player() {
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
     //BoundingBox
-    this.playerBB = new THREE.Box3(new THREE.Vector3(controls.getObject().position.x-this.bbSizeX,controls.getObject().position.y-this.playerheight,controls.getObject().position.z-this.bbSizeZ),
-                                    new THREE.Vector3(controls.getObject().position.x+this.bbSizeX,controls.getObject().position.y+1,controls.getObject().position.z+this.bbSizeZ));
+    this.playerBB = new THREE.Box3(new THREE.Vector3(game.controls.getObject().position.x-this.bbSizeX,game.controls.getObject().position.y-this.playerheight,game.controls.getObject().position.z-this.bbSizeZ),
+                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX,game.controls.getObject().position.y+1,game.controls.getObject().position.z+this.bbSizeZ));
 
     // ARMAS
     this.weapons = [];
@@ -31,8 +31,8 @@ function Player() {
     
     this.addWeapon = function(weapon) {
         this.weapons.push(weapon);
-        objetos.push(weapon);
-        controls.getObject().children[0].add(weapon.mesh);
+        game.objects.push(weapon);
+        game.controls.getObject().children[0].add(weapon.mesh);
     }
 
 
@@ -67,7 +67,7 @@ function Player() {
     };
 
     //adicionar o objeto como objeto ativo
-    objetos.push(this);
+    game.objects.push(this);
 
     this.mousedown = function () {
         self.weapons[self.currentWeapon].startShooting();
@@ -153,17 +153,17 @@ function Player() {
         reloadBar.style.height = relHeight + '%'; 
         // time speed update
         var timeBar = document.getElementById("timespeeddiv"); 
-        var timeHeight = 100 - currentTimeSpeed / maxTimeSpeed * 100;
+        var timeHeight = 100 - game.currentTimeSpeed / game.maxTimeSpeed * 100;
         timeBar.style.height = timeHeight + '%'; 
     };
 
     this.detectCollision = function () {
         //detecao colisao com balas e futuramente outros
-        for (var i = 0;i<objetos.length ; i++){
-            if (!(objetos[i] instanceof EnemyBullet)) continue;
-            if (this.playerBB.containsPoint(objetos[i].mesh.position)){
+        for (var i = 0;i<game.objects.length ; i++){
+            if (!(game.objects[i] instanceof EnemyBullet)) continue;
+            if (this.playerBB.containsPoint(game.objects[i].mesh.position)){
                 console.log("Colisão com o player");
-                objetos[i].destroy(i);
+                game.objects[i].destroy(i);
             }
         }
     };
@@ -171,11 +171,11 @@ function Player() {
 
     this.updateBB = function () {
 
-        this.playerBB.min.set(controls.getObject().position.x-this.bbSizeX,controls.getObject().position.y-this.playerheight,controls.getObject().position.z-1);
-        this.playerBB.max.set(controls.getObject().position.x+this.bbSizeX,controls.getObject().position.y+1,controls.getObject().position.z+1);
-        //this.playerBB.min.applyQuaternion(controls.getObject().getWorldQuaternion());
-        //this.playerBB.max.applyQuaternion(controls.getObject().getWorldQuaternion());
-        //console.log("My pos " + strVector(controls.getObject().position));
+        this.playerBB.min.set(game.controls.getObject().position.x-this.bbSizeX,game.controls.getObject().position.y-this.playerheight,game.controls.getObject().position.z-1);
+        this.playerBB.max.set(game.controls.getObject().position.x+this.bbSizeX,game.controls.getObject().position.y+1,game.controls.getObject().position.z+1);
+        //this.playerBB.min.applyQuaternion(game.controls.getObject().getWorldQuaternion());
+        //this.playerBB.max.applyQuaternion(game.controls.getObject().getWorldQuaternion());
+        //console.log("My pos " + strVector(game.controls.getObject().position));
         //console.log("BB " + strVector(this.playerBB.min) + " " + strVector(this.playerBB.max))
     };
 
@@ -186,85 +186,83 @@ function Player() {
 
         this.updateGUI(cw);
 
-        if ( controlsEnabled ) {
-            this.velocity.y -= this.gravity * this.palyerMass * delta * currentTimeSpeed;  // força gravitica
+        this.velocity.y -= this.gravity * this.palyerMass * delta * game.currentTimeSpeed;  // força gravitica
 
-            this.updateBB();
-            this.detectCollision();
+        this.updateBB();
+        this.detectCollision();
 
-            // se nao esta a saltar o movimento é normal
-            if (!this.isJumping){
-                if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta * currentTimeSpeed);
-                if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta * currentTimeSpeed)
-                if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta * currentTimeSpeed);
-                if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta * currentTimeSpeed);
-    
-                if (this.jumpPress) {
-                    this.velocity.y += this.jumpSpeed;
-                    this.isJumping = true;
-                    this.jumpDirection[0] = this.moveForward;
-                    this.jumpDirection[1] = this.moveBackward;
-                    this.jumpDirection[2] = this.moveLeft;
-                    this.jumpDirection[3] = this.moveRight;
-                }
-            } 
-            // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
-            else {
-                var inertiaFactor = 0.6;
-                if ( this.jumpDirection[0] ) controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor);
-                if ( this.jumpDirection[1] ) controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor)
-                if ( this.jumpDirection[2] ) controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor);
-                if ( this.jumpDirection[3] ) controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor);
-                var movementFactor = 0.4;
-                if ( this.moveForward ) controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor);
-                if ( this.moveBackward ) controls.getObject().translateZ(this.playerSpeed * delta * movementFactor)
-                if ( this.moveLeft ) controls.getObject().translateX(-this.playerSpeed * delta * movementFactor);
-                if ( this.moveRight ) controls.getObject().translateX(this.playerSpeed * delta * movementFactor);
+        // se nao esta a saltar o movimento é normal
+        if (!this.isJumping){
+            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * game.currentTimeSpeed);
+            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * game.currentTimeSpeed)
+            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
+            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * game.currentTimeSpeed);
+
+            if (this.jumpPress) {
+                this.velocity.y += this.jumpSpeed;
+                this.isJumping = true;
+                this.jumpDirection[0] = this.moveForward;
+                this.jumpDirection[1] = this.moveBackward;
+                this.jumpDirection[2] = this.moveLeft;
+                this.jumpDirection[3] = this.moveRight;
             }
-            
+        } 
+        // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
+        else {
+            var inertiaFactor = 0.6;
+            if ( this.jumpDirection[0] ) game.controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor);
+            if ( this.jumpDirection[1] ) game.controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor)
+            if ( this.jumpDirection[2] ) game.controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor);
+            if ( this.jumpDirection[3] ) game.controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor);
+            var movementFactor = 0.4;
+            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor);
+            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * movementFactor)
+            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * movementFactor);
+            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * movementFactor);
+        }
+        
 
-            this.raycaster.ray.origin.copy(controls.getObject().position);
-            //raycaster.ray.origin.y -= 10;
+        this.raycaster.ray.origin.copy(game.controls.getObject().position);
+        //raycaster.ray.origin.y -= 10;
 
-            var intersection = this.raycaster.intersectObject(platform);
+        var intersection = this.raycaster.intersectObject(game.platform);
 
-            rayInter.visible = false; //OBJETO DO CENARIO DEBUG
-            if (intersection.length>=1){
-                rayInter.visible = true;
-                rayInter.position.copy(intersection[0].point);
-                if (controls.getObject().position.y-this.playerheight <= intersection[0].point.y) { //colisao com o chao
-                    if (this.velocity.y<0) {
-                        this.velocity.y = 0;
-                        controls.getObject().position.y = intersection[0].point.y+this.playerheight;
-                        this.isJumping=false; //deteta qd n esta a salar
-                    }
+        game.rayInter.visible = false; //OBJETO DO CENARIO DEBUG
+        if (intersection.length>=1){
+            game.rayInter.visible = true;
+            game.rayInter.position.copy(intersection[0].point);
+            if (game.controls.getObject().position.y-this.playerheight <= intersection[0].point.y) { //colisao com o chao
+                if (this.velocity.y<0) {
+                    this.velocity.y = 0;
+                    game.controls.getObject().position.y = intersection[0].point.y+this.playerheight;
+                    this.isJumping=false; //deteta qd n esta a salar
                 }
             }
+        }
 
-            controls.getObject().translateY(this.velocity.y * delta);
+        game.controls.getObject().translateY(this.velocity.y * delta);
 
-            //console.log("velocidade y " + this.velocity.y);
-            //console.log("isJumping " + isJumping);
-            //console.log("player position x " + controls.getObject().position.x + " y "+  controls.getObject().position.y +" z "+  controls.getObject().position.z);
-            
-            // update da velocidade do tempo
-            var acceleratingTimeStep = 5;
-            var stoppingTimeStep = 2;
-            if ( cw.isShooting || cw.isReloading) { 
-                /* TODO refazer isto, o tempo so devia andar se a arma disparar
-                    Esta logica provavelmente deve passar para a arma (o oponent usa a mesma arma por isso nao passei agora)
-                    se a arma nao tiver balas tambem nao devia parar
-                */
-                currentTimeSpeed = maxTimeSpeed;
-            } 
-            else if (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight || this.isJumping ) {
-                var tempTimeSpeed = currentTimeSpeed + acceleratingTimeStep * delta ;
-                currentTimeSpeed = Math.min(tempTimeSpeed, maxTimeSpeed);
-            }
-            else {
-                var tempTimeSpeed = currentTimeSpeed - stoppingTimeStep * delta ;
-                currentTimeSpeed = Math.max(tempTimeSpeed, minTimeSpeed);
-            }
+        //console.log("velocidade y " + this.velocity.y);
+        //console.log("isJumping " + isJumping);
+        //console.log("player position x " + game.controls.getObject().position.x + " y "+  game.controls.getObject().position.y +" z "+  game.controls.getObject().position.z);
+        
+        // update da velocidade do tempo
+        var acceleratingTimeStep = 5;
+        var stoppingTimeStep = 2;
+        if ( cw.isShooting || cw.isReloading) { 
+            /* TODO refazer isto, o tempo so devia andar se a arma disparar
+                Esta logica provavelmente deve passar para a arma (o oponent usa a mesma arma por isso nao passei agora)
+                se a arma nao tiver balas tambem nao devia parar
+            */
+            game.currentTimeSpeed = game.maxTimeSpeed;
+        } 
+        else if (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight || this.isJumping ) {
+            var tempTimeSpeed = game.currentTimeSpeed + acceleratingTimeStep * delta ;
+            game.currentTimeSpeed = Math.min(tempTimeSpeed, game.maxTimeSpeed);
+        }
+        else {
+            var tempTimeSpeed = game.currentTimeSpeed - stoppingTimeStep * delta ;
+            game.currentTimeSpeed = Math.max(tempTimeSpeed, game.minTimeSpeed);
         }
     };
 }

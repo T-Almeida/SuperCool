@@ -11,7 +11,7 @@ function Enemy(position) {
 
     this.weapon = new EnemyPistol(new THREE.Vector3(1.5,0,-2), EnemyBullet);
     this.weapon.mesh.visible = true;
-    objetos.push(this.weapon);
+    game.objects.push(this.weapon);
 
     this.mesh.add(this.weapon.mesh);
 
@@ -37,23 +37,23 @@ function Enemy(position) {
 
         if (this.weapon.currentAmmo==0) this.weapon.reload();
 
-        if (this.fireCooldown>0) this.fireCooldown -= delta * currentTimeSpeed;
+        if (this.fireCooldown>0) this.fireCooldown -= delta * game.currentTimeSpeed;
 
     };
 
     this.detectCollision = function () {
         //detecao colisao com balas e futuramente outros
-        for (var i = 0;i<objetos.length ; i++){
-            if (!(objetos[i] instanceof Bullet)) continue;
-            if (this.meshBB.containsPoint(objetos[i].mesh.position)){
+        for (var i = 0;i<game.objects.length ; i++){
+            if (!(game.objects[i] instanceof Bullet)) continue;
+            if (this.meshBB.containsPoint(game.objects[i].mesh.position)){
                 console.log("Colisão");
-                objetos[i].destroy(i);
+                game.objects[i].destroy(i);
             }
         }
     };
 
     this.render = function () {
-        objetos.push(this);
-        scene.add(this.mesh);
+        game.objects.push(this);
+        game.scene.add(this.mesh);
     }
 }

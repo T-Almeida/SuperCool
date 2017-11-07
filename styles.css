@@ -1,4 +1,7 @@
-body { margin: 0; }
+body { 
+    margin: 0; 
+    background: black;
+}
 #container { width: 100%; height: 100% }
 canvas {display: block}
 .noselect {
@@ -12,9 +15,11 @@ canvas {display: block}
   }
 
 #crosshairdiv {
+    display: none;
     position: absolute; 
     top:50%; 
     left:50%;
+    margin: -10px 0 0 -4.5px;
 } 
 
 .transpGUI {
@@ -33,6 +38,7 @@ canvas {display: block}
 }
 /* Time Speed Styles */
 #timespeedcontainerdiv {
+    display: none;
     position: absolute;
     left: 5px;
     bottom: 24%;
@@ -41,6 +47,9 @@ canvas {display: block}
 }
 
 /* Weapon Indicators Styles */
+#weaponui {
+    display: none;
+}
 .weapon {
     position: absolute;
     bottom: 5px;
@@ -92,8 +101,9 @@ canvas {display: block}
 #loading {
     width: 200px;
     height: 20px;
-    background: #000;
-    border: 2px solid #000;
+    margin: -10px 0 0 -100px;
+    background: rgb(255, 255, 255);
+    border: 2px solid rgb(87, 87, 87);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -105,4 +115,34 @@ canvas {display: block}
     border: none;
     position: absolute;
     left: 0;
+}
+
+
+#blocker {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+#instructions {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    color: #ffffff;
+    text-align: center;
+    cursor: pointer;
 }

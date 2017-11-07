@@ -19,7 +19,7 @@ class Gun {
         this.accuracyDistance = accuracyDistance;
         this.point = new THREE.Object3D();
         this.point.position.z = - this.accuracyDistance;
-        controls.getObject().children[0].add(this.point);
+        game.controls.getObject().children[0].add(this.point);
     }
 
     startShooting(){
@@ -48,7 +48,7 @@ class Gun {
 
     update(delta, objectIndex) {
         if (this.isReloading){
-            this.reloadCooldown -= delta * currentTimeSpeed;
+            this.reloadCooldown -= delta * game.currentTimeSpeed;
             if (this.reloadCooldown <= 0) {
                 this.currentAmmo = this.maxAmmo;
                 this.isReloading = false;   
@@ -64,7 +64,7 @@ class Gun {
         }
         
         // update do cooldown da disparo
-        if (this.fireCooldown>0) this.fireCooldown -= delta * currentTimeSpeed;
+        if (this.fireCooldown>0) this.fireCooldown -= delta * game.currentTimeSpeed;
         
         if (this.isShooting && this.fireCooldown <= 0) {
             this.shoot();
@@ -139,7 +139,7 @@ class Automatic extends Gun {  // TODO mudar o nome
     }
 }
 
-class EnemyPistol extends Gun {
+class EnemyPistol extends Gun { // TODO nao usar mais
     constructor(position,bulletType){
         var mesh = new THREE.Mesh(
             new THREE.BoxGeometry(0.1,0.1,0.5),
