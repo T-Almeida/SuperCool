@@ -81,7 +81,7 @@ function Game() {
 
         // GAME MAP
 
-        var ground_geometry = new THREE.PlaneBufferGeometry( 2000, 2000 );
+        var ground_geometry = new THREE.PlaneBufferGeometry( 1000, 1000 );
         var ground_material = new THREE.MeshPhongMaterial( { 
             color: 0x999999,
             specular: 0x222222,
@@ -190,8 +190,8 @@ function Game() {
             }
             
             for (i=0; i<game.enemies.length; i++) {
-                game.enemies[i].setPlaybackRate( 1/game.currentTimeSpeed );
-                game.enemies[i].update(delta);
+                // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
+                game.enemies[i].update(delta * game.currentTimeSpeed);
             }
         }
         
@@ -217,8 +217,7 @@ function Game() {
             enemyChar.controls = controls;
             enemyChar.shareParts( loader.enemy );
             // cast and receive shadows
-            enemyChar.setWireframe (true) ;
-            enemyChar.enableShadows( true );
+            if (i==0) enemyChar.setWireframe (true) ;
             enemyChar.setWeapon( 0 );
             enemyChar.setSkin( i );
             enemyChar.root.position.x = i * 50;

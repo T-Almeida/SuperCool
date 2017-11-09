@@ -103,8 +103,8 @@ function Loader(){
         baseCharacter.onLoadComplete = function () {
             baseCharacter.setWireframe( true );
             baseCharacter.enableShadows( true );
-            baseCharacter.setWeapon( 0 );
-            baseCharacter.setSkin( 0 );
+            // baseCharacter.setWeapon( 0 );
+            //baseCharacter.setSkin( 0 );
             loader.enemy = baseCharacter;
             console.log(loader.enemy);
         };

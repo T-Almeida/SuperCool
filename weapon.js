@@ -94,7 +94,7 @@ class Gun {
 class Pistol extends Gun {
     constructor(mesh,bulletType,accuracyDistance,bulletPosition){
         var damage = 100;
-        var bulletSpeed = 40;
+        var bulletSpeed = 120;
         var fireRate = 4; // balas por segundo
         var maxAmmo = 10;
         var reloadTime = 1.5;
@@ -128,7 +128,7 @@ class Pistol extends Gun {
 class Automatic extends Gun {  // TODO mudar o nome
     constructor(mesh, bulletType,accuracyDistance){
         var damage = 100;
-        var bulletSpeed = 40;
+        var bulletSpeed = 120;
         var fireRate = 8; // balas por segundo
         var maxAmmo = 40;
         var reloadTime = 3.5;

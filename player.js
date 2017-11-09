@@ -1,8 +1,8 @@
 function Player() {
     this.playerheight = 25;
-    this.playerSpeed = 50;
-    this.palyerMass = 20.0;
-    this.jumpSpeed = 25;
+    this.playerSpeed = 30;
+    this.palyerMass = 30.0;
+    this.jumpSpeed = 30;
     this.gravity = 2;
     this.bbSizeX = 2;
     this.bbSizeZ = 1;
