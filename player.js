@@ -1,6 +1,6 @@
 function Player() {
-    this.playerheight = 5;
-    this.playerSpeed = 15;
+    this.playerheight = 25;
+    this.playerSpeed = 50;
     this.palyerMass = 20.0;
     this.jumpSpeed = 25;
     this.gravity = 2;
@@ -199,7 +199,7 @@ function Player() {
             if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * game.currentTimeSpeed);
 
             if (this.jumpPress) {
-                this.velocity.y += this.jumpSpeed;
+                this.velocity.y += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
                 this.isJumping = true;
                 this.jumpDirection[0] = this.moveForward;
                 this.jumpDirection[1] = this.moveBackward;
@@ -210,15 +210,15 @@ function Player() {
         // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
         else {
             var inertiaFactor = 0.6;
-            if ( this.jumpDirection[0] ) game.controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor);
-            if ( this.jumpDirection[1] ) game.controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor)
-            if ( this.jumpDirection[2] ) game.controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor);
-            if ( this.jumpDirection[3] ) game.controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor);
+            if ( this.jumpDirection[0] ) game.controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
+            if ( this.jumpDirection[1] ) game.controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed)
+            if ( this.jumpDirection[2] ) game.controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
+            if ( this.jumpDirection[3] ) game.controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
             var movementFactor = 0.4;
-            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor);
-            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * movementFactor)
-            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * movementFactor);
-            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * movementFactor);
+            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
+            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * movementFactor * game.currentTimeSpeed)
+            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
+            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
         }
         
 

@@ -2,10 +2,10 @@ function Bullet(posicaoOrigem,direcao,speed) {
 
     this.mesh = new THREE.Mesh(
         new THREE.SphereGeometry(0.05,8,8),
-        new THREE.MeshBasicMaterial({color:0x000000}));
+        new THREE.MeshPhongMaterial({emissive:0xff0000}));
 
     this.mesh.position.copy(posicaoOrigem);
-
+    
     var self = this;
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES

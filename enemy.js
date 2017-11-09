@@ -1,7 +1,7 @@
 function Enemy(position) {
 
     this.mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(3,5,2),
+        new THREE.BoxGeometry(20,30,2),
         new THREE.MeshBasicMaterial({color:0x0f0fff}));
 
     this.mesh.position.copy(position);

@@ -6,7 +6,10 @@ function Game() {
     this.controlsEnabled = false;
 
     this.player;
-    this.objects;
+    this.enemies = [];
+    this.objects = [];
+    this.floors;
+    this.walls;
     this.platform;
     this.rayInter;
 
@@ -28,8 +31,7 @@ function Game() {
 
         // CAMERA
 
-        this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 9000 );
-        
+        this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // Mover a camara com o rato (FirstPerson)
         this.controls = new THREE.PointerLockControls( this.camera );
         this.scene.add( this.controls.getObject() ); // adiciona camera
@@ -38,19 +40,28 @@ function Game() {
 
         this.scene.add( new THREE.AmbientLight( 0x222222 ) );
 
-        var directionalLight = new THREE.DirectionalLight( 0xe2c3a4 );
-        directionalLight.position.set( 0, 0, 1 ).normalize();
-        this.scene.add( directionalLight );
+        
+        var light = new THREE.SpotLight( 0xffffff, 5, 1000 );
+        light.position.set( -100, 350, 350 );
+        light.angle = 0.5;
+        light.penumbra = 0.5;
+        light.castShadow = true;
+        light.shadow.mapSize.width = 1024;
+        light.shadow.mapSize.height = 1024;
+        // scene.add( new THREE.CameraHelper( light.shadow.camera ) );
+        this.scene.add( light );
 
         // RENDERER
 
         this.renderer = new THREE.WebGLRenderer();  // TODO ver o antialias
+        this.renderer.shadowMap.enabled = true;
+        //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         container.appendChild( this.renderer.domElement );
         
         // SKYBOX
-
+        /*
         this.scene.add( makeSkybox( [
             'textures/cube/skybox/px.jpg', // right
             'textures/cube/skybox/nx.jpg', // left
@@ -58,16 +69,29 @@ function Game() {
             'textures/cube/skybox/ny.jpg', // bottom
             'textures/cube/skybox/pz.jpg', // back
             'textures/cube/skybox/nz.jpg'  // front
-        ], 8000 ));
+        ], 8000 ));*/
         
         // PLATFORM
-
+        /*
         this.scene.add( makePlatform(
             'models/platform/platform.json',
             'models/platform/platform.jpg',
             this.renderer.getMaxAnisotropy()
-        ));
+        ));*/
 
+        // GAME MAP
+
+        var ground_geometry = new THREE.PlaneBufferGeometry( 2000, 2000 );
+        var ground_material = new THREE.MeshPhongMaterial( { 
+            color: 0x999999,
+            specular: 0x222222,
+            shininess: 5 } );
+        var ground = new THREE.Mesh( ground_geometry, ground_material );
+        ground.rotation.x = - Math.PI / 2;
+        ground.receiveShadow = true;
+        this.scene.add( ground );
+        this.platform = ground; // TODO tirar
+        
         //RAYCAST DEBUG
 
         var gem = new THREE.BoxGeometry(0.1,0.5,0.1);
@@ -106,6 +130,7 @@ function Game() {
                     game.controls.enabled = true;
                     blocker.style.display = 'none';
                 } else {
+                    game.controlsEnabled = false;
                     game.controls.enabled = false;
                     blocker.style.display = 'block';
                     instructions.style.display = '';
@@ -130,15 +155,15 @@ function Game() {
 
         //CRIAR OBJETOS
 
-        this.objects = [];
         
         this.player = new Player();
-        this.player.addWeapon(new Pistol(loader.gun3, Bullet, 20));
-        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 10));
+        this.player.addWeapon(new Pistol(loader.gun2, Bullet, 40, new THREE.Vector3(0, 4, 4)));
+        this.player.addWeapon(new Automatic(loader.gun1, Bullet, 60));
 
         new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 
+        this.createEnemies();
 
         // STATS
 
@@ -154,27 +179,55 @@ function Game() {
     }
 
     this.animate = function() {
-        if (game.prevTime == undefined) game.prevTime = performance.now();
-
-        game.stats1.begin();
-        game.stats2.begin();
-
-        var time = performance.now();
-        var delta = ( time - game.prevTime ) / 1000;
+        var delta = clock.getDelta();
 
         resetPlayer();
+
         if ( game.controlsEnabled ) {
             //Call update
             for (var i = 0 ; i < game.objects.length ; i++){
                 game.objects[i].update(delta,i);
             }
+            
+            for (i=0; i<game.enemies.length; i++) {
+                game.enemies[i].setPlaybackRate( 1/game.currentTimeSpeed );
+                game.enemies[i].update(delta);
+            }
         }
-
-        game.stats1.end();
-        game.stats2.end();
+        
         requestAnimationFrame( game.animate );
         game.renderer.render( game.scene, game.camera );
-        game.prevTime = time;
+
+        game.stats1.update();
+        game.stats2.update();
+    }
+
+    this.createEnemies = function() {
+        var controls = {
+            moveForward: false,
+            moveBackward: false,
+            moveLeft: false,
+            moveRight: false,
+            attack: true
+        };
+        
+        for (i=0; i<3; i++) {
+            var enemyChar = new THREE.MD2CharacterComplex();
+            enemyChar.scale = 0.5;
+            enemyChar.controls = controls;
+            enemyChar.shareParts( loader.enemy );
+            // cast and receive shadows
+            enemyChar.setWireframe (true) ;
+            enemyChar.enableShadows( true );
+            enemyChar.setWeapon( 0 );
+            enemyChar.setSkin( i );
+            enemyChar.root.position.x = i * 50;
+            enemyChar.root.position.y = 12;
+            this.scene.add( enemyChar.root );
+            this.enemies.push(enemyChar);
+            console.log(enemyChar);
+        }
+        
     }
 
     this.onWindowResize = function( event ) {
@@ -211,7 +264,8 @@ function makePlatform( jsonUrl, textureUrl, textureQuality ) {
     var loader = new THREE.JSONLoader();
     loader.load( jsonUrl, function( geometry ) {
         geometry.computeFaceNormals();
-        game.platform = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial({ map : texture }) );
+        // game.platform = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial({ map : texture }) );
+        game.platform = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({ map : texture, shading: THREE.SmoothShading }) );
         game.platform.name = "platform";
         game.platform.scale.set( 2, 2, 2 );
         placeholder.add( game.platform );

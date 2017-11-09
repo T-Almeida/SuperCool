@@ -43,11 +43,14 @@
     <script src="threejs/three.js"></script>
     <script src="threejs/stats.min.js"></script>
     <script src="threejs/PointerLockControls.js"></script>
+    <script src='threejs/MD2CharacterComplex.js'></script>
+    <script src='threejs/MorphBlendMesh.js'></script>
     <script src="threejs/OBJLoader.js"></script>
     <script src="threejs/MTLLoader.js"></script>
     <script src="threejs/DDSLoader.js"></script>
     <script src="threejs/TDSLoader.js"></script>
     <script src="threejs/TGALoader.js"></script>
+    <script src="threejs/MD2Loader.js"></script>
 
     <script src="utils.js"></script>
     <script src="bullet.js"></script>
@@ -61,6 +64,7 @@
 
     <script>
         var loader, game;
+        var clock = new THREE.Clock();
 
         var container = document.getElementById("container");
         var blocker = document.getElementById("blocker");
@@ -74,7 +78,8 @@
 
         // espera até todos os modelos estarem carregados
         function waitForLoad() {
-            if (loader.gun1==undefined || loader.gun2==undefined || loader.gun3==undefined) {
+            if (loader.gun1==undefined || loader.gun2==undefined 
+                    || loader.gun3==undefined || loader.enemy==undefined) {
                 setTimeout(waitForLoad,200);
             } else {
                 console.log("finished loading")

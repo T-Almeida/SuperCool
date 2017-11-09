@@ -92,16 +92,16 @@ class Gun {
 }
 
 class Pistol extends Gun {
-    constructor(mesh,bulletType,accuracyDistance){
+    constructor(mesh,bulletType,accuracyDistance,bulletPosition){
         var damage = 100;
         var bulletSpeed = 40;
         var fireRate = 4; // balas por segundo
         var maxAmmo = 10;
         var reloadTime = 1.5;
 
-        //var pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.1), new THREE.MeshBasicMaterial({color:0x0000ff}));// usar isto para encontrar o ponto
-        var pointBulletSpawn = new THREE.Object3D();
-        pointBulletSpawn.position.z = -0.2;
+        var pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.1), new THREE.MeshBasicMaterial({color:0x0000ff}));// usar isto para encontrar o ponto
+        //var pointBulletSpawn = new THREE.Object3D();
+        pointBulletSpawn.position.copy(bulletPosition);
         mesh.add(pointBulletSpawn);
 
         super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn,accuracyDistance);
