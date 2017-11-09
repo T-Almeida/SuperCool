@@ -189,10 +189,7 @@ function Game() {
                 game.objects[i].update(delta,i);
             }
             
-            for (i=0; i<game.enemies.length; i++) {
-                // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
-                game.enemies[i].update(delta * game.currentTimeSpeed);
-            }
+
         }
         
         requestAnimationFrame( game.animate );
