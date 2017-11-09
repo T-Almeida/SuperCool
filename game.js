@@ -160,10 +160,10 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun2, Bullet, 40, new THREE.Vector3(0, 4, 4)));
         this.player.addWeapon(new Automatic(loader.gun1, Bullet, 60));
 
-        new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
+        new Enemy(new THREE.Vector3(-2, 12, 20 )).render();
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 
-        this.createEnemies();
+        //this.createEnemies();
 
         // STATS
 

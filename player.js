@@ -5,7 +5,7 @@ function Player() {
     this.jumpSpeed = 30;
     this.gravity = 2;
     this.bbSizeX = 2;
-    this.bbSizeZ = 1;
+    this.bbSizeZ = 2;
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -22,8 +22,8 @@ function Player() {
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
     //BoundingBox
-    this.playerBB = new THREE.Box3(new THREE.Vector3(game.controls.getObject().position.x-this.bbSizeX,game.controls.getObject().position.y-this.playerheight,game.controls.getObject().position.z-this.bbSizeZ),
-                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX,game.controls.getObject().position.y+1,game.controls.getObject().position.z+this.bbSizeZ));
+    this.playerBB = new THREE.Box3(new THREE.Vector3(game.controls.getObject().position.x-this.bbSizeX, game.controls.getObject().position.y-this.playerheight ,game.controls.getObject().position.z-this.bbSizeZ),
+                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX, game.controls.getObject().position.y+1 ,game.controls.getObject().position.z+this.bbSizeZ));
 
     // ARMAS
     this.weapons = [];
