@@ -79,7 +79,7 @@
         // espera até todos os modelos estarem carregados
         function waitForLoad() {
             if (loader.gun1==undefined || loader.gun2==undefined 
-                    || loader.gun3==undefined || loader.enemy==undefined) {
+                || loader.enemy==undefined || loader.map==undefined) {
                 setTimeout(waitForLoad,200);
             } else {
                 console.log("finished loading")

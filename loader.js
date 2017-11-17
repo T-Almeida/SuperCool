@@ -1,8 +1,8 @@
 function Loader(){
     this.gun1;
     this.gun2;
-    this.gun3;
     this.enemy;
+    this.map;
 
     THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
@@ -15,25 +15,43 @@ function Loader(){
         console.log( 'There was an error loading ' + url );
     };
 
-    this.loadGun1 = function() {
+    this.loadScene = function() {
         var mtlLoader = new THREE.MTLLoader(manager);
-        mtlLoader.setPath('models/submachine/');
+        mtlLoader.setPath('models/cena/');
         mtlLoader.load( 
-            'M24_R_Low_Poly_Version_obj.mtl', 
+            'cena.mtl', 
             function( materials ) {
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/submachine/');
+                objLoader.setPath('models/cena/');
                 objLoader.load( 
-                    'M24_R_Low_Poly_Version_obj.obj', 
+                    'cena.obj', 
                     function ( object ) {
-                        object.rotation.y = 180 * Math.PI / 180;
-                        object.rotation.x =  0 * Math.PI / 180;
-        -                //obj.rotateY(185 * Math.PI / 180); // 185 graus
-        -                //obj.rotateX(-2 * Math.PI / 180); // -2 graus
-                        object.position.set(1.2,-2, -2);
+                        loader.map = object;
+                        loader.processMaterial(object);
+                    } 
+                );
+            }
+        );
+    }
+
+    this.loadGun1 = function() {
+        var mtlLoader = new THREE.MTLLoader(manager);
+        mtlLoader.setPath('models/pistol/');
+        mtlLoader.load( 
+            'pistol.mtl', 
+            function( materials ) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials( materials );
+                objLoader.setPath('models/pistol/');
+                objLoader.load( 
+                    'pistol.obj', 
+                    function ( object ) {
+                        object.position.set(0.15, -0.25, -0.3);
                         loader.gun1 = object;
+                        loader.processMaterial(object);
                     } 
                 );
             }
@@ -42,41 +60,26 @@ function Loader(){
 
     this.loadGun2 = function() {
         var mtlLoader = new THREE.MTLLoader(manager);
-        mtlLoader.setPath('models/deagle/');
+        mtlLoader.setPath('models/rifle/');
         mtlLoader.load( 
-            'gun.mtl', 
+            'rifle.mtl', 
             function( materials ) {
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/deagle/');
+                objLoader.setPath('models/rifle/');
                 objLoader.load( 
-                    'gun.obj', 
+                    'rifle.obj', 
                     function ( object ) {
-                        object.scale.set(0.3,0.3,0.3);
-                        object.rotation.y =  180 * Math.PI / 180;
-                        object.position.set(1,-2, -2);
+                        object.position.set(0.15, -0.25, -0.3);
                         loader.gun2 = object;
+                        loader.processMaterial(object);
                     } 
                 );
             }
         );
     }
     
-    this.loadGun3 = function() {
-        var tgaLoader = new THREE.TGALoader(manager);
-        var glockTexture = tgaLoader.load('models/glock/glock18c.tga');
-        //3ds files dont store normal maps
-        var tdsLoader = new THREE.TDSLoader(manager);
-        tdsLoader.setPath('models/glock/');
-        tdsLoader.load( 
-            'models/glock/glock18c.3ds', 
-            function ( object ) {
-                object.children[0].material.map = glockTexture;
-                loader.gun3 = object;
-            }
-        );
-    }
 
     this.loadEnemy = function() {
         
@@ -148,9 +151,39 @@ function Loader(){
 
     this.loadModels = function() {
         console.log("Game.loadModels()");
+        this.loadScene();
         this.loadGun1();
         this.loadGun2();
-        this.loadGun3();
         this.loadEnemy();
+    }
+
+    this.processMaterial = function(object) {
+        for (i=0; i<object.children.length; i++){
+            var child = object.children[i];
+            if (child.material instanceof THREE.MeshPhongMaterial){
+                if (child.material.name == "myAccent1") {
+                    child.material.emissive =  new THREE.Color("rgb(3, 126, 147)");
+                }
+                else if (child.material.name == "mySecondary1") {
+                    child.material.emissive =  new THREE.Color("rgb(255, 110, 0)");
+                }
+            }
+            else {
+                for (j=0; j<child.material.length; j++) {
+                    var mat = child.material[j];
+                    if (mat.name == "myAccent1") {
+                        mat.emissive =  new THREE.Color("rgb(3, 126, 147)");
+                    }
+                    else if (mat.name == "mySecondary1") {
+                        mat.emissive =  new THREE.Color("rgb(255, 110, 0)");
+                    }
+                    else if (mat.name == "myBlack" || mat.name == "myDark") {
+                        mat.shininess = 10;
+                        mat.specular =  new THREE.Color("#ffffff");;
+                    }
+                }
+            }
+            
+        }
     }
 }

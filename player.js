@@ -1,9 +1,9 @@
 function Player() {
-    this.playerheight = 25;
-    this.playerSpeed = 30;
-    this.palyerMass = 30.0;
-    this.jumpSpeed = 30;
-    this.gravity = 2;
+    this.playerheight = 1.75;
+    this.playerSpeed = 4;
+    this.palyerMass = 5.0;
+    this.jumpSpeed = 4;
+    this.gravity = 1.7;
     this.bbSizeX = 2;
     this.bbSizeZ = 1;
 
@@ -225,7 +225,7 @@ function Player() {
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
 
-        var intersection = this.raycaster.intersectObject(game.platform);
+        var intersection = this.raycaster.intersectObjects(game.platform.children, true);
 
         game.rayInter.visible = false; //OBJETO DO CENARIO DEBUG
         if (intersection.length>=1){

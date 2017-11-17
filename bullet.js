@@ -1,9 +1,9 @@
 function Bullet(posicaoOrigem,direcao,speed) {
 
     this.mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.1,8,8),
-        new THREE.MeshPhongMaterial({emissive:0xff0000}));
-
+        new THREE.SphereGeometry(0.01,4,4),
+        new THREE.MeshPhongMaterial({emissive:0xffff00}));
+    //this.mesh.add(new THREE.PointLight( 0xff0000, 1, 100 ))
     this.mesh.position.copy(posicaoOrigem);
     
     var self = this;
