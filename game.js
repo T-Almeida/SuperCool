@@ -22,6 +22,9 @@ function Game() {
     this.stats1;
     this.stats2;
 
+    //gestao das fisicas
+    this.gravity = 2;
+
 
     this.init = function() {
 
@@ -40,14 +43,17 @@ function Game() {
 
         this.scene.add( new THREE.AmbientLight( 0x222222 ) );
 
-        
+        /*
         var light = new THREE.SpotLight( 0xffffff, 5, 1000 );
         light.position.set( -100, 350, 350 );
         light.angle = 0.5;
         light.penumbra = 0.5;
         light.castShadow = true;
         light.shadow.mapSize.width = 1024;
-        light.shadow.mapSize.height = 1024;
+        light.shadow.mapSize.height = 1024;*/
+
+        var light = new THREE.DirectionalLight(0xffffff);
+
         // scene.add( new THREE.CameraHelper( light.shadow.camera ) );
         this.scene.add( light );
 
@@ -160,7 +166,12 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun2, Bullet, 40, new THREE.Vector3(0, 4, 4)));
         this.player.addWeapon(new Automatic(loader.gun1, Bullet, 60));
 
-        new Enemy(new THREE.Vector3(-2, 12, 20 )).render();
+        new Enemy(new THREE.Vector3(-2, 14, 20 )).render();
+
+        new Enemy(new THREE.Vector3(0, 14, 40 )).render();
+
+        new Enemy(new THREE.Vector3(40, 14, 0 )).render();
+
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 
         //this.createEnemies();

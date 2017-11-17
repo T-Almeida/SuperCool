@@ -3,7 +3,6 @@ function Player() {
     this.playerSpeed = 30;
     this.palyerMass = 30.0;
     this.jumpSpeed = 30;
-    this.gravity = 2;
     this.bbSizeX = 2;
     this.bbSizeZ = 2;
 
@@ -15,7 +14,7 @@ function Player() {
     this.jumpDirection = [false,false,false,false];
     this.mousePress = false;
 
-    this.velocity = new THREE.Vector3();
+    this.velocityVertical = 0;
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
 
@@ -186,7 +185,7 @@ function Player() {
 
         this.updateGUI(cw);
 
-        this.velocity.y -= this.gravity * this.palyerMass * delta * game.currentTimeSpeed;  // força gravitica
+        this.velocityVertical -= game.gravity * this.palyerMass * delta * game.currentTimeSpeed;  // força gravitica
 
         this.updateBB();
         this.detectCollision();
@@ -199,7 +198,7 @@ function Player() {
             if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * game.currentTimeSpeed);
 
             if (this.jumpPress) {
-                this.velocity.y += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
+                this.velocityVertical += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
                 this.isJumping = true;
                 this.jumpDirection[0] = this.moveForward;
                 this.jumpDirection[1] = this.moveBackward;
@@ -232,15 +231,15 @@ function Player() {
             game.rayInter.visible = true;
             game.rayInter.position.copy(intersection[0].point);
             if (game.controls.getObject().position.y-this.playerheight <= intersection[0].point.y) { //colisao com o chao
-                if (this.velocity.y<0) {
-                    this.velocity.y = 0;
+                if (this.velocityVertical<0) {
+                    this.velocityVertical = 0;
                     game.controls.getObject().position.y = intersection[0].point.y+this.playerheight;
                     this.isJumping=false; //deteta qd n esta a salar
                 }
             }
         }
 
-        game.controls.getObject().translateY(this.velocity.y * delta);
+        game.controls.getObject().translateY(this.velocityVertical * delta);
 
         //console.log("velocidade y " + this.velocity.y);
         //console.log("isJumping " + isJumping);

@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>My first three.js app</title>
+    <style>
+        body { margin: 0; }
+        canvas { width: 100%; height: 100% }
+    </style>
+</head>
+<body>
+<script src="threejs/three.js"></script>
+<script>
+    var scene = new THREE.Scene();
+
+
+
+
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    var light = new THREE.DirectionalLight(0xffffff, 1.5);
+    light.position.set(0, 5, 0);
+    scene.add(light);
+
+
+    var sun = new THREE.Mesh( new THREE.SphereGeometry(1,8,8), new THREE.MeshPhongMaterial({
+        color: '#00abb1',
+        emissive: '#006063',
+        //ambient: '#006063',
+        specular: '#a9fcff',
+        shininess: 1.5
+    }) );
+
+    scene.add( sun );
+
+    var earthPivot = new THREE.Object3D();
+    sun.add( earthPivot );
+
+    var earth = new THREE.Mesh( new THREE.SphereGeometry(0.5,8,8), new THREE.MeshPhongMaterial({
+        color: '#b1ab00',
+        emissive: '#006063',
+        //ambient: '#006063',
+        specular: '#a9fcff',
+        shininess: 1.5
+    }) );
+    earth.position.x = 5;
+    earthPivot.add( earth );
+
+    camera.position.z = 10;
+
+    var animate = function () {
+        requestAnimationFrame( animate );
+
+        //earthPivot.rotation.y += 0.01;
+
+        sun.rotation.y += 0.05;
+
+        renderer.render(scene, camera);
+    };
+
+    animate();
+</script>
+</body>
+</html>
