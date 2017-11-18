@@ -191,35 +191,15 @@ function Player() {
         this.updateBB();
         this.detectCollision();
 
-        // se nao esta a saltar o movimento é normal
-        if (!this.isJumping){
-            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * game.currentTimeSpeed);
-            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * game.currentTimeSpeed)
-            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
-            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * game.currentTimeSpeed);
-
-            if (this.jumpPress) {
-                this.velocity.y += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
-                this.isJumping = true;
-                this.jumpDirection[0] = this.moveForward;
-                this.jumpDirection[1] = this.moveBackward;
-                this.jumpDirection[2] = this.moveLeft;
-                this.jumpDirection[3] = this.moveRight;
-            }
+        if (!this.isJumping && this.jumpPress){
+            this.velocity.y += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
+            this.isJumping = true;
         } 
-        // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
-        else {
-            var inertiaFactor = 0.6;
-            if ( this.jumpDirection[0] ) game.controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
-            if ( this.jumpDirection[1] ) game.controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed)
-            if ( this.jumpDirection[2] ) game.controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
-            if ( this.jumpDirection[3] ) game.controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
-            var movementFactor = 0.4;
-            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
-            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * movementFactor * game.currentTimeSpeed)
-            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
-            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
-        }
+        
+        if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
+        if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed)
+        if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
+        if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
         
 
         this.raycaster.ray.origin.copy(game.controls.getObject().position);

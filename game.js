@@ -39,32 +39,22 @@ function Game() {
         
         //this.camera.add(new THREE.PointLight(0xffffff, 1, 30, 2))
         this.scene.add( new THREE.AmbientLight( 0x202020 ) );
-
         
         var mesh = new THREE.Mesh(
-            new THREE.SphereGeometry(0.1,6,6),
+            new THREE.SphereGeometry(0.2,6,6),
             new THREE.MeshPhongMaterial({emissive:0xffffff}));
-        var plight = new THREE.PointLight(0x555555, 1, 15, 1);
+        var plight = new THREE.PointLight(0x555555, 1 , 30, 1);
         mesh.add(plight)
-        mesh.position.set(0, 14.8, 0);
+        mesh.position.set(0, 14.7, 0);
         this.scene.add(mesh);
 
-        /*
-        // var light = new THREE.SpotLight(color, intensity, distance, angle, penumbra, decay);
-        var spotLight = new THREE.SpotLight(0xffffff, 0.5, 30, 0.4, 0.3, 1);
-        spotLight.position.set( 0, 0.01, 0.1 );
-        spotLight.target = this.camera;
-        this.camera.add(spotLight);
-        */
-        //spotLight.position.copy( this.camera.position );
-        // scene.add( new THREE.CameraHelper( light.shadow.camera ) );
 
         // RENDERER
 
         this.renderer = new THREE.WebGLRenderer({antialias: true});  // TODO ver o antialias 
-        //this.renderer.shadowMap.enabled = true;
-        //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.gammaInput = true;
+        //this.renderer.shadowMapEnabled = true;
+        //this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        //this.renderer.gammaInput = true;
         this.renderer.gammaOutput = true;
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -145,9 +135,6 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, 0)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
         
-        new Enemy(new THREE.Vector3(-2, 5, 20 )).render();
-        //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
-
         this.createEnemies();
 
         // STATS

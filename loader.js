@@ -158,28 +158,55 @@ function Loader(){
     }
 
     this.processMaterial = function(object) {
+        /*var material = new THREE.MeshBasicMaterial(colorWhite);
+
+        object.traverse( function ( child ) {
+            if ( child instanceof THREE.Mesh ) {
+                if (child.material instanceof THREE.Material && child.material.name == "myBlack")
+                    child.material = material;
+            }
+        } );*/
+
+
         for (i=0; i<object.children.length; i++){
             var child = object.children[i];
+            var mat;
             if (child.material instanceof THREE.MeshPhongMaterial){
-                if (child.material.name == "myAccent1") {
-                    child.material.emissive =  new THREE.Color("rgb(3, 126, 147)");
+                mat = child.material;
+                if (mat.name == "myAccent1") {
+                    mat.emissive =  colorAccent;
                 }
-                else if (child.material.name == "mySecondary1") {
-                    child.material.emissive =  new THREE.Color("rgb(255, 110, 0)");
+                else if (mat.name == "mySecondary1") {
+                    mat.emissive =  colorSecondary;
+                }
+                else if (mat.name == "myBlack"){
+                    mat.color = colorBlack;
+                    mat.snininess = 0;
+                    mat.specular = colorBlack;
+                } 
+                else if (mat.name == "myDark") {
+                    mat.color = colorDark;
                 }
             }
             else {
                 for (j=0; j<child.material.length; j++) {
-                    var mat = child.material[j];
+                    mat = child.material[j];
                     if (mat.name == "myAccent1") {
-                        mat.emissive =  new THREE.Color("rgb(3, 126, 147)");
+                        mat.emissive =  colorAccent;
                     }
                     else if (mat.name == "mySecondary1") {
-                        mat.emissive =  new THREE.Color("rgb(255, 110, 0)");
+                        mat.emissive =  colorSecondary;
                     }
-                    else if (mat.name == "myBlack" || mat.name == "myDark") {
-                        mat.shininess = 10;
-                        mat.specular =  new THREE.Color("#ffffff");;
+                    else if (mat.name == "myBlack"){
+                        mat.color = colorBlack;
+                        mat.snininess = 0;
+                        mat.specular = colorBlack;
+                    } 
+                    else if (mat.name == "myDark") {
+                        mat.color = colorDark;
+                        mat.snininess = 100;
+                        mat.specular = colorBlack;
+                        
                     }
                 }
             }
