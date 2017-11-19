@@ -150,7 +150,6 @@ function Loader(){
     }
 
     this.loadModels = function() {
-        console.log("Game.loadModels()");
         this.loadScene();
         this.loadGun1();
         this.loadGun2();
@@ -199,14 +198,11 @@ function Loader(){
                     }
                     else if (mat.name == "myBlack"){
                         mat.color = colorBlack;
-                        mat.snininess = 0;
                         mat.specular = colorBlack;
                     } 
                     else if (mat.name == "myDark") {
                         mat.color = colorDark;
-                        mat.snininess = 100;
-                        mat.specular = colorBlack;
-                        
+                        mat.snininess = 30;
                     }
                 }
             }

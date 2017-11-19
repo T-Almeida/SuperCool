@@ -42,10 +42,11 @@ class Gun {
         var accPoint = new THREE.Vector3(0,0,0);
         this.point.localToWorld(accPoint);
         accPoint.sub(pointBulletVec);
+        
         //criar bala
-        var bullet = new this.bulletType(pointBulletVec, accPoint.normalize(), this.bulletSpeed);
-        //draw bullet
-        bullet.render();
+        var bullet = bPool.allocate();
+        bullet.activate(pointBulletVec, accPoint.normalize(), this.bulletSpeed);
+
         this.fireCooldown = 1/this.fireRate;
     }
 

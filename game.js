@@ -8,6 +8,7 @@ function Game() {
     this.player;
     this.enemies = [];
     this.objects = [];
+    this.bullets = [];
     this.platform;
     this.rayInter;
 
@@ -132,7 +133,7 @@ function Game() {
         //CRIAR OBJETOS
         
         this.player = new Player();
-        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, 0)));
+        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, -1)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
         
         this.createEnemies();
@@ -156,12 +157,17 @@ function Game() {
         resetPlayer();
 
         if ( game.controlsEnabled ) {
+            // Update das balas
+            for (var i = 0 ; i < game.bullets.length ; i++){
+                game.bullets[i].update(delta,i);
+            }
+
             //Call update
             for (var i = 0 ; i < game.objects.length ; i++){
                 game.objects[i].update(delta,i);
             }
             
-            for (i=0; i<game.enemies.length; i++) {
+            for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
                 game.enemies[i].update(delta * game.currentTimeSpeed);
             }
@@ -172,6 +178,8 @@ function Game() {
 
         game.stats1.update();
         game.stats2.update();
+
+        bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
     }
 
     this.createEnemies = function() {
