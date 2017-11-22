@@ -20,9 +20,10 @@ function Player() {
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
 
-    this.raycasterWalls = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,1);
+    this.wallDistance = 0.8;
+    this.raycasterWalls = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.wallDistance+0.1);
     //RAYCAST DEBUG
-    this.rayWallDebug = new THREE.Mesh(new THREE.BoxGeometry(0.2,0.2,0.2), new THREE.MeshBasicMaterial() );
+    this.rayWallDebug = new THREE.Mesh(new THREE.BoxGeometry(0.005,0.005,0.005), new THREE.MeshBasicMaterial({color:0xFF0000}) );
     game.scene.add(this.rayWallDebug);
 
     this.directitionRay = new THREE.Vector3(0,0,0);
@@ -99,22 +100,22 @@ function Player() {
             case 38: // up
             case 87: // w
                 self.moveForward = true;
-                self.directitionRay.z = -1;
+                self.directitionRay.z = -self.wallDistance;
                 break;
             case 37: // left
             case 65: // a
                 self.moveLeft = true;
-                self.directitionRay.x = -1;
+                self.directitionRay.x = -self.wallDistance;
                 break;
             case 40: // down
             case 83: // s
                 self.moveBackward = true;
-                self.directitionRay.z = 1;
+                self.directitionRay.z = self.wallDistance;
                 break;
             case 39: // right
             case 68: // d
                 self.moveRight = true;
-                self.directitionRay.x = 1;
+                self.directitionRay.x = self.wallDistance;
                 break;
 
             case 32: // space
@@ -213,15 +214,30 @@ function Player() {
             this.isJumping = true;
         }
 
+
+        var dirCopy = new THREE.Vector3().copy(this.directitionRay);
+        var vectorDir = dirCopy.applyMatrix4(new THREE.Matrix4().extractRotation(game.controls.getObject().matrix)).normalize();
+        //console.log("Vector dir " + strVector(vectorDir));
+        //console.log("Vector directitionRay " + strVector(this.directitionRay));
+        this.rayWallDebug.position.copy(new THREE.Vector3().addVectors(game.controls.getObject().position,vectorDir.multiplyScalar(this.wallDistance)));
         this.raycasterWalls.ray.origin.copy(game.controls.getObject().position);
+        this.raycasterWalls.ray.direction.copy(vectorDir);
 
-        if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
-        if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed);
-        if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
-        if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
-        
+        var intersectionWalls = this.raycasterWalls.intersectObjects(game.platform.children, true);
 
-       //console.log("Vector dir " + strVector(this.directitionRay));
+        if (intersectionWalls.length>=1){
+            console.log("colision with wall");
+        }
+
+        if ( this.moveForward  && !(dirCopy.z!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
+        if ( this.moveBackward && !(dirCopy.z!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed);
+        if ( this.moveLeft && !(dirCopy.x!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
+        if ( this.moveRight && !(dirCopy.x!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
+
+
+
+
+        //console.log("Vector dir " + strVector(this.directitionRay));
 
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
