@@ -21,6 +21,9 @@ function Game() {
     this.stats1;
     this.stats2;
 
+    //gestao das fisicas
+    this.gravity = 2;
+
 
     this.init = function() {
 
@@ -36,6 +39,7 @@ function Game() {
         this.scene.add( this.controls.getObject() ); // adiciona camera
         
 
+
         // LIGHTS
         
         //this.camera.add(new THREE.PointLight(0xffffff, 1, 30, 2))
@@ -48,6 +52,7 @@ function Game() {
         mesh.add(plight)
         mesh.position.set(0, 14.7, 0);
         this.scene.add(mesh);
+
 
 
         // RENDERER
@@ -133,10 +138,20 @@ function Game() {
         //CRIAR OBJETOS
         
         this.player = new Player();
-        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, -1)));
-        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
-        
-        this.createEnemies();
+
+        this.player.addWeapon(new Pistol(loader.gun2, Bullet, 40, new THREE.Vector3(0, 4, 4)));
+        this.player.addWeapon(new Automatic(loader.gun1, Bullet, 60));
+
+        new Enemy(new THREE.Vector3(-2, 14, 20 )).render();
+
+        new Enemy(new THREE.Vector3(0, 14, 40 )).render();
+
+        new Enemy(new THREE.Vector3(40, 14, 0 )).render();
+
+        //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
+
+        //this.createEnemies();
+
 
         // STATS
 
@@ -167,10 +182,12 @@ function Game() {
                 game.objects[i].update(delta,i);
             }
             
+
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
                 game.enemies[i].update(delta * game.currentTimeSpeed);
             }
+
         }
         
         requestAnimationFrame( game.animate );

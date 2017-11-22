@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="88bf3b40-ed3f-4c02-8833-edb3c90c99e1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/enemy.js" afterPath="$PROJECT_DIR$/enemy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.js" afterPath="$PROJECT_DIR$/game.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/player.js" afterPath="$PROJECT_DIR$/player.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils.js" afterPath="$PROJECT_DIR$/utils.js" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="simple_scene.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/simple_scene.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1445">
+              <caret line="85" column="28" lean-forward="false" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="game.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/game.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2924">
+              <caret line="172" column="42" lean-forward="false" selection-start-line="172" selection-start-column="42" selection-end-line="172" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MD2CharacterComplex.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/threejs/MD2CharacterComplex.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="7837">
+              <caret line="461" column="56" lean-forward="false" selection-start-line="461" selection-start-column="56" selection-end-line="461" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bullet.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bullet.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="27" column="10" lean-forward="false" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utils.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utils.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="39" lean-forward="false" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="loader.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/loader.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1581">
+              <caret line="93" column="31" lean-forward="false" selection-start-line="93" selection-start-column="25" selection-end-line="93" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="player.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/player.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3842">
+              <caret line="226" column="68" lean-forward="false" selection-start-line="226" selection-start-column="63" selection-end-line="226" selection-end-column="68" />
+              <folding>
+                <marker date="1510847069482" expanded="true" signature="11254:11264" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="enemy.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/enemy.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="782">
+              <caret line="46" column="25" lean-forward="false" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="weapon.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weapon.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="59" lean-forward="false" selection-start-line="35" selection-start-column="8" selection-end-line="36" selection-end-column="59" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>prevTime</find>
+      <find>isO</find>
+      <find>playerS</find>
+      <find>raycaster</find>
+      <find>geometry</find>
+      <find>contains</find>
+      <find>ray</find>
+      <find>shoot</find>
+      <find>addW</find>
+      <find>addWe</find>
+      <find>folder</find>
+      <find>setPl</find>
+      <find>setPlaybackRate</find>
+      <find>this.meshBody.duration</find>
+      <find>meshBody.duration</find>
+      <find>setSkin</find>
+      <find>loader</find>
+      <find>createPart</find>
+      <find>controls</find>
+      <find>log</find>
+      <find>lookAt</find>
+      <find>animationsMap</find>
+      <find>animation</find>
+      <find>playA</find>
+      <find>updateMovementModel</find>
+      <find>moveAnimation</find>
+      <find>gravity</find>
+      <find>velocity</find>
+      <find>platf</find>
+      <find>Enem</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/mainpage.html" />
+        <option value="D:/Dropbox/MEI/1ano/VI/aula02/src/shooter_demo.html" />
+        <option value="$PROJECT_DIR$/player_movements.js" />
+        <option value="$PROJECT_DIR$/simple_player_movement.js" />
+        <option value="$PROJECT_DIR$/player_prototype.js" />
+        <option value="$PROJECT_DIR$/scene.js" />
+        <option value="$PROJECT_DIR$/childExample.html" />
+        <option value="$PROJECT_DIR$/threejs/stats.min.js" />
+        <option value="$PROJECT_DIR$/styles.css" />
+        <option value="$PROJECT_DIR$/weapon.js" />
+        <option value="$PROJECT_DIR$/simple_scene.html" />
+        <option value="$PROJECT_DIR$/threejs/dat.gui.min.js" />
+        <option value="$PROJECT_DIR$/childsun.html" />
+        <option value="$PROJECT_DIR$/loader.js" />
+        <option value="$PROJECT_DIR$/bullet.js" />
+        <option value="$PROJECT_DIR$/threejs/MD2CharacterComplex.js" />
+        <option value="$PROJECT_DIR$/threejs/three.js" />
+        <option value="$PROJECT_DIR$/player.js" />
+        <option value="$PROJECT_DIR$/utils.js" />
+        <option value="$PROJECT_DIR$/enemy.js" />
+        <option value="$PROJECT_DIR$/game.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-7" />
+    <option name="width" value="697" />
+    <option name="height" value="735" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="threejs_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="threejs_project" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="threejs_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="threejs_project" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="threejs_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="threejs_project" type="462c0819:PsiDirectoryNode" />
+              <item name="textures" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="threejs_project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="threejs_project" type="462c0819:PsiDirectoryNode" />
+              <item name="threejs" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="D:/Dropbox/MEI/1ano/VI/d3" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="88bf3b40-ed3f-4c02-8833-edb3c90c99e1" name="Default" comment="" />
+      <created>1509561128741</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1509561128741</updated>
+      <workItem from="1509561131418" duration="13864000" />
+      <workItem from="1509629715510" duration="1919000" />
+      <workItem from="1509640256832" duration="5408000" />
+      <workItem from="1509657198885" duration="11671000" />
+      <workItem from="1509709826766" duration="19556000" />
+      <workItem from="1509807051505" duration="15868000" />
+      <workItem from="1509984988238" duration="14891000" />
+      <workItem from="1510234072497" duration="9617000" />
+      <workItem from="1510266260746" duration="3927000" />
+      <workItem from="1510680840327" duration="177000" />
+      <workItem from="1510838319916" duration="10721000" />
+      <workItem from="1510851372139" duration="118000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="107737000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13616398" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="92" y="92" width="1182" height="544" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="28" lean-forward="false" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scene.js" />
+    <entry file="file://D:/Dropbox/MEI/1ano/VI/aula02/src/shooter_demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5695">
+          <caret line="335" column="42" lean-forward="false" selection-start-line="335" selection-start-column="42" selection-end-line="335" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/player.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="28" lean-forward="false" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+          <folding>
+            <marker date="1510847069482" expanded="true" signature="11254:11264" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_player_movement.js" />
+    <entry file="file://$PROJECT_DIR$/mainpage.html" />
+    <entry file="file://$PROJECT_DIR$/simple_scene.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1547">
+          <caret line="91" column="49" lean-forward="false" selection-start-line="91" selection-start-column="49" selection-end-line="91" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scene.js" />
+    <entry file="file://$PROJECT_DIR$/player_movements.js" />
+    <entry file="file://D:/Dropbox/MEI/1ano/VI/aula02/src/shooter_demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5695">
+          <caret line="335" column="42" lean-forward="false" selection-start-line="335" selection-start-column="42" selection-end-line="335" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_player_movement.js" />
+    <entry file="file://$PROJECT_DIR$/mainpage.html" />
+    <entry file="file://$PROJECT_DIR$/simple_scene.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1751">
+          <caret line="103" column="23" lean-forward="false" selection-start-line="103" selection-start-column="23" selection-end-line="103" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scene.js" />
+    <entry file="file://$PROJECT_DIR$/player_movements.js" />
+    <entry file="file://$PROJECT_DIR$/simple_player_movement.js" />
+    <entry file="file://D:/Dropbox/MEI/1ano/VI/aula02/src/shooter_demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5695">
+          <caret line="335" column="42" lean-forward="true" selection-start-line="335" selection-start-column="42" selection-end-line="335" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mainpage.html" />
+    <entry file="file://$PROJECT_DIR$/simple_scene.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1751">
+          <caret line="103" column="23" lean-forward="false" selection-start-line="103" selection-start-column="23" selection-end-line="103" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scene.js" />
+    <entry file="file://$PROJECT_DIR$/player_movements.js" />
+    <entry file="file://D:/Dropbox/MEI/1ano/VI/aula02/src/shooter_demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5491">
+          <caret line="323" column="12" lean-forward="true" selection-start-line="323" selection-start-column="12" selection-end-line="327" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_player_movement.js" />
+    <entry file="file://$PROJECT_DIR$/mainpage.html" />
+    <entry file="file://$PROJECT_DIR$/player_movements.js" />
+    <entry file="file://D:/Dropbox/MEI/1ano/VI/aula02/src/shooter_demo.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5695">
+          <caret line="335" column="42" lean-forward="false" selection-start-line="335" selection-start-column="42" selection-end-line="335" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_player_movement.js" />
+    <entry file="file://$PROJECT_DIR$/player_prototype.js" />
+    <entry file="file://$PROJECT_DIR$/../TODO-Client/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="891" column="0" lean-forward="false" selection-start-line="891" selection-start-column="0" selection-end-line="897" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Dropbox/MEI/1ano/VI/aula04/Exemplo_41.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="49" column="29" lean-forward="true" selection-start-line="47" selection-start-column="12" selection-end-line="49" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/childExample.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/stats.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/PointerLockControls.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-68">
+          <caret line="1" column="25" lean-forward="false" selection-start-line="1" selection-start-column="25" selection-end-line="1" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/dat.gui.min.js" />
+    <entry file="file://$PROJECT_DIR$/scene.js" />
+    <entry file="file://$PROJECT_DIR$/threejs/Detector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/MD2Loader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/childsun.html" />
+    <entry file="file://$PROJECT_DIR$/threejs/MD2Character.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="49" column="33" lean-forward="false" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_scene.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1445">
+          <caret line="85" column="28" lean-forward="false" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weapon.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="59" lean-forward="false" selection-start-line="35" selection-start-column="8" selection-end-line="36" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/MorphBlendMesh.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="212" column="4" lean-forward="false" selection-start-line="212" selection-start-column="4" selection-end-line="212" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/loader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1581">
+          <caret line="93" column="31" lean-forward="false" selection-start-line="93" selection-start-column="25" selection-end-line="93" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/MD2CharacterComplex.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7837">
+          <caret line="461" column="56" lean-forward="false" selection-start-line="461" selection-start-column="56" selection-end-line="461" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/threejs/three.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="696" column="8" lean-forward="false" selection-start-line="696" selection-start-column="8" selection-end-line="696" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/player.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3842">
+          <caret line="226" column="68" lean-forward="false" selection-start-line="226" selection-start-column="63" selection-end-line="226" selection-end-column="68" />
+          <folding>
+            <marker date="1510847069482" expanded="true" signature="11254:11264" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="39" lean-forward="false" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/enemy.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="46" column="25" lean-forward="false" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2924">
+          <caret line="172" column="42" lean-forward="false" selection-start-line="172" selection-start-column="42" selection-end-line="172" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bullet.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="27" column="10" lean-forward="false" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

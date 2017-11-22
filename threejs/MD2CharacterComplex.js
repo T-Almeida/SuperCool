@@ -491,7 +491,7 @@ THREE.MD2CharacterComplex = function () {
 
 		// displacement
 
-		var forwardDelta = this.speed * delta;
+		var forwardDelta = this.speed * delta * 0.05;
 
 		this.root.position.x += Math.sin( this.bodyOrientation ) * forwardDelta;
 		this.root.position.z += Math.cos( this.bodyOrientation ) * forwardDelta;
@@ -523,7 +523,7 @@ THREE.MD2CharacterComplex = function () {
 
 	function createPart( geometry, skinMap ) {
 
-		var materialWireframe = new THREE.MeshLambertMaterial( { emissive: 0xffff00, wireframe: true, morphTargets: true, morphNormals: true } );
+		var materialWireframe = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: true, morphTargets: true, morphNormals: true } );
 		var materialTexture = new THREE.MeshLambertMaterial( { color: 0xffffff, wireframe: false, map: skinMap, morphTargets: true, morphNormals: true } );
 
 		//
