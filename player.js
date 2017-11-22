@@ -20,6 +20,13 @@ function Player() {
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
 
+    this.raycasterWalls = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,1);
+    //RAYCAST DEBUG
+    this.rayWallDebug = new THREE.Mesh(new THREE.BoxGeometry(0.2,0.2,0.2), new THREE.MeshBasicMaterial() );
+    game.scene.add(this.rayWallDebug);
+
+    this.directitionRay = new THREE.Vector3(0,0,0);
+
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
     //BoundingBox
@@ -34,7 +41,7 @@ function Player() {
         this.weapons.push(weapon);
         game.objects.push(weapon);
         game.controls.getObject().children[0].add(weapon.mesh);
-    }
+    };
 
 
     this.updateWeaponGUI = function() {
@@ -47,7 +54,7 @@ function Player() {
                 break;
             
         }
-    }
+    };
 
     // Muda a arma para a que esta no index passado
     // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
@@ -92,18 +99,22 @@ function Player() {
             case 38: // up
             case 87: // w
                 self.moveForward = true;
+                self.directitionRay.z = -1;
                 break;
             case 37: // left
             case 65: // a
                 self.moveLeft = true;
+                self.directitionRay.x = -1;
                 break;
             case 40: // down
             case 83: // s
                 self.moveBackward = true;
+                self.directitionRay.z = 1;
                 break;
             case 39: // right
             case 68: // d
                 self.moveRight = true;
+                self.directitionRay.x = 1;
                 break;
 
             case 32: // space
@@ -117,18 +128,22 @@ function Player() {
             case 38: // up
             case 87: // w
                 self.moveForward = false;
+                self.directitionRay.z = 0;
                 break;
             case 37: // left
             case 65: // a
                 self.moveLeft = false;
+                self.directitionRay.x = 0;
                 break;
             case 40: // down
             case 83: // s
+                self.directitionRay.z = 0;
                 self.moveBackward = false;
                 break;
             case 39: // right
             case 68: // d
                 self.moveRight = false;
+                self.directitionRay.x = 0;
                 break;
 
             case 32: // space
@@ -196,14 +211,17 @@ function Player() {
         if (!this.isJumping && this.jumpPress){
             this.velocityVertical += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
             this.isJumping = true;
+        }
 
-        } 
-        
+        this.raycasterWalls.ray.origin.copy(game.controls.getObject().position);
+
         if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
-        if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed)
+        if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed);
         if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
         if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
         
+
+        console.log("Vector dir " + strVector(this.directitionRay));
 
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;

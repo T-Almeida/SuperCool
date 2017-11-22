@@ -19,7 +19,12 @@ function Enemy(position) {
     this.enemyChar.enableShadows( true );
     this.enemyChar.setWeapon( 0 );
     //enemyChar.setSkin( i );
-
+    this.enemyChar.maxSpeed /= 100;
+    this.enemyChar.maxReverseSpeed /= 100;
+    this.enemyChar.frontAcceleration /=100;
+    this.enemyChar.frontDecceleration /=100;
+    this.enemyChar.backAcceleration/=100;
+    //this.enemyChar.angularSpeed /=100;
     //adicionar ponto de disparo
     //var pointBulletSpawn = new THREE.Object3D();
     this.pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5), new THREE.MeshBasicMaterial({color:0xff0000}));
@@ -156,7 +161,7 @@ function Enemy(position) {
         }else{                  // OLHA PARA O PLAYER
             this.controls.moveForward = false;
                 this.lookAtPlayer(function(){
-                    self.timeLook = 1+Math.random()*4;
+                    self.timeLook = 1+Math.random();
                 });//quando terminar de olhar para o player resta timeLook para 5
         }
 
