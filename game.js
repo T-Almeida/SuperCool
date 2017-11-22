@@ -139,14 +139,11 @@ function Game() {
         
         this.player = new Player();
 
-        this.player.addWeapon(new Pistol(loader.gun2, Bullet, 40, new THREE.Vector3(0, 4, 4)));
-        this.player.addWeapon(new Automatic(loader.gun1, Bullet, 60));
+        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, -1)));
+        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
 
-        new Enemy(new THREE.Vector3(-2, 14, 20 )).render();
+        new Enemy(new THREE.Vector3(0, 3,0 )).render();
 
-        new Enemy(new THREE.Vector3(0, 14, 40 )).render();
-
-        new Enemy(new THREE.Vector3(40, 14, 0 )).render();
 
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 

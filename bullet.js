@@ -62,7 +62,7 @@ function Bullet() {
 function EnemyBullet(posicaoOrigem,direcao,speed) {
 
     this.mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.2,8,8),
+        new THREE.SphereGeometry(0.02,8,8),
         new THREE.MeshBasicMaterial({color:0xff0000}));
 
     this.mesh.position.copy(posicaoOrigem);

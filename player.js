@@ -194,7 +194,7 @@ function Player() {
 
 
         if (!this.isJumping && this.jumpPress){
-            this.velocity.y += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
+            this.velocityVertical += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
             this.isJumping = true;
 
         } 
@@ -225,7 +225,7 @@ function Player() {
 
         game.controls.getObject().translateY(this.velocityVertical * delta);
 
-        //console.log("velocidade y " + this.velocity.y);
+        //console.log("velocidade y " + this.velocityVertical);
         //console.log("isJumping " + isJumping);
         //console.log("player position x " + game.controls.getObject().position.x + " y "+  game.controls.getObject().position.y +" z "+  game.controls.getObject().position.z);
         
