@@ -17,6 +17,8 @@
         <div id="timespeeddiv" class="progressBar transpGUI"></div>
     </div>
 
+    <div id="bulletPoolDiv" class="noselect"></div>
+
     <div id="weaponui" class="weapon" >
         <img id="weaponicon" class="noselect transpGUI" src="icons/pistol.png"/>
         <div id="reload" class="noselect progressBarBG">
@@ -63,12 +65,23 @@
 
 
     <script>
-        var loader, game;
+        // cores a usar
+        var colorDark = new THREE.Color("#111111");
+        var colorBlack = new THREE.Color("#050505");
+        var colorAccent = new THREE.Color("#037e93");
+        var colorSecondary = new THREE.Color("#ff6e00");
+        var colorWhite = new THREE.Color("#ffffff");
+
+        var loader;
+        var game = new Game();
+        var bPool = new BulletPool();
+        
         var clock = new THREE.Clock();
 
         var container = document.getElementById("container");
         var blocker = document.getElementById("blocker");
         var instructions = document.getElementById( 'instructions' );
+        var bulletPoolInfo = document.getElementById( 'bulletPoolDiv' );
 
         // carregamento dos modelos 3d
         loader = new Loader();
@@ -79,7 +92,7 @@
         // espera até todos os modelos estarem carregados
         function waitForLoad() {
             if (loader.gun1==undefined || loader.gun2==undefined 
-                    || loader.gun3==undefined || loader.enemy==undefined) {
+                || loader.enemy==undefined || loader.map==undefined) {
                 setTimeout(waitForLoad,200);
             } else {
                 console.log("finished loading")
@@ -92,8 +105,10 @@
             document.getElementById("loadingBar").style.display  = "none" ;
             blocker.style.display  = "block" ;
             loadGUI();
-            game = new Game();
             game.init();
+             // criação das balas
+            bPool.init(50);
+
             game.animate();
         }
         

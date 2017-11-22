@@ -1,5 +1,5 @@
 class Gun {
-    constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime, bulletType,pointBulletSpawn,accuracyDistance){
+    constructor(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime, bulletType, bulletPosition, accuracyDistance){
         this.mesh = mesh;
         this.mesh.visible = false;
         this.damage = damage;
@@ -13,13 +13,16 @@ class Gun {
         this.isShooting = false;
         this.isReloading = false;
         this.bulletType = bulletType;
-
-        this.pointBulletSpawn = pointBulletSpawn;
-
         this.accuracyDistance = accuracyDistance;
+        
         this.point = new THREE.Object3D();
         this.point.position.z = - this.accuracyDistance;
         game.controls.getObject().children[0].add(this.point);
+
+        this.pointBulletSpawn = new THREE.Object3D();
+        
+        this.pointBulletSpawn.position.copy(bulletPosition);
+        mesh.add(this.pointBulletSpawn);
     }
 
     startShooting(){
@@ -39,38 +42,43 @@ class Gun {
         var accPoint = new THREE.Vector3(0,0,0);
         this.point.localToWorld(accPoint);
         accPoint.sub(pointBulletVec);
+        
         //criar bala
-        var bullet = new this.bulletType(pointBulletVec, accPoint.normalize(), this.bulletSpeed);
-        //draw bullet
-        bullet.render();
+        var bullet = bPool.allocate();
+        bullet.activate(pointBulletVec, accPoint.normalize(), this.bulletSpeed);
+
         this.fireCooldown = 1/this.fireRate;
     }
 
     update(delta, objectIndex) {
+        // update do cooldown da disparo
+        if (this.fireCooldown>0) 
+            this.fireCooldown -= delta * game.currentTimeSpeed;
+            
+        // angulo da arma para simular a animação
+        if (this.isReloading) this.mesh.rotation.x = Math.PI / 4;
+        else if (this.fireCooldown>1/(this.fireRate*3)) this.mesh.rotation.x = Math.PI / 32;
+        else this.mesh.rotation.x = 0;
+
         if (this.isReloading){
             this.reloadCooldown -= delta * game.currentTimeSpeed;
             if (this.reloadCooldown <= 0) {
                 this.currentAmmo = this.maxAmmo;
                 this.isReloading = false;   
-                this.mesh.rotateX(- Math.PI / 4);          
             }
             else{
                 return;
             }
         }
+
         // se nao tem mais balas tem de recarregar
         if (this.currentAmmo <= 0) {
             return;
         }
-        
-        // update do cooldown da disparo
-        if (this.fireCooldown>0) this.fireCooldown -= delta * game.currentTimeSpeed;
-        
+
         if (this.isShooting && this.fireCooldown <= 0) {
             this.shoot();
         }
-
-        
     }
 
     reload() {
@@ -78,37 +86,28 @@ class Gun {
             return;
         this.isReloading = true;
         this.reloadCooldown = this.reloadTime;
-        this.mesh.rotateX(Math.PI / 4);
     }
 
     stopReloading() {
         if (this.isReloading){
             this.isReloading = false;
             this.reloadCooldown = 0;
-            this.mesh.rotateX( - Math.PI / 4);
         }
         
     }
 }
 
 class Pistol extends Gun {
-    constructor(mesh,bulletType,accuracyDistance,bulletPosition){
+    constructor(mesh, bulletType, accuracyDistance, bulletPosition){
         var damage = 100;
-        var bulletSpeed = 120;
+        var bulletSpeed = 15;
         var fireRate = 4; // balas por segundo
         var maxAmmo = 10;
         var reloadTime = 1.5;
 
-        var pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.1), new THREE.MeshBasicMaterial({color:0x0000ff}));// usar isto para encontrar o ponto
-        //var pointBulletSpawn = new THREE.Object3D();
-        pointBulletSpawn.position.copy(bulletPosition);
-        mesh.add(pointBulletSpawn);
-
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn,accuracyDistance);
-
-        this.canShot = true; // um disparo por clique do botao
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime, bulletType, bulletPosition, accuracyDistance);
         
-
+        this.canShot = true; // um disparo por clique do botao
     }
 
     stopShooting(){
@@ -125,17 +124,15 @@ class Pistol extends Gun {
     }
 }
 
-class Automatic extends Gun {  // TODO mudar o nome
-    constructor(mesh, bulletType,accuracyDistance){
+class Automatic extends Gun { 
+    constructor(mesh, bulletType,accuracyDistance,bulletPosition){
         var damage = 100;
-        var bulletSpeed = 120;
+        var bulletSpeed = 20;
         var fireRate = 8; // balas por segundo
         var maxAmmo = 40;
         var reloadTime = 3.5;
-        var pointBulletSpawn = new THREE.Object3D();
-        pointBulletSpawn.position.z = -0.2;
-        mesh.add(pointBulletSpawn);
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn,accuracyDistance);
+        
+        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,bulletPosition,accuracyDistance);
     }
 }
 

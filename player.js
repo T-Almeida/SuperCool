@@ -1,8 +1,10 @@
 function Player() {
-    this.playerheight = 25;
-    this.playerSpeed = 30;
-    this.palyerMass = 30.0;
-    this.jumpSpeed = 30;
+
+    this.playerheight = 1.75;
+    this.playerSpeed = 4;
+    this.palyerMass = 5.0;
+    this.jumpSpeed = 4;
+
     this.bbSizeX = 2;
     this.bbSizeZ = 2;
 
@@ -190,41 +192,23 @@ function Player() {
         this.updateBB();
         this.detectCollision();
 
-        // se nao esta a saltar o movimento é normal
-        if (!this.isJumping){
-            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * game.currentTimeSpeed);
-            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * game.currentTimeSpeed)
-            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
-            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * game.currentTimeSpeed);
 
-            if (this.jumpPress) {
-                this.velocityVertical += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
-                this.isJumping = true;
-                this.jumpDirection[0] = this.moveForward;
-                this.jumpDirection[1] = this.moveBackward;
-                this.jumpDirection[2] = this.moveLeft;
-                this.jumpDirection[3] = this.moveRight;
-            }
+        if (!this.isJumping && this.jumpPress){
+            this.velocityVertical += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
+            this.isJumping = true;
+
         } 
-        // se esta a saltar deve manter o movimento (inercia) mas com possibilidade de pequenos ajustes
-        else {
-            var inertiaFactor = 0.6;
-            if ( this.jumpDirection[0] ) game.controls.getObject().translateZ(-this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
-            if ( this.jumpDirection[1] ) game.controls.getObject().translateZ(this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed)
-            if ( this.jumpDirection[2] ) game.controls.getObject().translateX(-this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
-            if ( this.jumpDirection[3] ) game.controls.getObject().translateX(this.playerSpeed * delta * inertiaFactor * game.currentTimeSpeed);
-            var movementFactor = 0.4;
-            if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
-            if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta * movementFactor * game.currentTimeSpeed)
-            if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
-            if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta * movementFactor * game.currentTimeSpeed);
-        }
+        
+        if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
+        if ( this.moveBackward ) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed)
+        if ( this.moveLeft ) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
+        if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
         
 
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
 
-        var intersection = this.raycaster.intersectObject(game.platform);
+        var intersection = this.raycaster.intersectObjects(game.platform.children, true);
 
         game.rayInter.visible = false; //OBJETO DO CENARIO DEBUG
         if (intersection.length>=1){
@@ -241,7 +225,7 @@ function Player() {
 
         game.controls.getObject().translateY(this.velocityVertical * delta);
 
-        //console.log("velocidade y " + this.velocity.y);
+        //console.log("velocidade y " + this.velocityVertical);
         //console.log("isJumping " + isJumping);
         //console.log("player position x " + game.controls.getObject().position.x + " y "+  game.controls.getObject().position.y +" z "+  game.controls.getObject().position.z);
         

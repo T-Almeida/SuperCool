@@ -8,8 +8,7 @@ function Game() {
     this.player;
     this.enemies = [];
     this.objects = [];
-    this.floors;
-    this.walls;
+    this.bullets = [];
     this.platform;
     this.rayInter;
 
@@ -39,64 +38,41 @@ function Game() {
         this.controls = new THREE.PointerLockControls( this.camera );
         this.scene.add( this.controls.getObject() ); // adiciona camera
         
+
+
         // LIGHTS
+        
+        //this.camera.add(new THREE.PointLight(0xffffff, 1, 30, 2))
+        this.scene.add( new THREE.AmbientLight( 0x202020 ) );
+        
+        var mesh = new THREE.Mesh(
+            new THREE.SphereGeometry(0.2,6,6),
+            new THREE.MeshPhongMaterial({emissive:0xffffff}));
+        var plight = new THREE.PointLight(0x555555, 1 , 30, 1);
+        mesh.add(plight)
+        mesh.position.set(0, 14.7, 0);
+        this.scene.add(mesh);
 
-        this.scene.add( new THREE.AmbientLight( 0x222222 ) );
 
-        /*
-        var light = new THREE.SpotLight( 0xffffff, 5, 1000 );
-        light.position.set( -100, 350, 350 );
-        light.angle = 0.5;
-        light.penumbra = 0.5;
-        light.castShadow = true;
-        light.shadow.mapSize.width = 1024;
-        light.shadow.mapSize.height = 1024;*/
-
-        var light = new THREE.DirectionalLight(0xffffff);
-
-        // scene.add( new THREE.CameraHelper( light.shadow.camera ) );
-        this.scene.add( light );
 
         // RENDERER
 
-        this.renderer = new THREE.WebGLRenderer();  // TODO ver o antialias
-        this.renderer.shadowMap.enabled = true;
-        //this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        this.renderer = new THREE.WebGLRenderer({antialias: true});  // TODO ver o antialias 
+        //this.renderer.shadowMapEnabled = true;
+        //this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        //this.renderer.gammaInput = true;
+        this.renderer.gammaOutput = true;
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         container.appendChild( this.renderer.domElement );
         
-        // SKYBOX
-        /*
-        this.scene.add( makeSkybox( [
-            'textures/cube/skybox/px.jpg', // right
-            'textures/cube/skybox/nx.jpg', // left
-            'textures/cube/skybox/py.jpg', // top
-            'textures/cube/skybox/ny.jpg', // bottom
-            'textures/cube/skybox/pz.jpg', // back
-            'textures/cube/skybox/nz.jpg'  // front
-        ], 8000 ));*/
         
-        // PLATFORM
-        /*
-        this.scene.add( makePlatform(
-            'models/platform/platform.json',
-            'models/platform/platform.jpg',
-            this.renderer.getMaxAnisotropy()
-        ));*/
 
         // GAME MAP
-
-        var ground_geometry = new THREE.PlaneBufferGeometry( 1000, 1000 );
-        var ground_material = new THREE.MeshPhongMaterial( { 
-            color: 0x999999,
-            specular: 0x222222,
-            shininess: 5 } );
-        var ground = new THREE.Mesh( ground_geometry, ground_material );
-        ground.rotation.x = - Math.PI / 2;
-        ground.receiveShadow = true;
-        this.scene.add( ground );
-        this.platform = ground; // TODO tirar
+        
+        console.log(loader.map);
+        this.scene.add(loader.map);
+        this.platform = loader.map;
         
         //RAYCAST DEBUG
 
@@ -160,21 +136,19 @@ function Game() {
         }
 
         //CRIAR OBJETOS
-
         
         this.player = new Player();
-        this.player.addWeapon(new Pistol(loader.gun2, Bullet, 40, new THREE.Vector3(0, 4, 4)));
-        this.player.addWeapon(new Automatic(loader.gun1, Bullet, 60));
 
-        new Enemy(new THREE.Vector3(-2, 14, 20 )).render();
+        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, -1)));
+        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
 
-        new Enemy(new THREE.Vector3(0, 14, 40 )).render();
+        new Enemy(new THREE.Vector3(0, 3,0 )).render();
 
-        new Enemy(new THREE.Vector3(40, 14, 0 )).render();
 
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
 
         //this.createEnemies();
+
 
         // STATS
 
@@ -195,11 +169,21 @@ function Game() {
         resetPlayer();
 
         if ( game.controlsEnabled ) {
+            // Update das balas
+            for (var i = 0 ; i < game.bullets.length ; i++){
+                game.bullets[i].update(delta,i);
+            }
+
             //Call update
             for (var i = 0 ; i < game.objects.length ; i++){
                 game.objects[i].update(delta,i);
             }
             
+
+            for (var i=0; i<game.enemies.length; i++) {
+                // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
+                game.enemies[i].update(delta * game.currentTimeSpeed);
+            }
 
         }
         
@@ -208,6 +192,8 @@ function Game() {
 
         game.stats1.update();
         game.stats2.update();
+
+        bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
     }
 
     this.createEnemies = function() {
@@ -221,18 +207,17 @@ function Game() {
         
         for (i=0; i<3; i++) {
             var enemyChar = new THREE.MD2CharacterComplex();
-            enemyChar.scale = 0.5;
+            enemyChar.scale = 2/50;
             enemyChar.controls = controls;
             enemyChar.shareParts( loader.enemy );
             // cast and receive shadows
             if (i==0) enemyChar.setWireframe (true) ;
-            enemyChar.setWeapon( 0 );
+            //enemyChar.setWeapon( 0 );
             enemyChar.setSkin( i );
-            enemyChar.root.position.x = i * 50;
-            enemyChar.root.position.y = 12;
+            enemyChar.root.position.x = i * 1.5;
+            enemyChar.root.position.y = 1;
             this.scene.add( enemyChar.root );
             this.enemies.push(enemyChar);
-            console.log(enemyChar);
         }
         
     }
@@ -244,41 +229,6 @@ function Game() {
         game.camera.aspect = width / height;
         game.camera.updateProjectionMatrix();
     }
-}
-
-function makeSkybox( urls, size ) {
-    var skyboxCubemap = new THREE.CubeTextureLoader().load( urls );
-    skyboxCubemap.format = THREE.RGBFormat;
-
-    var skyboxShader = THREE.ShaderLib['cube'];
-    skyboxShader.uniforms['tCube'].value = skyboxCubemap;
-
-    return new THREE.Mesh(
-        new THREE.BoxGeometry( size, size, size ),
-        new THREE.ShaderMaterial({
-            fragmentShader : skyboxShader.fragmentShader, vertexShader : skyboxShader.vertexShader,
-            uniforms : skyboxShader.uniforms, depthWrite : false, side : THREE.BackSide
-        })
-    );
-}
-
-function makePlatform( jsonUrl, textureUrl, textureQuality ) {
-    var placeholder = new THREE.Object3D();
-    var texture = new THREE.TextureLoader().load( textureUrl );
-    texture.minFilter = THREE.LinearFilter;
-    texture.anisotropy = textureQuality;
-
-    var loader = new THREE.JSONLoader();
-    loader.load( jsonUrl, function( geometry ) {
-        geometry.computeFaceNormals();
-        // game.platform = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial({ map : texture }) );
-        game.platform = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({ map : texture, shading: THREE.SmoothShading }) );
-        game.platform.name = "platform";
-        game.platform.scale.set( 2, 2, 2 );
-        placeholder.add( game.platform );
-    });
-
-    return placeholder;
 }
 
 

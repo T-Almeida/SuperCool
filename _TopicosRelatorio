@@ -1,0 +1,23 @@
+## Este documento é para apontar tudo o que ja foi feito / testado  neste trabalho ##
+
+
+- Plataforma inicial
+
+- Varios tipos de loaders
+
+- Arranjar modelos das armas
+    As armas tinham demasiado detalhe e quando se trocava havia lag
+    Decidiu-se criar armas low-poly
+
+- BoundingBox vs Raycast
+
+- Balas como fonte de luz
+
+- Sombras dao desempenho horrivel
+    Foi feita uma ilusao de sombra usando dois materias diferentes
+
+- O mapa criado tinha 3 mil faces e depois de uma otimização passou para 1,5 mil
+
+- MD2Character não dava para copiar para varios inimigos. As animações não eram grande coisa
+    Passou-se a usar MD2CharacterComplex
+

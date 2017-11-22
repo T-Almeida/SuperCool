@@ -11,7 +11,7 @@ function Enemy(position) {
 
     //preparação do modelo
     this.enemyChar = new THREE.MD2CharacterComplex();
-    this.enemyChar.scale = 0.5;
+    this.enemyChar.scale = 2/50;
     this.enemyChar.controls = this.controls;
     this.enemyChar.shareParts( loader.enemy );
     // cast and receive shadows
@@ -40,11 +40,11 @@ function Enemy(position) {
     this.isSun = false;
 
     //VARIAVEIS DE CONTROLO DO ENIMIGO
-    this.speed = 10;
+    this.speed = 0.00002;
     this.fireCooldown = 3;
     this.velocityVertical = 0;
-    this.enemyMass = 100;
-    this.enemyHeight = 12;
+    this.enemyMass = 10;
+    this.enemyHeight = 1.10;
 
     //animacao de ataque
     this.attackAniTime = 0.5;
@@ -67,7 +67,7 @@ function Enemy(position) {
         var direction = new THREE.Vector3( 0, 0, 1 ).applyMatrix4(new THREE.Matrix4().extractRotation( this.mesh.matrix ));
         direction.y=0;
 
-        var bullet = new EnemyBullet(pointBulletVec, direction, 80);
+        var bullet = new EnemyBullet(pointBulletVec, direction, 15);
         //draw bullet
         bullet.render();
 
@@ -101,7 +101,7 @@ function Enemy(position) {
         this.velocityVertical -= game.gravity * this.enemyMass * delta * game.currentTimeSpeed;  // força gravitica
 
         this.raycaster.ray.origin.copy(this.mesh.position);
-        var intersection = this.raycaster.intersectObject(game.platform);
+        var intersection = this.raycaster.intersectObjects(game.platform.children, true);
 
         if (intersection.length>=1){
             if (this.mesh.position.y-this.enemyHeight <= intersection[0].point.y) { //colisao com o chao
