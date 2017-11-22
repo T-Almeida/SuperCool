@@ -221,7 +221,7 @@ function Player() {
         if ( this.moveRight ) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
         
 
-        console.log("Vector dir " + strVector(this.directitionRay));
+       //console.log("Vector dir " + strVector(this.directitionRay));
 
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
