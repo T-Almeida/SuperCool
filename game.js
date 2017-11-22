@@ -19,8 +19,6 @@ function Game() {
 
     this.prevTime;
     this.stats1;
-    this.stats2;
-
 
     this.init = function() {
 
@@ -52,7 +50,7 @@ function Game() {
 
         // RENDERER
 
-        this.renderer = new THREE.WebGLRenderer({antialias: true});  // TODO ver o antialias 
+        this.renderer = new THREE.WebGLRenderer({antialias: false});  // TODO ver o antialias 
         //this.renderer.shadowMapEnabled = true;
         //this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
         //this.renderer.gammaInput = true;
@@ -144,11 +142,6 @@ function Game() {
         this.stats1.showPanel(0); // Panel 0 = fps
         this.stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
         document.body.appendChild(this.stats1.domElement);
-
-        this.stats2 = new Stats();
-        this.stats2.showPanel(1); // Panel 1 = ms
-        this.stats2.domElement.style.cssText = 'position:absolute;top:0px;left:80px;';
-        document.body.appendChild(this.stats2.domElement);
     }
 
     this.animate = function() {
@@ -177,7 +170,6 @@ function Game() {
         game.renderer.render( game.scene, game.camera );
 
         game.stats1.update();
-        game.stats2.update();
 
         bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
     }
