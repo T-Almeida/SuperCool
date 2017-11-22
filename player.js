@@ -1,11 +1,12 @@
 function Player() {
+
     this.playerheight = 1.75;
     this.playerSpeed = 4;
     this.palyerMass = 5.0;
     this.jumpSpeed = 4;
-    this.gravity = 1.7;
+
     this.bbSizeX = 2;
-    this.bbSizeZ = 1;
+    this.bbSizeZ = 2;
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -15,15 +16,15 @@ function Player() {
     this.jumpDirection = [false,false,false,false];
     this.mousePress = false;
 
-    this.velocity = new THREE.Vector3();
+    this.velocityVertical = 0;
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.playerheight + 1);
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
     //BoundingBox
-    this.playerBB = new THREE.Box3(new THREE.Vector3(game.controls.getObject().position.x-this.bbSizeX,game.controls.getObject().position.y-this.playerheight,game.controls.getObject().position.z-this.bbSizeZ),
-                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX,game.controls.getObject().position.y+1,game.controls.getObject().position.z+this.bbSizeZ));
+    this.playerBB = new THREE.Box3(new THREE.Vector3(game.controls.getObject().position.x-this.bbSizeX, game.controls.getObject().position.y-this.playerheight ,game.controls.getObject().position.z-this.bbSizeZ),
+                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX, game.controls.getObject().position.y+1 ,game.controls.getObject().position.z+this.bbSizeZ));
 
     // ARMAS
     this.weapons = [];
@@ -186,14 +187,16 @@ function Player() {
 
         this.updateGUI(cw);
 
-        this.velocity.y -= this.gravity * this.palyerMass * delta * game.currentTimeSpeed;  // força gravitica
+        this.velocityVertical -= game.gravity * this.palyerMass * delta * game.currentTimeSpeed;  // força gravitica
 
         this.updateBB();
         this.detectCollision();
 
+
         if (!this.isJumping && this.jumpPress){
-            this.velocity.y += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
+            this.velocityVertical += this.jumpSpeed ; // TODO rever isto pq quando tempo para salta mais alto
             this.isJumping = true;
+
         } 
         
         if ( this.moveForward ) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
@@ -212,17 +215,17 @@ function Player() {
             game.rayInter.visible = true;
             game.rayInter.position.copy(intersection[0].point);
             if (game.controls.getObject().position.y-this.playerheight <= intersection[0].point.y) { //colisao com o chao
-                if (this.velocity.y<0) {
-                    this.velocity.y = 0;
+                if (this.velocityVertical<0) {
+                    this.velocityVertical = 0;
                     game.controls.getObject().position.y = intersection[0].point.y+this.playerheight;
                     this.isJumping=false; //deteta qd n esta a salar
                 }
             }
         }
 
-        game.controls.getObject().translateY(this.velocity.y * delta);
+        game.controls.getObject().translateY(this.velocityVertical * delta);
 
-        //console.log("velocidade y " + this.velocity.y);
+        //console.log("velocidade y " + this.velocityVertical);
         //console.log("isJumping " + isJumping);
         //console.log("player position x " + game.controls.getObject().position.x + " y "+  game.controls.getObject().position.y +" z "+  game.controls.getObject().position.z);
         

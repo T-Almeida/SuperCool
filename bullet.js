@@ -54,6 +54,7 @@ function Bullet() {
         bPool.free(this);
         this.setPosition(defaultPosition);
         this.direction = defaultDirection;
+
     }
 }
 
@@ -61,7 +62,7 @@ function Bullet() {
 function EnemyBullet(posicaoOrigem,direcao,speed) {
 
     this.mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.05,8,8),
+        new THREE.SphereGeometry(0.02,8,8),
         new THREE.MeshBasicMaterial({color:0xff0000}));
 
     this.mesh.position.copy(posicaoOrigem);
@@ -85,7 +86,7 @@ function EnemyBullet(posicaoOrigem,direcao,speed) {
     };
 
     this.destroy = function(index){
-        console.log("Bullet destroyed");
+        //console.log("Bullet destroyed");
         game.scene.remove(this.mesh); //remover da cena
         game.objects.splice(index,1); //remover dos objetos ativos
     }
