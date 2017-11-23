@@ -28,6 +28,8 @@ function Player() {
 
     this.directitionRay = new THREE.Vector3(0,0,0);
 
+    this.boosts = []; //lista de boost que se aplicam ao player
+
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
     //BoundingBox
@@ -203,7 +205,7 @@ function Player() {
 
         this.updateGUI(cw);
 
-        this.velocityVertical -= game.gravity * this.palyerMass * delta * game.currentTimeSpeed;  // força gravitica
+        this.velocityVertical -= game.gravity * this.palyerMass * delta; // * game.currentTimeSpeed; TODO para experimentar sem camera lenta
 
         this.updateBB();
         this.detectCollision();
@@ -215,6 +217,7 @@ function Player() {
         }
 
 
+        //TODO otimizar as variaveis e tirar o bloco de debug
         var dirCopy = new THREE.Vector3().copy(this.directitionRay);
         var vectorDir = dirCopy.applyMatrix4(new THREE.Matrix4().extractRotation(game.controls.getObject().matrix)).normalize();
         //console.log("Vector dir " + strVector(vectorDir));
@@ -234,7 +237,10 @@ function Player() {
         if ( this.moveLeft && !(dirCopy.x!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
         if ( this.moveRight && !(dirCopy.x!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateX(this.playerSpeed * delta *  game.currentTimeSpeed);
 
-
+        //aplicar lógica dos boosts
+        for (var i = 0;i<this.boosts.length; i++) {
+            this.boosts[i].update(new THREE.Vector3().subVectors(game.controls.getObject().position,new THREE.Vector3(0,this.playerheight,0)))//ver se é preciso passar o delta
+        }
 
 
         //console.log("Vector dir " + strVector(this.directitionRay));
@@ -281,5 +287,7 @@ function Player() {
             var tempTimeSpeed = game.currentTimeSpeed - stoppingTimeStep * delta ;
             game.currentTimeSpeed = Math.max(tempTimeSpeed, game.minTimeSpeed);
         }
+
+        //console.log("-y speed " + this.velocityVertical);
     };
 }

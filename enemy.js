@@ -61,6 +61,8 @@ function Enemy(position) {
 
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.enemyHeight + 1);
 
+    this.boosts = []; //lista de boost que se aplicam aos enimigos
+
     this.shoot = function (){
 
         console.log("shoot");
@@ -124,6 +126,11 @@ function Enemy(position) {
         if (outsideMap(this.mesh.position)) {
             this.mesh.position.y = 40;
             this.velocityVertical = 0;
+        }
+
+        //aplicar lógica dos boosts
+        for (var i = 0;i<this.boosts.length; i++) {
+            this.boosts[i].update(new THREE.Vector3().subVectors(this.mesh.position,new THREE.Vector3(0,this.enemyHeight,0)))//ver se é preciso passar o delta
         }
 
        // console.log(this.mesh.position)

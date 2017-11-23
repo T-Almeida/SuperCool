@@ -142,7 +142,17 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, -1)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
 
-        new Enemy(new THREE.Vector3(0, 3,0 )).render();
+        var e1 = new Enemy(new THREE.Vector3(0, 3,0 ));
+            e1.render();
+
+        //BOOSTS
+        var posBoostCenter = new THREE.Vector3(0,0,0);
+        this.player.boosts.push(new Boost(posBoostCenter,function () {
+            game.player.velocityVertical = 12;
+        }));
+        e1.boosts.push(new Boost(posBoostCenter,function () {
+            e1.velocityVertical = 12;
+        }));
 
 
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
