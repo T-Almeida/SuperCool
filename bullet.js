@@ -6,12 +6,13 @@ function Bullet() {
     this.direction = defaultDirection;
     this.speed = 0;
     this.active = false;
+    this.shotByPlayer = false;
 
     var mat = new THREE.MeshPhongMaterial( {emissive: colorWhite} );
-    var trailMat = new THREE.MeshPhongMaterial( {emissive: colorSecondary}); //, transparent:true, opacity:0.5} );
+    var trailMat = new THREE.MeshPhongMaterial( {color: colorSecondary,emissive: colorSecondary}); //, transparent:true, opacity:0.5} );
     
     var bulletSize = 0.02;
-    var trailSize = 2;
+    var trailSize = 4;
     this.mesh = new THREE.Mesh(new THREE.SphereGeometry(bulletSize, 4, 4), mat);
     this.trail = new THREE.Mesh(new THREE.CylinderGeometry(bulletSize, 0 , trailSize, 3 ), trailMat);
     this.mesh.add(this.trail);
@@ -35,11 +36,13 @@ function Bullet() {
         this.mesh.translateOnAxis( this.direction, this.speed * delta * game.currentTimeSpeed);
     };
 
-    this.activate = function (position, direction, speed) {
+    this.activate = function (position, direction, speed, shotByPlayer) {
         this.setPosition(position);
         this.direction = direction;
         this.speed = speed;
         this.active = true;
+        this.shotByPlayer = shotByPlayer;
+        
         game.bullets.push(this);
         
         this.trail.quaternion.setFromUnitVectors(axis, direction);  // rotação do trail
@@ -55,40 +58,6 @@ function Bullet() {
         this.setPosition(defaultPosition);
         this.direction = defaultDirection;
 
-    }
-}
-
-
-function EnemyBullet(posicaoOrigem,direcao,speed) {
-
-    this.mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(0.02,8,8),
-        new THREE.MeshBasicMaterial({color:0xff0000}));
-
-    this.mesh.position.copy(posicaoOrigem);
-
-    var self = this;
-
-    //FUNCAO CHAMADA EM TODOS OS FRAMES
-    this.update = function (delta,objectIndex) {
-        if (outsideMap(this.mesh.position)){ //destuir bala
-            this.destroy(objectIndex);
-            return ;
-        }
-
-        this.mesh.translateOnAxis( direcao, speed * delta * game.currentTimeSpeed);
-
-    };
-
-    this.render = function () {
-        game.objects.push(this);
-        game.scene.add(this.mesh);
-    };
-
-    this.destroy = function(index){
-        //console.log("Bullet destroyed");
-        game.scene.remove(this.mesh); //remover da cena
-        game.objects.splice(index,1); //remover dos objetos ativos
     }
 }
 

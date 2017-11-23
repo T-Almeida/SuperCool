@@ -2,8 +2,8 @@
 
 
 // game systems code
-var min_box = new THREE.Vector3(-500,-20,-500);
-var max_box = new THREE.Vector3(500,100,500);
+var min_box = new THREE.Vector3(-30,-5,-30);
+var max_box = new THREE.Vector3(30,40,30);
 
 function resetPlayer() {
     if( game.controls.getObject().position.y < -10 ) {

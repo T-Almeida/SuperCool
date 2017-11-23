@@ -2,7 +2,7 @@
 function Boost(postion,actionFunction) {
     this.position = postion;
     this.actionFunction = actionFunction;
-    this.thresholdDistance = 0.8;
+    this.thresholdDistance = 1.6;
 
     var self = this;
 

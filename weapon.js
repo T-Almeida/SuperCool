@@ -45,7 +45,7 @@ class Gun {
         
         //criar bala
         var bullet = bPool.allocate();
-        bullet.activate(pointBulletVec, accPoint.normalize(), this.bulletSpeed);
+        bullet.activate(pointBulletVec, accPoint.normalize(), this.bulletSpeed, true);
 
         this.fireCooldown = 1/this.fireRate;
     }

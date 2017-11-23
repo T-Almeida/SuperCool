@@ -9,7 +9,8 @@ function Game() {
     this.enemies = [];
     this.objects = [];
     this.bullets = [];
-    this.platform;
+    this.floors;
+    this.walls;
     this.rayInter;
 
     // gestao do tempo
@@ -72,7 +73,10 @@ function Game() {
         
         console.log(loader.map);
         this.scene.add(loader.map);
-        this.platform = loader.map;
+        this.scene.add(loader.floors);
+        this.floors = loader.floors;
+        this.scene.add(loader.walls);
+        this.walls = loader.walls;
         
         //RAYCAST DEBUG
 

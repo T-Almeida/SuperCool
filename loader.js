@@ -3,6 +3,8 @@ function Loader(){
     this.gun2;
     this.enemy;
     this.map;
+    this.floors;
+    this.walls;
 
     THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
@@ -16,6 +18,7 @@ function Loader(){
     };
 
     this.loadScene = function() {
+        var scale = 2;
         var mtlLoader = new THREE.MTLLoader(manager);
         mtlLoader.setPath('models/cena/');
         mtlLoader.load( 
@@ -28,8 +31,41 @@ function Loader(){
                 objLoader.load( 
                     'cena.obj', 
                     function ( object ) {
+                        object.scale.set(scale,scale,scale);
                         loader.map = object;
                         loader.processMaterial(object);
+                    } 
+                );
+            }
+        );
+        mtlLoader.load( 
+            'floors.mtl', 
+            function( materials ) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials( materials );
+                objLoader.setPath('models/cena/');
+                objLoader.load( 
+                    'floors.obj', 
+                    function ( object ) {
+                        object.scale.set(scale,scale,scale);
+                        loader.floors = object;
+                    } 
+                );
+            }
+        );
+        mtlLoader.load( 
+            'walls.mtl', 
+            function( materials ) {
+                materials.preload();
+                var objLoader = new THREE.OBJLoader(manager);
+                objLoader.setMaterials( materials );
+                objLoader.setPath('models/cena/');
+                objLoader.load( 
+                    'walls.obj', 
+                    function ( object ) {
+                        object.scale.set(scale,scale,scale);
+                        loader.walls = object;
                     } 
                 );
             }

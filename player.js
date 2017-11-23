@@ -178,11 +178,10 @@ function Player() {
 
     this.detectCollision = function () {
         //detecao colisao com balas e futuramente outros
-        for (var i = 0;i<game.objects.length ; i++){
-            if (!(game.objects[i] instanceof EnemyBullet)) continue;
-            if (this.playerBB.containsPoint(game.objects[i].mesh.position)){
-                console.log("Colisão com o player");
-                game.objects[i].destroy(i);
+        for (var i = 0;i<game.bullets.length ; i++){
+            if (!game.bullets[i].shotByPlayer && this.playerBB.containsPoint(game.bullets[i].mesh.position)){
+                console.log("Player hit");
+                game.bullets[i].destroy(i);
             }
         }
     };
@@ -226,12 +225,12 @@ function Player() {
         this.raycasterWalls.ray.origin.copy(game.controls.getObject().position);
         this.raycasterWalls.ray.direction.copy(vectorDir);
 
-        var intersectionWalls = this.raycasterWalls.intersectObjects(game.platform.children, true);
+        var intersectionWalls = this.raycasterWalls.intersectObjects(game.walls.children, true);
 
-        if (intersectionWalls.length>=1){
+        /* if (intersectionWalls.length>=1){
             console.log("colision with wall");
         }
-
+ */
         if ( this.moveForward  && !(dirCopy.z!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
         if ( this.moveBackward && !(dirCopy.z!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed);
         if ( this.moveLeft && !(dirCopy.x!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
@@ -248,7 +247,7 @@ function Player() {
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
 
-        var intersection = this.raycaster.intersectObjects(game.platform.children, true);
+        var intersection = this.raycaster.intersectObjects(game.floors.children, true);
 
         game.rayInter.visible = false; //OBJETO DO CENARIO DEBUG
         if (intersection.length>=1){

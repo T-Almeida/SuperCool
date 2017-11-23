@@ -29,6 +29,7 @@ function Enemy(position) {
     //var pointBulletSpawn = new THREE.Object3D();
     this.pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5), new THREE.MeshBasicMaterial({color:0xff0000}));
     this.pointBulletSpawn.position.set(28,13,-10);
+    this.bulletSpeed = 15;
     this.enemyChar.meshWeapon.add(this.pointBulletSpawn);
     console.log(this.enemyChar);
 
@@ -74,10 +75,8 @@ function Enemy(position) {
         var direction = new THREE.Vector3( 0, 0, 1 ).applyMatrix4(new THREE.Matrix4().extractRotation( this.mesh.matrix ));
         direction.y=0;
 
-        var bullet = new EnemyBullet(pointBulletVec, direction, 15);
-        //draw bullet
-        bullet.render();
-
+        var bullet = bPool.allocate();
+        bullet.activate(pointBulletVec, direction, this.bulletSpeed, false);
     };
 
 
@@ -108,7 +107,7 @@ function Enemy(position) {
         this.velocityVertical -= game.gravity * this.enemyMass * delta * game.currentTimeSpeed;  // força gravitica
 
         this.raycaster.ray.origin.copy(this.mesh.position);
-        var intersection = this.raycaster.intersectObjects(game.platform.children, true);
+        var intersection = this.raycaster.intersectObjects(game.floors.children, true);
 
         if (intersection.length>=1){
             if (this.mesh.position.y-this.enemyHeight <= intersection[0].point.y) { //colisao com o chao
