@@ -49,7 +49,7 @@ function Enemy(position) {
     this.speed = 0.00002;
     this.fireCooldown = 3;
     this.velocityVertical = 0;
-    this.enemyMass = 10;
+    this.enemyMass = 5;
     this.enemyHeight = 1.10;
 
     //animacao de ataque
@@ -118,7 +118,7 @@ function Enemy(position) {
             }
         }
 
-        this.mesh.translateY(delta * this.velocityVertical);
+        this.mesh.translateY(delta * this.velocityVertical* game.currentTimeSpeed);
     };
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
@@ -135,7 +135,6 @@ function Enemy(position) {
        // console.log(this.mesh.position)
         //update fisica
         this.updatePhysics(delta);
-
 
         if (this.fireCooldown <= 0) {
             this.controls.attack = true;
@@ -175,6 +174,7 @@ function Enemy(position) {
 
         //this.mesh.rotateY(0.3*delta * superHotConstant);
         //this.mesh.translateZ(-this.speed*delta * superHotConstant);
+
 
         //update animation
         this.enemyChar.update(delta * game.currentTimeSpeed);

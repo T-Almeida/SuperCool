@@ -155,7 +155,7 @@ function Game() {
             game.player.velocityVertical = 12;
         }));
         e1.boosts.push(new Boost(posBoostCenter,function () {
-            e1.velocityVertical = 12;
+            e1.velocityVertical = 14;
         }));
 
 
