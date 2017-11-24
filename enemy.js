@@ -177,7 +177,7 @@ function Enemy(position) {
 
 
         //update animation
-        this.enemyChar.update(delta * game.currentTimeSpeed);
+        this.enemyChar.update(delta*game.currentTimeSpeed);
 
         this.meshBB.setFromObject(this.mesh); //update bounding box
         this.detectCollision();

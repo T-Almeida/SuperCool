@@ -491,7 +491,7 @@ THREE.MD2CharacterComplex = function () {
 
 		// displacement
 
-		var forwardDelta = this.speed * delta * 0.05;
+		var forwardDelta = this.speed * 0.05 * delta;
 
 		this.root.position.x += Math.sin( this.bodyOrientation ) * forwardDelta;
 		this.root.position.z += Math.cos( this.bodyOrientation ) * forwardDelta;

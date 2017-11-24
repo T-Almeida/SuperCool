@@ -153,6 +153,7 @@ function Game() {
         var posBoostCenter = new THREE.Vector3(0,0,0);
         this.player.boosts.push(new Boost(posBoostCenter,function () {
             game.player.velocityVertical = 12;
+            game.player.isJumping = true;
         }));
         e1.boosts.push(new Boost(posBoostCenter,function () {
             e1.velocityVertical = 14;
