@@ -3,9 +3,9 @@ function Player() {
     updateMapColor(this.health);
 
     this.playerheight = 1.75;
-    this.playerSpeed = 4;
+    this.playerSpeed = 5;
     this.palyerMass = 5.0;
-    this.jumpSpeed = 4;
+    this.jumpSpeed = 5;
 
     this.bbSizeX = 2;
     this.bbSizeZ = 2;

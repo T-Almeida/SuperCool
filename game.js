@@ -152,14 +152,32 @@ function Game() {
             e1.render();
 
         //BOOSTS
-        var posBoostCenter = new THREE.Vector3(0,0,0);
-        this.player.boosts.push(new Boost(posBoostCenter,function () {
-            game.player.velocityVertical = 12;
+        var playerBoost = function() {
+            game.player.velocityVertical = 16;
             game.player.isJumping = true;
-        }));
-        e1.boosts.push(new Boost(posBoostCenter,function () {
-            e1.velocityVertical = 14;
-        }));
+        }
+        var enemyBoost = function() {
+            e1.velocityVertical = 16;
+        }
+
+        var posBoostCenter = new THREE.Vector3(0,0,0);
+        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
+        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
+        var boostPos = 17;
+        posBoostCenter = new THREE.Vector3(boostPos,0,boostPos);
+        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
+        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
+        posBoostCenter = new THREE.Vector3(-boostPos,0,boostPos);
+        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
+        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
+        posBoostCenter = new THREE.Vector3(boostPos,0,-boostPos);
+        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
+        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
+        posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
+        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
+        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
+
+
 
         this.enemies.push(e1);
 
