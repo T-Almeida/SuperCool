@@ -36,12 +36,7 @@ function Enemy(position) {
 
     this.mesh = this.enemyChar.root; // redundandte, mas para manter a consistencia
     this.mesh.position.copy(position);
-
-    this.meshBB = new THREE.Box3(new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,0));
-    this.meshBB.setFromObject(this.mesh);
-
-    var helper = new THREE.Box3Helper( this.meshBB, 0x0000ff );//DEGUB ELEMINAR O HELPER
-    game.scene.add( helper );
+    this.mesh.name="enemy";
 
     this.isSun = false;
 
@@ -158,7 +153,7 @@ function Enemy(position) {
             }
         }
 
-
+        /*
         //dumb IA
         if (this.timeLook > 0) { // VAI EM FRENTE
             this.timeLook -= delta * game.currentTimeSpeed;
@@ -168,7 +163,7 @@ function Enemy(position) {
                 this.lookAtPlayer(function(){
                     self.timeLook = 1+Math.random();
                 });//quando terminar de olhar para o player resta timeLook para 5
-        }
+        }*/
 
         //console.log("move " , this.timeLook)
 
@@ -179,20 +174,6 @@ function Enemy(position) {
         //update animation
         this.enemyChar.update(delta*game.currentTimeSpeed);
 
-        this.meshBB.setFromObject(this.mesh); //update bounding box
-        this.detectCollision();
-
-    };
-
-    this.detectCollision = function () {
-        //detecao colisao com balas e futuramente outros
-        for (var i = 0;i<game.objects.length ; i++){
-            if (!(game.objects[i] instanceof Bullet)) continue;
-            if (this.meshBB.containsPoint(game.objects[i].mesh.position)){
-                console.log("Colisão");
-                game.objects[i].destroy(i);
-            }
-        }
     };
 
     this.render = function () {

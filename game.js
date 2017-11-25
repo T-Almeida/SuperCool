@@ -75,8 +75,10 @@ function Game() {
         this.scene.add(loader.map);
         this.scene.add(loader.floors);
         this.floors = loader.floors;
+        this.floors.name="floors";
         this.scene.add(loader.walls);
         this.walls = loader.walls;
+        this.walls.name="walls";
         
         //RAYCAST DEBUG
 
@@ -145,7 +147,8 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
 
-        var e1 = new Enemy(new THREE.Vector3(0, 3,0 ));
+
+        var e1 = new Enemy(new THREE.Vector3(5, 3,5 ));
             e1.render();
 
         //BOOSTS
@@ -157,6 +160,8 @@ function Game() {
         e1.boosts.push(new Boost(posBoostCenter,function () {
             e1.velocityVertical = 14;
         }));
+
+        this.enemies.push(e1);
 
 
         //new Enemy(new THREE.Vector3(40, 15, -2 )).render();

@@ -1,6 +1,8 @@
+
 function Bullet() {
     var defaultPosition = new THREE.Vector3(0, -20, 0);
     var defaultDirection = new THREE.Vector3(0, 0, 0);
+
     var axis = new THREE.Vector3(0, 1, 0);
 
     this.direction = defaultDirection;
@@ -19,16 +21,50 @@ function Bullet() {
 
     this.mesh.position.set(defaultPosition);
     game.scene.add(this.mesh);
-        
+
+    this.farDetection = 1;
+    this.raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.farDetection);
+    this.objectToCollide = [];
+    //adicinar objetos para colidir estaticos AQUI! dinamicos (enimigos deve ser na func active)
+    this.objectToCollide.push(game.floors);
+    this.objectToCollide.push(game.walls);
+
+    //this.box = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),new THREE.MeshBasicMaterial({color:0x00ff00}));
+    //this.box.position.set(this.mesh.position);
+    //game.scene.add(this.box);
+    //this.objectToCollide.push(game.walls.children);
+    //this.objectToCollide.push(game.floors.children);
+
+
     var self = this;    
     
     this.setPosition = function(position) {
         this.mesh.position.copy(position);
-    }
+    };
 
     this.update = function (delta, objectIndex) {
+        //this.box.position.copy(new THREE.Vector3().addVectors(this.mesh.position,this.direction.normalize()));
+        //console.log(this.mesh.position);
+        this.raycaster.ray.origin.copy(this.mesh.position);
+        this.raycaster.ray.direction.copy(this.direction);
 
-        if ( outsideMap(this.mesh.position) ){ 
+        var intersections = this.raycaster.intersectObjects(this.objectToCollide,true);
+        //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
+
+        if (intersections.length>0){
+            console.log("Colisão bala");
+            var object = getParent(intersections[0].object);
+            if (object.name=="enemy"){//bala colidiu com inimigo
+                console.log("Com enimgo");
+
+            }//se nao colidiu com parede ou chao
+
+            this.destroy(objectIndex);
+            return;
+        }
+
+
+        if ( outsideMap(this.mesh.position) ){
             this.destroy(objectIndex);
             return ;
         }
@@ -38,7 +74,7 @@ function Bullet() {
 
     this.activate = function (position, direction, speed, shotByPlayer) {
         this.setPosition(position);
-        this.direction = direction;
+        this.direction = direction.normalize(); //IMP normalizar
         this.speed = speed;
         this.active = true;
         this.shotByPlayer = shotByPlayer;
@@ -50,6 +86,10 @@ function Bullet() {
         this.trail.position.x = - direction.x * trailSize / 2;
         this.trail.position.y = - direction.y * trailSize / 2;
         this.trail.position.z = - direction.z * trailSize / 2;
+
+        //adicionar enimigos ativos para colisoes
+        for (var i = 0;i<game.enemies.length;i++)
+            this.objectToCollide.push(game.enemies[0].mesh)// não dá para utilizar função de map do js
     };
 
     this.destroy = function(index){
@@ -58,7 +98,12 @@ function Bullet() {
         this.setPosition(defaultPosition);
         this.direction = defaultDirection;
 
-    }
+    };
+}
+
+function getParent(object) {
+    if (object.name=="") return getParent(object.parent);
+    return object;
 }
 
 function BulletPool() {
@@ -73,13 +118,13 @@ function BulletPool() {
         pool.push(bullet);
         this.totalPooled += 1;
         return bullet;
-    }
+    };
 
     this.init = function(number) {
         for (var i=0; i<number; i++){
             this.createBullet();
         }
-    }
+    };
 
     this.allocate = function() {
         var bullet;
@@ -91,7 +136,7 @@ function BulletPool() {
             this.totalUsed += 1;
         }
         return bullet;
-    }
+    };
 
     this.free = function(bullet) {
         if (!bullet.active) return;
@@ -99,5 +144,5 @@ function BulletPool() {
         bullet.active = false;
         pool.push(bullet);
         this.totalUsed -= 1;
-    }
+    };
 }
