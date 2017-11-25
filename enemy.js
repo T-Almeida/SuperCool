@@ -197,11 +197,11 @@ function Enemy() {
         game.scene.add(this.mesh);
     }
 
-    this.damage = function(damage) {
+    this.damage = function(damage, index) {
         this.health -= damage;
 
         if (this.health <= 0){
-            console.log("enemy dead");
+            this.destroy(index);
         }
     }
 

@@ -147,22 +147,7 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
 
-        //BOOSTS
-        var playerBoost = function() {
-            game.player.velocityVertical = 16;
-            game.player.isJumping = true;
-        }
-        var posBoostCenter = new THREE.Vector3(0,0,0);
-        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        var boostPos = 17;
-        posBoostCenter = new THREE.Vector3(boostPos,0,boostPos);
-        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        posBoostCenter = new THREE.Vector3(-boostPos,0,boostPos);
-        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        posBoostCenter = new THREE.Vector3(boostPos,0,-boostPos);
-        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
-        this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
+        
 
         // STATS
 
@@ -195,7 +180,7 @@ function Game() {
             game.enemySpawnTimerCurrent -= delta * game.currentTimeSpeed;
             if (game.enemySpawnTimerCurrent<=0){
                 var enemy = enemyPool.allocate();
-                enemy.activate(new THREE.Vector3(0,10,0));
+                enemy.activate(getRandomEnemySpawn());
                 game.enemySpawnTimerCurrent = game.enemySpawnTimer;
             }
 

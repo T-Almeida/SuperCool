@@ -32,6 +32,22 @@ function Player() {
     this.directitionRay = new THREE.Vector3(0,0,0);
 
     this.boosts = []; //lista de boost que se aplicam ao player
+    //BOOSTS
+    var playerBoost = function() {
+        game.player.velocityVertical = 16;
+        game.player.isJumping = true;
+    }
+    var boostPos = 17;
+    var posBoostCenter = new THREE.Vector3(0,0,0);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(boostPos,0,boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(-boostPos,0,boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(boostPos,0,-boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
@@ -76,6 +92,8 @@ function Player() {
         var cw = this.weapons[weaponId];
         cw.mesh.visible = true;
         cw.changeState(cw.previousState);
+
+        console.log(game.controls.getObject().position);
     };
 
     this.mousedown = function () {

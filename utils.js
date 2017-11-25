@@ -54,3 +54,28 @@ function updateMapColor(health) {
     loader.mapAccentMaterial.color = new THREE.Color("#000000");
     loader.mapAccentMaterial.emissive = new THREE.Color(color);
 }
+
+
+var enemySpawns = [
+    new THREE.Vector3(0,0,-13),
+    new THREE.Vector3(-13,0,0),
+    new THREE.Vector3(13,0,0),
+    new THREE.Vector3(0,0,13),
+    new THREE.Vector3(17,0,17),
+    new THREE.Vector3(17,0,-17),
+    new THREE.Vector3(-17,0,17),
+    new THREE.Vector3(-17,0,-17),
+    new THREE.Vector3(7,10,7),
+    new THREE.Vector3(7,10,-7),
+    new THREE.Vector3(-7,10,7),
+    new THREE.Vector3(-7,10,-7),
+    new THREE.Vector3(16,8,0),
+    new THREE.Vector3(-16,8,0),
+    new THREE.Vector3(0,8,16),
+    new THREE.Vector3(0,8,-16),
+    new THREE.Vector3(0,0,0),
+]
+function getRandomEnemySpawn() {
+    var r = Math.floor(Math.random() * enemySpawns.length);
+    return enemySpawns[r];
+}

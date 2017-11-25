@@ -60,7 +60,7 @@ function Bullet(damage) {
             if (game.enemies[i].mesh.position.distanceTo(this.mesh.position)<1){
                 intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
                 if (intersections.length>0){
-                    game.enemies[i].damage(this.damage);
+                    game.enemies[i].damage(this.damage,i);
                     console.log("Enemy hit");
                     this.destroy(objectIndex);
                     return;
