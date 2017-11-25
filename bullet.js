@@ -24,10 +24,11 @@ function Bullet() {
 
     this.farDetection = 1;
     this.raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.farDetection);
-    this.objectToCollide = [];
+    this.objectStatic = [];
+    this.objectStatic.push(game.floors);
+    this.objectStatic.push(game.walls);
+    this.objectDynamic = [];
     //adicinar objetos para colidir estaticos AQUI! dinamicos (enimigos deve ser na func active)
-    this.objectToCollide.push(game.floors);
-    this.objectToCollide.push(game.walls);
 
     //this.box = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),new THREE.MeshBasicMaterial({color:0x00ff00}));
     //this.box.position.set(this.mesh.position);
@@ -48,17 +49,18 @@ function Bullet() {
         this.raycaster.ray.origin.copy(this.mesh.position);
         this.raycaster.ray.direction.copy(this.direction);
 
-        var intersections = this.raycaster.intersectObjects(this.objectToCollide,true);
+        var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
         //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
-
         if (intersections.length>0){
             console.log("Colisão bala");
-            var object = getParent(intersections[0].object);
-            if (object.name=="enemy"){//bala colidiu com inimigo
-                console.log("Com enimgo");
+            this.destroy(objectIndex);
+            return;
+        }
 
-            }//se nao colidiu com parede ou chao
-
+        intersections = this.raycaster.intersectObjects(this.objectDynamic,true);
+        //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
+        if (intersections.length>0){
+            console.log("Colisão com inimigo");
             this.destroy(objectIndex);
             return;
         }
@@ -87,9 +89,10 @@ function Bullet() {
         this.trail.position.y = - direction.y * trailSize / 2;
         this.trail.position.z = - direction.z * trailSize / 2;
 
-        //adicionar enimigos ativos para colisoes
-        for (var i = 0;i<game.enemies.length;i++)
-            this.objectToCollide.push(game.enemies[0].mesh)// não dá para utilizar função de map do js
+        this.objectDynamic = [];
+        for (var k = 0;k<game.enemies.length;k++)
+            this.objectDynamic.push(game.enemies[k].mesh);
+
     };
 
     this.destroy = function(index){
