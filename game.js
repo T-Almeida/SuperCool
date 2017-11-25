@@ -7,7 +7,6 @@ function Game() {
 
     this.player;
     this.enemies = [];
-    this.objects = [];
     this.bullets = [];
     this.floors;
     this.walls;
@@ -34,7 +33,7 @@ function Game() {
 
         // CAMERA
 
-        this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 1000 );
+        this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // Mover a camara com o rato (FirstPerson)
         this.controls = new THREE.PointerLockControls( this.camera );
         this.scene.add( this.controls.getObject() ); // adiciona camera
@@ -211,12 +210,10 @@ function Game() {
                 game.bullets[i].update(delta,i);
             }
 
-            //Call update
-            for (var i = 0 ; i < game.objects.length ; i++){
-                game.objects[i].update(delta,i);
-            }
+            // Update do player
+            game.player.update(delta);
             
-
+            // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
                 game.enemies[i].update(delta * game.currentTimeSpeed);

@@ -1,10 +1,11 @@
 
-function Bullet() {
+function Bullet(damage) {
     var defaultPosition = new THREE.Vector3(0, -20, 0);
     var defaultDirection = new THREE.Vector3(0, 0, 0);
 
     var axis = new THREE.Vector3(0, 1, 0);
 
+    this.damage = damage;
     this.direction = defaultDirection;
     this.speed = 0;
     this.active = false;
@@ -22,11 +23,9 @@ function Bullet() {
     this.mesh.position.set(defaultPosition);
     game.scene.add(this.mesh);
 
-    this.farDetection = 1;
+    this.farDetection = 0.5;
     this.raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.farDetection);
-    this.objectStatic = [];
-    this.objectStatic.push(game.floors);
-    this.objectStatic.push(game.walls);
+    this.objectStatic = [game.floors, game.walls];
 
     //adicinar objetos para colidir estaticos AQUI! dinamicos (enimigos deve ser na func active)
 
@@ -50,7 +49,6 @@ function Bullet() {
         this.raycaster.ray.direction.copy(this.direction);
 
         var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
-        //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
         if (intersections.length>0){
             console.log("Colisão bala");
             this.destroy(objectIndex);
@@ -59,19 +57,21 @@ function Bullet() {
 
         //intercesoes com os enimigos + eficiente
         for (var i=0;i<game.enemies.length;i++){
-            if (game.enemies[i].mesh.position.distanceTo(this.mesh.position)<3){
+            if (game.enemies[i].mesh.position.distanceTo(this.mesh.position)<1){
                 intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
-                //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
                 if (intersections.length>0){
-                    console.log("Colisão com inimigo");
+                    console.log("Enemy hit");
                     this.destroy(objectIndex);
                     return;
                 }
             }
         }
-
-
-
+        
+        if (!this.shotByPlayer && game.player.playerBB.containsPoint(this.mesh.position)){
+            game.player.takeDamage(this.damage);
+            console.log("Player hit");
+            this.destroy(objectIndex);
+        }
 
         if ( outsideMap(this.mesh.position) ){
             this.destroy(objectIndex);
@@ -81,7 +81,8 @@ function Bullet() {
         this.mesh.translateOnAxis( this.direction, this.speed * delta * game.currentTimeSpeed);
     };
 
-    this.activate = function (position, direction, speed, shotByPlayer) {
+    this.activate = function (damage, position, direction, speed, shotByPlayer) {
+        this.damage = damage;
         this.setPosition(position);
         this.direction = direction.normalize(); //IMP normalizar
         this.speed = speed;
@@ -103,7 +104,6 @@ function Bullet() {
         bPool.free(this);
         this.setPosition(defaultPosition);
         this.direction = defaultDirection;
-
     };
 }
 

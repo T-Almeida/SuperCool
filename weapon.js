@@ -58,6 +58,11 @@ class Gun {
     }
 
     shoot() {
+        if (this.currentAmmo <= 0){
+            this.changeState(4);
+            return;
+        }
+
         this.currentAmmo -= 1;
 
         var pointBulletVec = new THREE.Vector3(0,0,0);
@@ -71,7 +76,7 @@ class Gun {
         
         //criar bala
         var bullet = bPool.allocate();
-        bullet.activate(pointBulletVec, accPoint.normalize(), this.bulletSpeed, true);
+        bullet.activate(this.damage, pointBulletVec, accPoint.normalize(), this.bulletSpeed, true);
 
         this.fireCooldown = 1/this.fireRate;
 

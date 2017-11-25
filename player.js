@@ -7,7 +7,7 @@ function Player() {
     this.palyerMass = 5.0;
     this.jumpSpeed = 5;
 
-    this.bbSizeX = 2;
+    this.bbSizeX = 1;
     this.bbSizeZ = 2;
 
     this.moveForward = false;
@@ -45,7 +45,6 @@ function Player() {
     
     this.addWeapon = function(weapon) {
         this.weapons.push(weapon);
-        game.objects.push(weapon);
         game.controls.getObject().children[0].add(weapon.mesh);
     };
 
@@ -77,13 +76,7 @@ function Player() {
         var cw = this.weapons[weaponId];
         cw.mesh.visible = true;
         cw.changeState(cw.previousState);
-
-        this.takeDamage(20);
-        
     };
-
-    //adicionar o objeto como objeto ativo
-    game.objects.push(this);
 
     this.mousedown = function () {
         self.weapons[self.currentWeapon].startShooting();
@@ -181,16 +174,6 @@ function Player() {
         timeBar.style.height = timeHeight + '%'; 
     };
 
-    this.detectCollision = function () {
-        //detecao colisao com balas e futuramente outros
-        for (var i = 0;i<game.bullets.length ; i++){
-            if (!game.bullets[i].shotByPlayer && this.playerBB.containsPoint(game.bullets[i].mesh.position)){
-                console.log("Player hit");
-                game.bullets[i].destroy(i);
-            }
-        }
-    };
-
 
     this.updateBB = function () {
 
@@ -205,6 +188,7 @@ function Player() {
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
         var cw = this.weapons[this.currentWeapon];
+        cw.update(delta,0);
         // a arma foi trocada
         cw.mesh.visible = true;
         this.updateWeaponGUI();
@@ -213,7 +197,6 @@ function Player() {
         this.velocityVertical -= game.gravity * this.palyerMass * delta; // * game.currentTimeSpeed; TODO para experimentar sem camera lenta
 
         this.updateBB();
-        this.detectCollision();
 
 
         if (!this.isJumping && this.jumpPress){

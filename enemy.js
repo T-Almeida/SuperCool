@@ -1,5 +1,6 @@
 function Enemy(position) {
     var self = this;
+    var enemyDamage = 20;
 
     this.controls = {
         moveForward: false,
@@ -15,7 +16,7 @@ function Enemy(position) {
     this.enemyChar.controls = this.controls;
     this.enemyChar.shareParts( loader.enemy );
     // cast and receive shadows
-    this.enemyChar.setWireframe (false) ;
+    this.enemyChar.setWireframe (true) ;
     this.enemyChar.enableShadows( true );
     this.enemyChar.setWeapon( 0 );
     //enemyChar.setSkin( i );
@@ -61,7 +62,7 @@ function Enemy(position) {
 
     this.shoot = function (){
 
-        console.log("shoot");
+        console.log("Enemy shoot");
 
         var pointBulletVec = new THREE.Vector3(0,0,0);
         this.pointBulletSpawn.localToWorld(pointBulletVec);
@@ -71,7 +72,7 @@ function Enemy(position) {
         direction.y=0;
 
         var bullet = bPool.allocate();
-        bullet.activate(pointBulletVec, direction, this.bulletSpeed, false);
+        bullet.activate(enemyDamage, pointBulletVec, direction, this.bulletSpeed, false);
     };
 
 
@@ -177,7 +178,7 @@ function Enemy(position) {
     };
 
     this.render = function () {
-        game.objects.push(this);
+        game.enemies.push(this);
         game.scene.add(this.mesh);
     }
 }
