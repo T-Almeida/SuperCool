@@ -5,6 +5,7 @@ function Loader(){
     this.map;
     this.floors;
     this.walls;
+    this.mapAccentMaterial;
 
     THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
@@ -33,7 +34,7 @@ function Loader(){
                     function ( object ) {
                         object.scale.set(scale,scale,scale);
                         loader.map = object;
-                        loader.processMaterial(object);
+                        loader.processMaterial(object,true);
                     } 
                 );
             }
@@ -87,7 +88,7 @@ function Loader(){
                     function ( object ) {
                         object.position.set(0.15, -0.25, -0.3);
                         loader.gun1 = object;
-                        loader.processMaterial(object);
+                        loader.processMaterial(object,false);
                     } 
                 );
             }
@@ -109,7 +110,7 @@ function Loader(){
                     function ( object ) {
                         object.position.set(0.15, -0.25, -0.3);
                         loader.gun2 = object;
-                        loader.processMaterial(object);
+                        loader.processMaterial(object,false);
                     } 
                 );
             }
@@ -192,17 +193,7 @@ function Loader(){
         this.loadEnemy();
     }
 
-    this.processMaterial = function(object) {
-        /*var material = new THREE.MeshBasicMaterial(colorWhite);
-
-        object.traverse( function ( child ) {
-            if ( child instanceof THREE.Mesh ) {
-                if (child.material instanceof THREE.Material && child.material.name == "myBlack")
-                    child.material = material;
-            }
-        } );*/
-
-
+    this.processMaterial = function(object,map) {
         for (i=0; i<object.children.length; i++){
             var child = object.children[i];
             var mat;
@@ -210,9 +201,14 @@ function Loader(){
                 mat = child.material;
                 if (mat.name == "myAccent1") {
                     mat.emissive =  colorAccent;
+                    this.mapAccentMaterial = mat;
                 }
                 else if (mat.name == "mySecondary1") {
                     mat.emissive =  colorSecondary;
+                    if (map){
+                        mat.transparent = true;
+                        mat.opacity = 0.8;
+                    }
                 }
                 else if (mat.name == "myBlack"){
                     mat.color = colorBlack;
@@ -228,17 +224,22 @@ function Loader(){
                     mat = child.material[j];
                     if (mat.name == "myAccent1") {
                         mat.emissive =  colorAccent;
+                        this.mapAccentMaterial = mat;
                     }
                     else if (mat.name == "mySecondary1") {
                         mat.emissive =  colorSecondary;
+                        if (map){
+                            mat.transparent = true;
+                            mat.opacity = 0.8;
+                        }
                     }
                     else if (mat.name == "myBlack"){
                         mat.color = colorBlack;
+                        mat.snininess = 0;
                         mat.specular = colorBlack;
                     } 
                     else if (mat.name == "myDark") {
                         mat.color = colorDark;
-                        mat.snininess = 30;
                     }
                 }
             }

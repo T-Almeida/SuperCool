@@ -1,4 +1,7 @@
 function Player() {
+    this.health = 100;
+    updateMapColor(this.health);
+
     this.playerheight = 1.75;
     this.playerSpeed = 4;
     this.palyerMass = 5.0;
@@ -74,6 +77,9 @@ function Player() {
         var cw = this.weapons[weaponId];
         cw.mesh.visible = true;
         cw.changeState(cw.previousState);
+
+        this.takeDamage(20);
+        
     };
 
     //adicionar o objeto como objeto ativo
@@ -227,10 +233,6 @@ function Player() {
 
         var intersectionWalls = this.raycasterWalls.intersectObjects(game.walls.children, true);
 
-        /* if (intersectionWalls.length>=1){
-            console.log("colision with wall");
-        }
- */
         if ( this.moveForward  && !(dirCopy.z!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateZ(-this.playerSpeed * delta *  game.currentTimeSpeed);
         if ( this.moveBackward && !(dirCopy.z!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateZ(this.playerSpeed * delta *  game.currentTimeSpeed);
         if ( this.moveLeft && !(dirCopy.x!==0 && intersectionWalls.length>=1)) game.controls.getObject().translateX(-this.playerSpeed * delta * game.currentTimeSpeed);
@@ -289,4 +291,13 @@ function Player() {
 
         //console.log("-y speed " + this.velocityVertical);
     };
+
+    this.takeDamage = function(damage) {
+        this.health -= damage;
+
+        if (this.health <= 0) {
+            console.log("game over");
+        }
+        updateMapColor(this.health);
+    }
 }

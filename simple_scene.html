@@ -73,14 +73,6 @@
 
 
     <script>
-        // cores a usar
-        var hexMain = "#ff6e00";
-        var colorDark = new THREE.Color("#111111");
-        var colorBlack = new THREE.Color("#050505");
-        var colorAccent = new THREE.Color("#037e93");
-        var colorSecondary = new THREE.Color(hexMain);
-        var colorWhite = new THREE.Color("#ffffff");
-
 
         var loader;
         var game = new Game();
@@ -102,8 +94,9 @@
 
         // espera até todos os modelos estarem carregados
         function waitForLoad() {
-            if (loader.gun1==undefined || loader.gun2==undefined 
-                || loader.enemy==undefined || loader.map==undefined) {
+            if (!loader.gun1 || !loader.gun2 || !loader.enemy 
+                || !loader.map || !loader.floors || !loader.walls
+                || !loader.mapAccentMaterial) {
                 setTimeout(waitForLoad,200);
             } else {
                 console.log("finished loading")
