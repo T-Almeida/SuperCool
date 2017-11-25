@@ -58,6 +58,11 @@ class Gun {
     }
 
     shoot() {
+        if (this.currentAmmo <= 0){
+            this.changeState(4);
+            return;
+        }
+
         this.currentAmmo -= 1;
 
         var pointBulletVec = new THREE.Vector3(0,0,0);
@@ -71,7 +76,7 @@ class Gun {
         
         //criar bala
         var bullet = bPool.allocate();
-        bullet.activate(pointBulletVec, accPoint.normalize(), this.bulletSpeed, true);
+        bullet.activate(this.damage, pointBulletVec, accPoint.normalize(), this.bulletSpeed, true);
 
         this.fireCooldown = 1/this.fireRate;
 
@@ -110,13 +115,14 @@ class Gun {
         switch (this.previousState) {
             case 0: // NORMAL
                 if (this.isShooting) {
-                    this.shoot(); // changes state to 1 or 3
+                    this.shoot();
                 }
                 break;
             case 1: // SHOT : já disparou antes
                 this.fireCooldown -= delta * game.currentTimeSpeed;
+                
                 if (this.fireCooldown<0){ // fire cooldown finished
-                    if (this.currentAmmo == 0)
+                    if (this.currentAmmo<=0)
                         this.changeState(4);
                     else if (this.isShooting)
                         this.shoot();
@@ -124,7 +130,7 @@ class Gun {
                         this.changeState(0);
                 } 
                 else if ( this.fireCooldown < 1/(this.fireRate*3) ) {
-                    if (this.currentAmmo == 0)
+                    if (this.currentAmmo <= 0)
                         this.changeState(4);
                     else
                         this.changeState(2);
@@ -170,7 +176,7 @@ class Gun {
             this.isReloading = false;
             this.reloadCooldown = 0;
         }
-        if (this.currentAmmo==0)
+        if (this.currentAmmo<=0)
             this.changeState(4); // out of ammo
         else if (this.fireCooldown > 1/(this.fireRate*3))
             this.changeState(2); // shot
@@ -224,7 +230,7 @@ class Automatic extends Gun {
     constructor(mesh, bulletType,accuracyDistance,spread,bulletPosition){
         var damage = 100;
         var bulletSpeed = 20;
-        var fireRate = 5; // balas por segundo
+        var fireRate = 4.5; // balas por segundo
         var maxAmmo = 40;
         var reloadTime = 3.5;
         
@@ -237,27 +243,5 @@ class Automatic extends Gun {
             accuracyDistance, 
             spread
         );
-    }
-}
-
-class EnemyPistol extends Gun { // TODO nao usar mais
-    constructor(position,bulletType){
-        var mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(0.1,0.1,0.5),
-            new THREE.MeshBasicMaterial({color:0x550000}));
-        mesh.position.copy(position);
-
-        var damage = 100;
-        var bulletSpeed = 40;
-        var fireRate = 4; // balas por segundo
-        var maxAmmo = 10;
-        var reloadTime = 1.5;
-        //var pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.1), new THREE.MeshBasicMaterial({color:0x0000ff}));// usar isto para encontrar o ponto
-        var pointBulletSpawn = new THREE.Object3D();
-        pointBulletSpawn.position.z = -0.2;
-        mesh.add(pointBulletSpawn);
-        super(mesh, damage, bulletSpeed, fireRate, maxAmmo, reloadTime,bulletType,pointBulletSpawn);
-
-        this.canShot = true; // um disparo por clique do botao
     }
 }

@@ -153,3 +153,10 @@ canvas {display: block}
     left: 10px;
     color: white;
 }
+
+#enemyPoolDiv {
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    color: white;
+}

@@ -1,8 +1,11 @@
-function Bullet() {
+
+function Bullet(damage) {
     var defaultPosition = new THREE.Vector3(0, -20, 0);
     var defaultDirection = new THREE.Vector3(0, 0, 0);
+
     var axis = new THREE.Vector3(0, 1, 0);
 
+    this.damage = damage;
     this.direction = defaultDirection;
     this.speed = 0;
     this.active = false;
@@ -19,16 +22,60 @@ function Bullet() {
 
     this.mesh.position.set(defaultPosition);
     game.scene.add(this.mesh);
-        
+
+    this.farDetection = 0.5;
+    this.raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.farDetection);
+    this.objectStatic = [game.floors, game.walls];
+
+    //adicinar objetos para colidir estaticos AQUI! dinamicos (enimigos deve ser na func active)
+
+    //this.box = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),new THREE.MeshBasicMaterial({color:0x00ff00}));
+    //this.box.position.set(this.mesh.position);
+    //game.scene.add(this.box);
+    //this.objectToCollide.push(game.walls.children);
+    //this.objectToCollide.push(game.floors.children);
+
+
     var self = this;    
     
     this.setPosition = function(position) {
         this.mesh.position.copy(position);
-    }
+    };
 
     this.update = function (delta, objectIndex) {
+        //this.box.position.copy(new THREE.Vector3().addVectors(this.mesh.position,this.direction.normalize()));
+        //console.log(this.mesh.position);
+        this.raycaster.ray.origin.copy(this.mesh.position);
+        this.raycaster.ray.direction.copy(this.direction);
 
-        if ( outsideMap(this.mesh.position) ){ 
+        var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
+        if (intersections.length>0){
+            console.log("Colisão bala");
+            this.destroy(objectIndex);
+            return;
+        }
+
+        //intercesoes com os enimigos + eficiente
+        for (var i=0;i<game.enemies.length;i++){
+            if (game.enemies[i].mesh.position.distanceTo(this.mesh.position)<1){
+                intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
+                if (intersections.length>0){
+                    game.enemies[i].damage(this.damage,i);
+                    console.log("Enemy hit");
+                    this.destroy(objectIndex);
+                    return;
+                }
+            }
+        }
+        
+        if (!this.shotByPlayer && game.player.playerBB.containsPoint(this.mesh.position)){
+            game.player.takeDamage(this.damage);
+            console.log("Player hit");
+            this.destroy(objectIndex);
+            return;
+        }
+
+        if ( outsideMap(this.mesh.position) ){
             this.destroy(objectIndex);
             return ;
         }
@@ -36,9 +83,10 @@ function Bullet() {
         this.mesh.translateOnAxis( this.direction, this.speed * delta * game.currentTimeSpeed);
     };
 
-    this.activate = function (position, direction, speed, shotByPlayer) {
+    this.activate = function (damage, position, direction, speed, shotByPlayer) {
+        this.damage = damage;
         this.setPosition(position);
-        this.direction = direction;
+        this.direction = direction.normalize(); //IMP normalizar
         this.speed = speed;
         this.active = true;
         this.shotByPlayer = shotByPlayer;
@@ -50,6 +98,7 @@ function Bullet() {
         this.trail.position.x = - direction.x * trailSize / 2;
         this.trail.position.y = - direction.y * trailSize / 2;
         this.trail.position.z = - direction.z * trailSize / 2;
+
     };
 
     this.destroy = function(index){
@@ -57,8 +106,12 @@ function Bullet() {
         bPool.free(this);
         this.setPosition(defaultPosition);
         this.direction = defaultDirection;
+    };
+}
 
-    }
+function getParent(object) {
+    if (object.name=="") return getParent(object.parent);
+    return object;
 }
 
 function BulletPool() {
@@ -73,13 +126,13 @@ function BulletPool() {
         pool.push(bullet);
         this.totalPooled += 1;
         return bullet;
-    }
+    };
 
     this.init = function(number) {
         for (var i=0; i<number; i++){
             this.createBullet();
         }
-    }
+    };
 
     this.allocate = function() {
         var bullet;
@@ -91,7 +144,7 @@ function BulletPool() {
             this.totalUsed += 1;
         }
         return bullet;
-    }
+    };
 
     this.free = function(bullet) {
         if (!bullet.active) return;
@@ -99,5 +152,5 @@ function BulletPool() {
         bullet.active = false;
         pool.push(bullet);
         this.totalUsed -= 1;
-    }
+    };
 }

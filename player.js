@@ -3,11 +3,11 @@ function Player() {
     updateMapColor(this.health);
 
     this.playerheight = 1.75;
-    this.playerSpeed = 4;
+    this.playerSpeed = 5;
     this.palyerMass = 5.0;
-    this.jumpSpeed = 4;
+    this.jumpSpeed = 5;
 
-    this.bbSizeX = 2;
+    this.bbSizeX = 1;
     this.bbSizeZ = 2;
 
     this.moveForward = false;
@@ -32,6 +32,22 @@ function Player() {
     this.directitionRay = new THREE.Vector3(0,0,0);
 
     this.boosts = []; //lista de boost que se aplicam ao player
+    //BOOSTS
+    var playerBoost = function() {
+        game.player.velocityVertical = 16;
+        game.player.isJumping = true;
+    }
+    var boostPos = 17;
+    var posBoostCenter = new THREE.Vector3(0,0,0);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(boostPos,0,boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(-boostPos,0,boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(boostPos,0,-boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
+    posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
+    this.boosts.push(new Boost(posBoostCenter,playerBoost));
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
@@ -45,7 +61,6 @@ function Player() {
     
     this.addWeapon = function(weapon) {
         this.weapons.push(weapon);
-        game.objects.push(weapon);
         game.controls.getObject().children[0].add(weapon.mesh);
     };
 
@@ -78,12 +93,8 @@ function Player() {
         cw.mesh.visible = true;
         cw.changeState(cw.previousState);
 
-        this.takeDamage(20);
-        
+        console.log(game.controls.getObject().position);
     };
-
-    //adicionar o objeto como objeto ativo
-    game.objects.push(this);
 
     this.mousedown = function () {
         self.weapons[self.currentWeapon].startShooting();
@@ -181,16 +192,6 @@ function Player() {
         timeBar.style.height = timeHeight + '%'; 
     };
 
-    this.detectCollision = function () {
-        //detecao colisao com balas e futuramente outros
-        for (var i = 0;i<game.bullets.length ; i++){
-            if (!game.bullets[i].shotByPlayer && this.playerBB.containsPoint(game.bullets[i].mesh.position)){
-                console.log("Player hit");
-                game.bullets[i].destroy(i);
-            }
-        }
-    };
-
 
     this.updateBB = function () {
 
@@ -205,6 +206,7 @@ function Player() {
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
         var cw = this.weapons[this.currentWeapon];
+        cw.update(delta,0);
         // a arma foi trocada
         cw.mesh.visible = true;
         this.updateWeaponGUI();
@@ -213,7 +215,6 @@ function Player() {
         this.velocityVertical -= game.gravity * this.palyerMass * delta; // * game.currentTimeSpeed; TODO para experimentar sem camera lenta
 
         this.updateBB();
-        this.detectCollision();
 
 
         if (!this.isJumping && this.jumpPress){

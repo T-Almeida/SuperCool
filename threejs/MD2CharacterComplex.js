@@ -10,7 +10,7 @@ THREE.MD2CharacterComplex = function () {
 
 	// animation parameters
 
-	this.animationFPS = 6;
+	this.animationFPS = 2;
 	this.transitionFrames = 15;
 
 	// movement model parameters
@@ -492,9 +492,8 @@ THREE.MD2CharacterComplex = function () {
 		// displacement
 
 		var forwardDelta = this.speed * 0.05 * delta;
-
-		this.root.position.x += Math.sin( this.bodyOrientation ) * forwardDelta;
-		this.root.position.z += Math.cos( this.bodyOrientation ) * forwardDelta;
+		this.root.position.x += Math.sin( this.bodyOrientation ) * forwardDelta / 8;
+		this.root.position.z += Math.cos( this.bodyOrientation ) * forwardDelta / 8;
 
 		// steering
 
@@ -523,7 +522,7 @@ THREE.MD2CharacterComplex = function () {
 
 	function createPart( geometry, skinMap ) {
 
-		var materialWireframe = new THREE.MeshLambertMaterial( { color: 0xffff00, wireframe: true, morphTargets: true, morphNormals: true } );
+		var materialWireframe = new THREE.MeshPhongMaterial( { color: 0xff6e00, emissive: 0xff6e00, wireframe: true, morphTargets: true, morphNormals: true } );
 		var materialTexture = new THREE.MeshLambertMaterial( { color: 0xffffff, wireframe: false, map: skinMap, morphTargets: true, morphNormals: true } );
 
 		//

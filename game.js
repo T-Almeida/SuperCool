@@ -7,7 +7,6 @@ function Game() {
 
     this.player;
     this.enemies = [];
-    this.objects = [];
     this.bullets = [];
     this.floors;
     this.walls;
@@ -25,6 +24,8 @@ function Game() {
     //gestao das fisicas
     this.gravity = 2;
 
+    this.enemySpawnTimer = 5;
+    this.enemySpawnTimerCurrent = 1;
 
     this.init = function() {
 
@@ -34,7 +35,7 @@ function Game() {
 
         // CAMERA
 
-        this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 1000 );
+        this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // Mover a camara com o rato (FirstPerson)
         this.controls = new THREE.PointerLockControls( this.camera );
         this.scene.add( this.controls.getObject() ); // adiciona camera
@@ -71,12 +72,13 @@ function Game() {
 
         // GAME MAP
         
-        console.log(loader.map);
         this.scene.add(loader.map);
         this.scene.add(loader.floors);
         this.floors = loader.floors;
+        this.floors.name="floors";
         this.scene.add(loader.walls);
         this.walls = loader.walls;
+        this.walls.name="walls";
         
         //RAYCAST DEBUG
 
@@ -145,24 +147,7 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
 
-        var e1 = new Enemy(new THREE.Vector3(0, 3,0 ));
-            e1.render();
-
-        //BOOSTS
-        var posBoostCenter = new THREE.Vector3(0,0,0);
-        this.player.boosts.push(new Boost(posBoostCenter,function () {
-            game.player.velocityVertical = 12;
-            game.player.isJumping = true;
-        }));
-        e1.boosts.push(new Boost(posBoostCenter,function () {
-            e1.velocityVertical = 14;
-        }));
-
-
-        //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
-
-        //this.createEnemies();
-
+        
 
         // STATS
 
@@ -188,12 +173,18 @@ function Game() {
                 game.bullets[i].update(delta,i);
             }
 
-            //Call update
-            for (var i = 0 ; i < game.objects.length ; i++){
-                game.objects[i].update(delta,i);
-            }
+            // Update do player
+            game.player.update(delta);
             
+            // enemy spawns
+            game.enemySpawnTimerCurrent -= delta * game.currentTimeSpeed;
+            if (game.enemySpawnTimerCurrent<=0){
+                var enemy = enemyPool.allocate();
+                enemy.activate(getRandomEnemySpawn());
+                game.enemySpawnTimerCurrent = game.enemySpawnTimer;
+            }
 
+            // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
                 game.enemies[i].update(delta * game.currentTimeSpeed);
@@ -208,33 +199,9 @@ function Game() {
         game.stats2.update();
 
         bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
+        enemyPoolInfo.innerHTML = enemyPool.totalUsed + " / " + enemyPool.totalPooled;
     }
 
-    this.createEnemies = function() {
-        var controls = {
-            moveForward: false,
-            moveBackward: false,
-            moveLeft: false,
-            moveRight: false,
-            attack: true
-        };
-        
-        for (i=0; i<3; i++) {
-            var enemyChar = new THREE.MD2CharacterComplex();
-            enemyChar.scale = 2/50;
-            enemyChar.controls = controls;
-            enemyChar.shareParts( loader.enemy );
-            // cast and receive shadows
-            if (i==0) enemyChar.setWireframe (true) ;
-            //enemyChar.setWeapon( 0 );
-            enemyChar.setSkin( i );
-            enemyChar.root.position.x = i * 1.5;
-            enemyChar.root.position.y = 1;
-            this.scene.add( enemyChar.root );
-            this.enemies.push(enemyChar);
-        }
-        
-    }
 
     this.onWindowResize = function( event ) {
         var width = window.innerWidth;
