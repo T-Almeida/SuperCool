@@ -24,6 +24,8 @@ function Game() {
     //gestao das fisicas
     this.gravity = 2;
 
+    this.enemySpawnTimer = 5;
+    this.enemySpawnTimerCurrent = 1;
 
     this.init = function() {
 
@@ -70,7 +72,6 @@ function Game() {
 
         // GAME MAP
         
-        console.log(loader.map);
         this.scene.add(loader.map);
         this.scene.add(loader.floors);
         this.floors = loader.floors;
@@ -146,45 +147,22 @@ function Game() {
         this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
         this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
 
-
-        var e1 = new Enemy(new THREE.Vector3(5, 3,5 ));
-            e1.render();
-
         //BOOSTS
         var playerBoost = function() {
             game.player.velocityVertical = 16;
             game.player.isJumping = true;
         }
-        var enemyBoost = function() {
-            e1.velocityVertical = 16;
-        }
-
         var posBoostCenter = new THREE.Vector3(0,0,0);
         this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
         var boostPos = 17;
         posBoostCenter = new THREE.Vector3(boostPos,0,boostPos);
         this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
         posBoostCenter = new THREE.Vector3(-boostPos,0,boostPos);
         this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
         posBoostCenter = new THREE.Vector3(boostPos,0,-boostPos);
         this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
         posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
         this.player.boosts.push(new Boost(posBoostCenter,playerBoost));
-        e1.boosts.push(new Boost(posBoostCenter,enemyBoost));
-
-
-
-        this.enemies.push(e1);
-
-
-        //new Enemy(new THREE.Vector3(40, 15, -2 )).render();
-
-        //this.createEnemies();
-
 
         // STATS
 
@@ -213,6 +191,14 @@ function Game() {
             // Update do player
             game.player.update(delta);
             
+            // enemy spawns
+            game.enemySpawnTimerCurrent -= delta * game.currentTimeSpeed;
+            if (game.enemySpawnTimerCurrent<=0){
+                var enemy = enemyPool.allocate();
+                enemy.activate(new THREE.Vector3(0,10,0));
+                game.enemySpawnTimerCurrent = game.enemySpawnTimer;
+            }
+
             // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
@@ -228,33 +214,9 @@ function Game() {
         game.stats2.update();
 
         bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
+        enemyPoolInfo.innerHTML = enemyPool.totalUsed + " / " + enemyPool.totalPooled;
     }
 
-    this.createEnemies = function() {
-        var controls = {
-            moveForward: false,
-            moveBackward: false,
-            moveLeft: false,
-            moveRight: false,
-            attack: true
-        };
-        
-        for (i=0; i<3; i++) {
-            var enemyChar = new THREE.MD2CharacterComplex();
-            enemyChar.scale = 2/50;
-            enemyChar.controls = controls;
-            enemyChar.shareParts( loader.enemy );
-            // cast and receive shadows
-            if (i==0) enemyChar.setWireframe (true) ;
-            //enemyChar.setWeapon( 0 );
-            enemyChar.setSkin( i );
-            enemyChar.root.position.x = i * 1.5;
-            enemyChar.root.position.y = 1;
-            this.scene.add( enemyChar.root );
-            this.enemies.push(enemyChar);
-        }
-        
-    }
 
     this.onWindowResize = function( event ) {
         var width = window.innerWidth;

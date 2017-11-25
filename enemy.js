@@ -1,6 +1,6 @@
-function Enemy(position) {
+function Enemy() {
+    var defaultPosition = new THREE.Vector3(0, -20, 0);
     var self = this;
-    var enemyDamage = 20;
 
     this.controls = {
         moveForward: false,
@@ -32,11 +32,10 @@ function Enemy(position) {
     this.pointBulletSpawn.position.set(28,13,-10);
     this.bulletSpeed = 15;
     this.enemyChar.meshWeapon.add(this.pointBulletSpawn);
-    console.log(this.enemyChar);
 
 
     this.mesh = this.enemyChar.root; // redundandte, mas para manter a consistencia
-    this.mesh.position.copy(position);
+    this.mesh.position.copy(defaultPosition);
     this.mesh.name="enemy";
 
     this.isSun = false;
@@ -47,6 +46,9 @@ function Enemy(position) {
     this.velocityVertical = 0;
     this.enemyMass = 5;
     this.enemyHeight = 1.10;
+    this.enemyDamage = 20;
+    this.health = 100;
+    
 
     //animacao de ataque
     this.attackAniTime = 0.5;
@@ -59,20 +61,31 @@ function Enemy(position) {
     this.raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, this.enemyHeight + 1);
 
     this.boosts = []; //lista de boost que se aplicam aos enimigos
+    var enemyBoost = function() {
+        self.velocityVertical = 16;
+    }
+    var boostPos = new THREE.Vector3(0,0,0);
+    this.boosts.push(new Boost(boostPos,enemyBoost));
+    var boostCoord = 17;
+    boostPos = new THREE.Vector3(boostCoord,0,boostCoord);
+    this.boosts.push(new Boost(boostPos,enemyBoost));
+    boostPos = new THREE.Vector3(-boostCoord,0,boostCoord);
+    this.boosts.push(new Boost(boostPos,enemyBoost));
+    boostPos = new THREE.Vector3(boostCoord,0,-boostCoord);
+    this.boosts.push(new Boost(boostPos,enemyBoost));
+    boostPos = new THREE.Vector3(-boostCoord,0,-boostCoord);
+    this.boosts.push(new Boost(boostPos,enemyBoost));
 
     this.shoot = function (){
-
-        console.log("Enemy shoot");
-
         var pointBulletVec = new THREE.Vector3(0,0,0);
         this.pointBulletSpawn.localToWorld(pointBulletVec);
-
 
         var direction = new THREE.Vector3( 0, 0, 1 ).applyMatrix4(new THREE.Matrix4().extractRotation( this.mesh.matrix ));
         direction.y=0;
 
         var bullet = bPool.allocate();
-        bullet.activate(enemyDamage, pointBulletVec, direction, this.bulletSpeed, false);
+        console.log("shoot");
+        bullet.activate(this.enemyDamage, pointBulletVec, direction, this.bulletSpeed, false);
     };
 
 
@@ -118,6 +131,8 @@ function Enemy(position) {
     };
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
+        if (!this.active) return;
+
         if (outsideMap(this.mesh.position)) {
             this.mesh.position.y = 40;
             this.velocityVertical = 0;
@@ -181,4 +196,70 @@ function Enemy(position) {
         game.enemies.push(this);
         game.scene.add(this.mesh);
     }
+
+    this.damage = function(damage) {
+        this.health -= damage;
+
+        if (this.health <= 0){
+            console.log("enemy dead");
+        }
+    }
+
+    this.activate = function (position) {
+        this.active = true;
+        this.setPosition(position);
+
+    };
+
+    this.destroy = function(index){
+        this.active = false;
+        game.enemies.splice(index,1); //remover dos objetos ativos
+        enemyPool.free(this);
+        this.setPosition(defaultPosition);
+    };
+
+    this.setPosition = function(position) {
+        this.mesh.position.copy(position);
+    };
+}
+
+
+function EnemyPool() {
+    this.totalPooled = 0;
+    this.totalUsed = 0;
+    this.pool = [];
+
+    // função interna
+    this.createEnemy = function() {
+        var enemy = new Enemy();
+        enemy.render();
+        this.totalPooled += 1;
+        this.pool.push(enemy);
+        return enemy;
+    };
+
+    this.init = function(number) {
+        for (var i=0; i<number; i++){
+            this.createEnemy();
+        }
+    };
+
+    this.allocate = function() {
+        var enemy;
+        if (this.totalUsed === this.totalPooled) {
+            enemy = this.createEnemy();
+        } else {
+            enemy = this.pool.pop();
+            this.totalUsed += 1;
+        }
+        return enemy;
+    };
+
+    this.free = function(enemy) {
+        if (!enemy.active) return;
+
+        enemy.active = false;
+        this.pool.push(enemy);
+        this.totalUsed -= 1;
+    };
 }
