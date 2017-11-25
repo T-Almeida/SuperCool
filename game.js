@@ -198,7 +198,6 @@ function Game() {
                 enemy.activate(new THREE.Vector3(0,10,0));
                 game.enemySpawnTimerCurrent = game.enemySpawnTimer;
             }
-
             // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );

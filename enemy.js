@@ -194,17 +194,18 @@ function Enemy() {
     };
 
     this.render = function () {
-        game.enemies.push(this);
+        //game.enemies.push(this);
         game.scene.add(this.mesh);
-    }
+    };
 
-    this.damage = function(damage) {
+    this.damage = function(damage,objectIndex) {
         this.health -= damage;
 
         if (this.health <= 0){
             console.log("enemy dead");
+            this.destroy(objectIndex);
         }
-    }
+    };
 
     this.activate = function (position) {
         this.active = true;
@@ -213,7 +214,6 @@ function Enemy() {
     };
 
     this.destroy = function(index){
-        this.active = false;
         game.enemies.splice(index,1); //remover dos objetos ativos
         enemyPool.free(this);
         this.setPosition(defaultPosition);
@@ -253,6 +253,7 @@ function EnemyPool() {
             enemy = this.pool.pop();
             this.totalUsed += 1;
         }
+        game.enemies.push(enemy);
         return enemy;
     };
 
