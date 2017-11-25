@@ -51,7 +51,7 @@ function Game() {
             new THREE.MeshPhongMaterial({emissive:0xffffff}));
         var plight = new THREE.PointLight(0x555555, 1 , 30, 1);
         mesh.add(plight)
-        mesh.position.set(0, 14.7, 0);
+        mesh.position.set(0, 29, 0);
         this.scene.add(mesh);
 
 
@@ -142,9 +142,8 @@ function Game() {
         //CRIAR OBJETOS
         
         this.player = new Player();
-
-        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 15, new THREE.Vector3(0, 0.15, -1)));
-        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 20, new THREE.Vector3(0, 0.1, -0.4)));
+        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
+        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
 
         var e1 = new Enemy(new THREE.Vector3(0, 3,0 ));
             e1.render();

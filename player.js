@@ -1,5 +1,4 @@
 function Player() {
-
     this.playerheight = 1.75;
     this.playerSpeed = 4;
     this.palyerMass = 5.0;
@@ -13,8 +12,9 @@ function Player() {
     this.moveLeft = false;
     this.moveRight = false;
     this.jumpPress = false;
-    this.jumpDirection = [false,false,false,false];
     this.mousePress = false;
+
+    this.weaponAtPreviousUpdate = -1;
 
     this.velocityVertical = 0;
 
@@ -70,11 +70,10 @@ function Player() {
             w.stopReloading();
             w.mesh.visible = false;
         }
-
-        this.weapons[weaponId].mesh.visible = true;
         this.currentWeapon = weaponId;
-
-        this.updateWeaponGUI();
+        var cw = this.weapons[weaponId];
+        cw.mesh.visible = true;
+        cw.changeState(cw.previousState);
     };
 
     //adicionar o objeto como objeto ativo
@@ -200,8 +199,9 @@ function Player() {
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
         var cw = this.weapons[this.currentWeapon];
+        // a arma foi trocada
         cw.mesh.visible = true;
-
+        this.updateWeaponGUI();
         this.updateGUI(cw);
 
         this.velocityVertical -= game.gravity * this.palyerMass * delta; // * game.currentTimeSpeed; TODO para experimentar sem camera lenta

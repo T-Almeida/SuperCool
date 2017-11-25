@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>three.js - platformer demo</title>
+    <title>SuperCool</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -11,7 +11,14 @@
 
     <div id="container"></div>
 
-    <div id="crosshairdiv" class="noselect">+</div>
+    <svg id="crosshairdiv"  height="100" width="100">
+        <defs>
+            <clipPath id="cut-off-bottom">
+                <rect x="0" y="41" width="100" height="18" />
+            </clipPath>
+        </defs>
+        <circle id="crosshaircircle" cx="50" cy="50" r="11" stroke="white" stroke-width="3" fill="none" clip-path="url(#cut-off-bottom)"/>
+    </svg>
 
     <div id="timespeedcontainerdiv" class="noselect progressBarBG">
         <div id="timespeeddiv" class="progressBar transpGUI"></div>
@@ -67,11 +74,13 @@
 
     <script>
         // cores a usar
+        var hexMain = "#ff6e00";
         var colorDark = new THREE.Color("#111111");
         var colorBlack = new THREE.Color("#050505");
         var colorAccent = new THREE.Color("#037e93");
-        var colorSecondary = new THREE.Color("#ff6e00");
+        var colorSecondary = new THREE.Color(hexMain);
         var colorWhite = new THREE.Color("#ffffff");
+
 
         var loader;
         var game = new Game();
@@ -83,6 +92,7 @@
         var blocker = document.getElementById("blocker");
         var instructions = document.getElementById( 'instructions' );
         var bulletPoolInfo = document.getElementById( 'bulletPoolDiv' );
+        var crosshair = document.getElementById("crosshaircircle").style;
 
         // carregamento dos modelos 3d
         loader = new Loader();
