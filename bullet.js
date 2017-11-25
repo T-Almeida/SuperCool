@@ -27,7 +27,7 @@ function Bullet() {
     this.objectStatic = [];
     this.objectStatic.push(game.floors);
     this.objectStatic.push(game.walls);
-    this.objectDynamic = [];
+
     //adicinar objetos para colidir estaticos AQUI! dinamicos (enimigos deve ser na func active)
 
     //this.box = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),new THREE.MeshBasicMaterial({color:0x00ff00}));
@@ -57,13 +57,20 @@ function Bullet() {
             return;
         }
 
-        intersections = this.raycaster.intersectObjects(this.objectDynamic,true);
-        //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
-        if (intersections.length>0){
-            console.log("Colisão com inimigo");
-            this.destroy(objectIndex);
-            return;
+        //intercesoes com os enimigos + eficiente
+        for (var i=0;i<game.enemies.length;i++){
+            if (game.enemies[i].mesh.position.distanceTo(this.mesh.position)<3){
+                intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
+                //var intersection = this.raycaster.intersectObject(game.enemies[0].mesh,true);
+                if (intersections.length>0){
+                    console.log("Colisão com inimigo");
+                    this.destroy(objectIndex);
+                    return;
+                }
+            }
         }
+
+
 
 
         if ( outsideMap(this.mesh.position) ){
@@ -88,10 +95,6 @@ function Bullet() {
         this.trail.position.x = - direction.x * trailSize / 2;
         this.trail.position.y = - direction.y * trailSize / 2;
         this.trail.position.z = - direction.z * trailSize / 2;
-
-        this.objectDynamic = [];
-        for (var k = 0;k<game.enemies.length;k++)
-            this.objectDynamic.push(game.enemies[k].mesh);
 
     };
 
