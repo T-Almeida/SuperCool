@@ -184,7 +184,6 @@ function Game() {
                 game.enemySpawnTimerCurrent = game.enemySpawnTimer;
             }
 
-            console.log("enemies " + game.enemies.length);
             // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
