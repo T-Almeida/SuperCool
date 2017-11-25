@@ -10,7 +10,7 @@ THREE.MD2CharacterComplex = function () {
 
 	// animation parameters
 
-	this.animationFPS = 6;
+	this.animationFPS = 2;
 	this.transitionFrames = 15;
 
 	// movement model parameters
@@ -492,9 +492,8 @@ THREE.MD2CharacterComplex = function () {
 		// displacement
 
 		var forwardDelta = this.speed * 0.05 * delta;
-
-		this.root.position.x += Math.sin( this.bodyOrientation ) * forwardDelta;
-		this.root.position.z += Math.cos( this.bodyOrientation ) * forwardDelta;
+		this.root.position.x += Math.sin( this.bodyOrientation ) * forwardDelta / 8;
+		this.root.position.z += Math.cos( this.bodyOrientation ) * forwardDelta / 8;
 
 		// steering
 
