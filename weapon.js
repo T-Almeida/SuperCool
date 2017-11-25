@@ -116,7 +116,9 @@ class Gun {
             case 1: // SHOT : já disparou antes
                 this.fireCooldown -= delta * game.currentTimeSpeed;
                 if (this.fireCooldown<0){ // fire cooldown finished
-                    if (this.isShooting)
+                    if (this.currentAmmo == 0)
+                        this.changeState(4);
+                    else if (this.isShooting)
                         this.shoot();
                     else
                         this.changeState(0);
