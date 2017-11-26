@@ -23,7 +23,7 @@ function Bullet(damage) {
     this.mesh.position.set(defaultPosition);
     game.scene.add(this.mesh);
 
-    this.farDetection = 0.5;
+    this.farDetection = 1;
     this.raycaster = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.farDetection);
     this.objectStatic = [game.floors, game.walls];
 
@@ -42,9 +42,11 @@ function Bullet(damage) {
         this.mesh.position.copy(position);
     };
 
+    var subtract = new THREE.Vector3();
+
     this.update = function (delta, objectIndex) {
         //this.box.position.copy(new THREE.Vector3().addVectors(this.mesh.position,this.direction.normalize()));
-        this.raycaster.ray.origin.copy(this.mesh.position);
+        this.raycaster.ray.origin.copy(this.mesh.position,this.direction);
         this.raycaster.ray.direction.copy(this.direction);
 
         var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
@@ -55,7 +57,7 @@ function Bullet(damage) {
 
         //intercesoes com os inimigos + eficiente
         for (var i=0;i<game.enemies.length;i++){
-            if (!game.enemies[i].isDying && game.enemies[i].mesh.position.distanceTo(this.mesh.position)<1){
+            if (!game.enemies[i].isDying && game.enemies[i].mesh.position.distanceTo(this.mesh.position)<2){
                 intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
                 if (intersections.length>0){
                     game.enemies[i].damage(this.damage,i,this.direction);
