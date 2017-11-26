@@ -43,10 +43,12 @@ function Bullet(damage) {
     };
 
     var subtract = new THREE.Vector3();
-
+    //var dBox = new THREE.Mesh(new THREE.BoxGeometry(0.2,0.2,0.2),new THREE.MeshBasicMaterial({color:0x00ff00}));
+    //game.scene.add(dBox);
     this.update = function (delta, objectIndex) {
         //this.box.position.copy(new THREE.Vector3().addVectors(this.mesh.position,this.direction.normalize()));
-        this.raycaster.ray.origin.copy(this.mesh.position,this.direction);
+        //dBox.position.copy(subtract.subVectors(this.mesh.position,this.direction));
+        this.raycaster.ray.origin.copy(subtract.subVectors(this.mesh.position,this.direction));
         this.raycaster.ray.direction.copy(this.direction);
 
         var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
