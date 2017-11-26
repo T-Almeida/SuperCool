@@ -35,13 +35,14 @@ function Enemy() {
     this.isSun = false;
 
     //VARIAVEIS DE CONTROLO DO ENIMIGO
-    this.speed = 0.00002;
     this.fireCooldown = 3;
     this.velocityVertical = 0;
     this.enemyMass = 5;
     this.enemyHeight = 1.10;
     this.enemyDamage = 20;
     this.health = 100;
+    this.aimbotThreshold = 0.55;
+
     
 
     //animacao de ataque
@@ -57,7 +58,7 @@ function Enemy() {
     this.boosts = []; //lista de boost que se aplicam aos enimigos
     var enemyBoost = function() {
         self.velocityVertical = 16;
-    }
+    };
     var boostPos = new THREE.Vector3(0,0,0);
     this.boosts.push(new Boost(boostPos,enemyBoost));
     var boostCoord = 17;
@@ -70,13 +71,23 @@ function Enemy() {
     boostPos = new THREE.Vector3(-boostCoord,0,-boostCoord);
     this.boosts.push(new Boost(boostPos,enemyBoost));
 
-    this.shoot = function (){
-        var pointBulletVec = new THREE.Vector3(0,0,0);
+    this.shoot = function () {
+        var pointBulletVec = new THREE.Vector3(0, 0, 0);
         this.pointBulletSpawn.localToWorld(pointBulletVec);
 
-        var direction = new THREE.Vector3( 0, 0, 1 ).applyMatrix4(new THREE.Matrix4().extractRotation( this.mesh.matrix ));
-        direction.y=0;
+        var direction = new THREE.Vector3(0, 0, 1).applyMatrix4(new THREE.Matrix4().extractRotation(this.mesh.matrix));
+        //vetor na direao do player EP = P-E
+        var dirEP = new THREE.Vector3().subVectors(game.controls.getObject().position, this.mesh.position);
 
+        var cos = (direction.x * dirEP.x + direction.y * dirEP.y + +direction.z * dirEP.z) / (direction.length() + dirEP.length());
+
+        if (cos > this.aimbotThreshold) {
+            //autoaim
+            console.log("aimbot");
+            direction = dirEP;
+        } else {
+            direction.y = 0;
+        }
         var bullet = bPool.allocate();
         bullet.activate(this.enemyDamage, pointBulletVec, direction, this.bulletSpeed, false);
     };
@@ -126,6 +137,9 @@ function Enemy() {
     this.update = function (delta,objectIndex) {
         if (!this.active) return;
 
+
+
+
         //update fisica
 
         if (this.isDying){
@@ -171,6 +185,7 @@ function Enemy() {
 
 
         //dumb IA
+        
         if (this.timeLook > 0) { // VAI EM FRENTE
             this.timeLook -= delta * game.currentTimeSpeed;
             this.controls.moveForward = true;

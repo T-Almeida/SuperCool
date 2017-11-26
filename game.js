@@ -103,6 +103,7 @@ function Game() {
         document.body.appendChild(this.stats1.domElement);
     }
 
+
     this.animate = function() {
         if (game.gameOver) return;
 
@@ -119,6 +120,7 @@ function Game() {
             game.player.update(delta);
             
             // enemy spawns
+
             game.enemySpawnTimerCurrent -= delta * game.currentTimeSpeed;
             if (game.enemySpawnTimerCurrent<=0){
                 var enemy = enemyPool.allocate();
@@ -126,7 +128,9 @@ function Game() {
                 game.enemySpawnTimerCurrent = game.enemySpawnTimer;
                 game.enemySpawnTimer *= 1 - 0.5 * delta * game.currentTimeSpeed;
             }
-    
+
+
+
             // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
