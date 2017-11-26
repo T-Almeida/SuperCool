@@ -7,8 +7,8 @@ function Player() {
     this.palyerMass = 5.0;
     this.jumpSpeed = 5;
 
-    this.bbSizeX = 1;
-    this.bbSizeZ = 2;
+    this.bbSizeX = 0.25;
+    this.bbSizeZ = 0.25;
 
     this.moveForward = false;
     this.moveBackward = false;
@@ -36,7 +36,7 @@ function Player() {
     var playerBoost = function() {
         game.player.velocityVertical = 16;
         game.player.isJumping = true;
-    }
+    };
     var boostPos = 17;
     var posBoostCenter = new THREE.Vector3(0,0,0);
     this.boosts.push(new Boost(posBoostCenter,playerBoost));
@@ -53,7 +53,7 @@ function Player() {
 
     //BoundingBox
     this.playerBB = new THREE.Box3(new THREE.Vector3(game.controls.getObject().position.x-this.bbSizeX, game.controls.getObject().position.y-this.playerheight ,game.controls.getObject().position.z-this.bbSizeZ),
-                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX, game.controls.getObject().position.y+1 ,game.controls.getObject().position.z+this.bbSizeZ));
+                                    new THREE.Vector3(game.controls.getObject().position.x+this.bbSizeX, game.controls.getObject().position.y ,game.controls.getObject().position.z+this.bbSizeZ));
 
     // ARMAS
     this.weapons = [];
