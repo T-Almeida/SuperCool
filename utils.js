@@ -14,6 +14,19 @@ var colorSecondary = new THREE.Color("#ff6e00");
 var colorWhite = new THREE.Color("#ffffff");
 var colorRed = new THREE.Color("#ff0000");
 
+var container = document.getElementById("container");
+var blocker = document.getElementById("blocker");
+var instructions = document.getElementById( 'instructions' );
+var bulletPoolInfo = document.getElementById( 'bulletPoolDiv' );
+var enemyPoolInfo = document.getElementById( 'enemyPoolDiv' );
+var endgameDiv = document.getElementById( 'endgameDiv' );
+var finalScore = document.getElementById( 'finalScore' );
+var retryButton = document.getElementById( 'retryButton' );
+var crosshair = document.getElementById("crosshaircircle").style;
+var currentAmmoDiv = document.getElementById("currentAmmo");
+var maxAmmoDiv = document.getElementById("maxAmmo");
+var reloadBar = document.getElementById("currentreload"); 
+
 
 
 // game systems code
@@ -52,7 +65,7 @@ function updateMapColor(health) {
     else
         color = c_5;
     
-    loader.mapAccentMaterial.color = new THREE.Color("#000000");
+    loader.mapAccentMaterial.color = new THREE.Color(color);
     loader.mapAccentMaterial.emissive = new THREE.Color(color);
 }
 
@@ -79,4 +92,19 @@ var enemySpawns = [
 function getRandomEnemySpawn() {
     var r = Math.floor(Math.random() * enemySpawns.length);
     return enemySpawns[r];
+}
+
+
+function updateWeaponHUD(weapon) {
+    currentAmmoDiv.innerHTML = weapon.currentAmmo;
+    if (weapon.maxAmmo == -1)
+        maxAmmoDiv.innerHTML = "∞";
+    else
+        maxAmmoDiv.innerHTML = weapon.maxAmmo;
+}
+
+function updateReloadHUD(weapon){
+    // update da div que diz se esta a recarregar
+    var relProg = 100 - weapon.reloadCooldown / weapon.reloadTime * 100;
+    reloadBar.style.width = relProg + '%'; 
 }

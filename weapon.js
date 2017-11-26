@@ -5,6 +5,7 @@ class Gun {
         bulletSpeed, 
         fireRate, 
         maxAmmo, 
+        magCapacity,
         reloadTime, 
         bulletType, 
         bulletPosition, 
@@ -18,7 +19,8 @@ class Gun {
             this.fireRate = fireRate;
             this.fireCooldown = 0;
             this.maxAmmo = maxAmmo;
-            this.currentAmmo = maxAmmo;
+            this.magCapacity = magCapacity;
+            this.currentAmmo = magCapacity;
             this.reloadTime = reloadTime;
             this.reloadCooldown = 0;
             this.isShooting = false;
@@ -46,7 +48,7 @@ class Gun {
              * 3 - reloading
              * 4 - out of ammo
              */
-            this.previousState = 0;
+            this.changeState(0);
     }
 
     startShooting(){
@@ -81,6 +83,8 @@ class Gun {
         this.fireCooldown = 1/this.fireRate;
 
         this.changeState(1); // SHOT  
+
+        updateWeaponHUD(this);
     }
 
     changeState(state){
@@ -106,8 +110,10 @@ class Gun {
                 crosshair.r = 10 + this.spread;
                 crosshair.stroke = "red";
                 break;
-                
         }
+        updateWeaponHUD(this);
+        updateReloadHUD(this);
+        
     }
 
     update(delta, objectIndex) {
@@ -148,7 +154,20 @@ class Gun {
                 this.reloadCooldown -= delta * game.currentTimeSpeed;
 
                 if (this.reloadCooldown<0){ // reload cooldown finished
-                    this.currentAmmo = this.maxAmmo;
+
+                    if (this.maxAmmo==-1){ // infinite bullets
+                        this.currentAmmo = this.magCapacity;
+                    } else {
+                        var bulletsNeeded = this.magCapacity - this.currentAmmo;
+                        if (this.maxAmmo <= bulletsNeeded) {
+                            this.currentAmmo += this.maxAmmo;
+                            this.maxAmmo = 0;
+                        } else {
+                            this.maxAmmo -= bulletsNeeded;
+                            this.currentAmmo = this.magCapacity;
+                        }
+                    }
+                    
                     this.stopReloading();
 
                     if (this.isShooting) 
@@ -156,6 +175,8 @@ class Gun {
                     else
                         this.changeState(0);
                 }
+
+                updateReloadHUD(this);
                 break;
             case 4: // OUT OF AMMO
                 break;
@@ -163,7 +184,7 @@ class Gun {
     }
 
     reload() {
-        if (this.currentAmmo == this.maxAmmo || this.isReloading)
+        if (this.currentAmmo == this.magCapacity || this.isReloading || this.maxAmmo == 0)
             return;
         this.isReloading = true;
         this.reloadCooldown = this.reloadTime;
@@ -185,6 +206,8 @@ class Gun {
             this.changeState(0); // normal
         
     }
+
+    
 }
 
 class Pistol extends Gun {
@@ -192,7 +215,8 @@ class Pistol extends Gun {
         var damage = 100;
         var bulletSpeed = 15;
         var fireRate = 4; // balas por segundo
-        var maxAmmo = 10;
+        var maxAmmo = -1;// infinite
+        var magCapacity = 10; 
         var reloadTime = 1.5;
 
         super(
@@ -201,6 +225,7 @@ class Pistol extends Gun {
             bulletSpeed, 
             fireRate, 
             maxAmmo, 
+            magCapacity,
             reloadTime, 
             bulletType, 
             bulletPosition, 
@@ -227,17 +252,21 @@ class Pistol extends Gun {
 
 class Automatic extends Gun { 
     constructor(mesh, bulletType,accuracyDistance,spread,bulletPosition){
-        var damage = 90;
+        var damage = 100;
         var bulletSpeed = 20;
         var fireRate = 4.5; // balas por segundo
-        var maxAmmo = 40;
+        var maxAmmo = 200;
+        var magCapacity = 40;
         var reloadTime = 3.5;
         
         super(mesh, 
             damage, 
             bulletSpeed, 
-            fireRate, maxAmmo, 
-            reloadTime,bulletType,
+            fireRate, 
+            maxAmmo, 
+            magCapacity,
+            reloadTime,
+            bulletType,
             bulletPosition,
             accuracyDistance, 
             spread

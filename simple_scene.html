@@ -9,57 +9,73 @@
 </head>
 <body>
 
-    <div id="container"></div>
+    <div id="container">
+        <!-- CROSSHAIR -->
+        <svg id="crosshairdiv"  height="100" width="100">
+            <defs>
+                <clipPath id="cut-off-bottom">
+                    <rect x="0" y="41" width="100" height="18" />
+                </clipPath>
+            </defs>
+            <circle id="crosshaircircle" cx="50" cy="50" r="11" stroke="white" stroke-width="3" fill="none" clip-path="url(#cut-off-bottom)"/>
+        </svg>
 
-    <svg id="crosshairdiv"  height="100" width="100">
-        <defs>
-            <clipPath id="cut-off-bottom">
-                <rect x="0" y="41" width="100" height="18" />
-            </clipPath>
-        </defs>
-        <circle id="crosshaircircle" cx="50" cy="50" r="11" stroke="white" stroke-width="3" fill="none" clip-path="url(#cut-off-bottom)"/>
-    </svg>
+        <!-- TIME SPEED INDICATOR -->
+        <div id="timespeedcontainerdiv" class="noselect progressBarBG">
+            <div id="timespeeddiv" class="progressBar transpGUI"></div>
+        </div>
+    
+        <!-- SCORE -->
+        <div id="scoreDiv" class="noselect"></div>
 
-    <div id="timespeedcontainerdiv" class="noselect progressBarBG">
-        <div id="timespeeddiv" class="progressBar transpGUI"></div>
+        <!-- WEAPON HUD -->
+        <div id="weaponui" class="transpGUI" >
+            <img id="weaponicon" class="noselect " src="icons/pistol.png"/>
+
+            <div id="maxAmmo" class="noselect "></div>
+            <div id="currentAmmo" class="noselect "></div>
+
+            <div id="reload" class="noselect">
+                <div id="currentreload"></div>
+            </div>
+        </div>
+    
+        <!-- LOADING BAR -->
+        <div id="loading">
+            <div id="loadingBar"></div>
+        </div>
+    
+        <!-- POINTER LOCK WAITING -->
+        <div id="blocker">
+            <div id="instructions">
+                <span style="font-size:40px">Click to play</span>
+                <br />
+                (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around and shoot, 1-2 = Select a gun)
+            </div>
+        </div>
+    
+        <!-- ENDGAME SCORE -->
+        <div id="endgameDiv">
+           <div id="finalScoreDiv">
+                <span style="font-size:20px">YOUR FINAL SCORE</span>
+                <br>
+                <span id="finalScore" style="font-size:80px">80</span>
+                <br>
+                <button id="retryButton">PLAY AGAIN</button>        
+            </div>
+        </div>
     </div>
 
+    
+
+    
     <div id="bulletPoolDiv" class="noselect"></div>
     <div id="enemyPoolDiv" class="noselect"></div>
 
-    <div id="scoreDiv" class="noselect"></div>
+    
     
 
-    <div id="weaponui" class="weapon" >
-        <img id="weaponicon" class="noselect transpGUI" src="icons/pistol.png"/>
-        <div id="reload" class="noselect progressBarBG">
-            <div id="currentreload" class="progressBar transpGUI"></div>
-        </div>
-        <div id="maxAmmo" class="ammo noselect transpGUI"></div>
-        <div id="currentAmmo" class="ammo noselect transpGUI"></div>
-    </div>
-
-    <div id="loading">
-        <div id="loadingBar"></div>
-    </div>
-
-    <div id="blocker">
-        <div id="instructions">
-            <span style="font-size:40px">Click to play</span>
-            <br />
-            (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around and shoot, 1-2 = Select a gun)
-        </div>
-    </div>
-
-    <div id="endgameDiv">
-       <div id="finalScoreDiv">
-        <span style="font-size:20px">YOUR FINAL SCORE</span>
-        <br>
-        <span id="finalScore" style="font-size:80px">80</span>
-        <br>
-        <button id="retryButton">PLAY AGAIN</button>        
-    </div>
-    </div>
+    
 
 
     <!-- THREEJS SCRIPTS -->
@@ -93,18 +109,7 @@
 
         var clock = new THREE.Clock();
 
-        var container = document.getElementById("container");
-        var blocker = document.getElementById("blocker");
-        var instructions = document.getElementById( 'instructions' );
-        var bulletPoolInfo = document.getElementById( 'bulletPoolDiv' );
-        var enemyPoolInfo = document.getElementById( 'enemyPoolDiv' );
-
-        var endgameDiv = document.getElementById( 'endgameDiv' );
-        var finalScore = document.getElementById( 'finalScore' );
-        var retryButton = document.getElementById( 'retryButton' );
-
-        var crosshair = document.getElementById("crosshaircircle").style;
-
+        
         // carregamento dos modelos 3d
         loader = new Loader();
         loader.loadModels();

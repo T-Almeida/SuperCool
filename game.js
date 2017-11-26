@@ -90,13 +90,10 @@ function Game() {
         // POINTERLOCK
         this.verifyPointerLock();
         
-        //CRIAR OBJETOS
-        this.player = new Player();
-        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
-        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
+        //CRIAR O JOGADOR
+        this.createPlayer();
 
         // STATS
-
         this.stats1 = new Stats();
         this.stats1.showPanel(0); // Panel 0 = fps
         this.stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
@@ -138,10 +135,7 @@ function Game() {
         requestAnimationFrame( game.animate );
         game.renderer.render( game.scene, game.camera );
 
-        game.stats1.update();
-
-        bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
-        enemyPoolInfo.innerHTML = enemyPool.totalUsed + " / " + enemyPool.totalPooled;
+        game.stats1.update();       
     }
 
 
@@ -153,6 +147,12 @@ function Game() {
         game.camera.updateProjectionMatrix();
     }
 
+    this.createPlayer = function() {
+        this.player = new Player();
+        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
+        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
+        updateWeaponHUD(this.player.weapons[0]);
+    }
 
     this.endGame = function(){
         document.exitPointerLock = document.exitPointerLock    ||
@@ -188,7 +188,8 @@ function Game() {
             game.enemies[j].destroy(j);
 
         this.controls.getObject().position.set( 0, 20, 0 );
-        this.player.velocityVertical = 0;
+        this.createPlayer();
+        
         
         this.enemySpawnTimer = 4;
         this.enemySpawnTimerCurrent = 1;

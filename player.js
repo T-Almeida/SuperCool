@@ -80,7 +80,7 @@ function Player() {
     // Muda a arma para a que esta no index passado
     // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
     this.switchWeapon = function(weaponId) {
-        if (this.currentWeapon == weaponId)
+        if (!game.controlsEnabled || this.currentWeapon == weaponId)
             return;
         for (i=0; i<this.weapons.length; i++){
             var w = this.weapons[i];
@@ -176,14 +176,9 @@ function Player() {
     document.addEventListener('mouseup', this.mouseup , false);
 
     this.updateGUI = function(cw) {
-        // update do div com as balas
-        document.getElementById("currentAmmo").innerHTML = cw.currentAmmo;
-        document.getElementById("maxAmmo").innerHTML = cw.maxAmmo;
         
-        // update da div que diz se esta a recarregar
-        var reloadBar = document.getElementById("currentreload"); 
-        var relHeight = cw.reloadCooldown / cw.reloadTime * 100;
-        reloadBar.style.height = relHeight + '%'; 
+        
+        
         // time speed update
         var timeBar = document.getElementById("timespeeddiv"); 
         var timeHeight = 100 - game.currentTimeSpeed / game.maxTimeSpeed * 100;

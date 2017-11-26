@@ -128,6 +128,7 @@ function BulletPool() {
         for (var i=0; i<number; i++){
             this.createBullet();
         }
+        this.refreshUI();
     };
 
     this.allocate = function() {
@@ -139,6 +140,7 @@ function BulletPool() {
             bullet = pool.pop();
             this.totalUsed += 1;
         }
+        this.refreshUI();
         return bullet;
     };
 
@@ -148,5 +150,12 @@ function BulletPool() {
         bullet.active = false;
         pool.push(bullet);
         this.totalUsed -= 1;
+
+        this.refreshUI();
     };
+
+    this.refreshUI = function() {
+        bulletPoolInfo.innerHTML = this.totalUsed + " / " + this.totalPooled;
+        
+    }
 }

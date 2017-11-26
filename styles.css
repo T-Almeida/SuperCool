@@ -30,6 +30,7 @@ canvas {display: block}
     box-shadow: 2px 2px 0px rgb(31, 31, 31);
     position: absolute;
     bottom: 0;
+    left: 0;
     width: 100%;
 }
 .progressBarBG {
@@ -49,52 +50,69 @@ canvas {display: block}
 /* Weapon Indicators Styles */
 #weaponui {
     display: none;
-}
-.weapon {
     position: absolute;
-    bottom: 5px;
-    height: 60px;
-    background: red;
-
-    left: calc(50% - 105px);
-    /* Firefox */
-    left: -moz-calc(50% - 105px);
-    /* WebKit */
-    left: -webkit-calc(50% - 105px);
-    /* Opera */
-    left: -o-calc(50% - 105px);
-    /* Standard */
-    left: calc(50% - 105px);
+    left: 30px;
+    bottom: 30px;
+    background: #0e0e0e;
+    width: 290px;
+    height: 65px;
+    border-radius: 5px;
 }
+
 #weaponicon {
     position: absolute;
     left: 0px;
-    width: 100px;
+    width: 180px;
     height: 60px;
 }
 #reload {
     position: absolute;
-    left: 100px;
-    width: 5px;
-    height: 100%;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 5px;
+    background: white;
+    border-radius: 10px;
+    
     
 }
+#currentreload {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 5px;
+    background: #ffb403;
+    border-radius: 10px;
+    
+}
+
 #maxAmmo {
     position: absolute;
-    left: 110px;
-    bottom: 0px;
-    font-size: 10px;
+    left: 180px;
+    top: 0px;
+    width: 40px;
+    height: 60px;
+    font-size: 20px;
+    line-height: 60px; 
+    text-align: right;
+    border-right: solid 2px #ffb403  ;
+    padding-right: 7px;
+    color: white;
+    
 }
 #currentAmmo {
     position: absolute;
-    left: 110px;
+    left: 230px;
     top: 0px;
-    font-size: 30px;
-}
-.ammo {
-    font-family: 'Arima Madurai', cursive;
-    text-shadow: 2px 2px 0px rgb(31, 31, 31);
+    font-size: 35px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 60px; 
     color: white;
+    
 }
 
 
@@ -150,14 +168,14 @@ canvas {display: block}
 #bulletPoolDiv {
     position: absolute;
     bottom: 10px;
-    left: 10px;
+    right: 50px;
     color: white;
 }
 
 #enemyPoolDiv {
     position: absolute;
     bottom: 40px;
-    left: 10px;
+    right: 50px;
     color: white;
 }
 

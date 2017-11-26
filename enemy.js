@@ -270,6 +270,8 @@ function EnemyPool() {
         for (var i=0; i<number; i++){
             this.createEnemy();
         }
+        this.refreshUI();
+        
     };
 
     this.allocate = function() {
@@ -280,6 +282,9 @@ function EnemyPool() {
             enemy = this.pool.pop();
             this.totalUsed += 1;
         }
+
+        this.refreshUI();
+        
         return enemy;
     };
 
@@ -289,5 +294,11 @@ function EnemyPool() {
         enemy.active = false;
         this.pool.push(enemy);
         this.totalUsed -= 1;
+
+        this.refreshUI();
     };
+
+    this.refreshUI = function() {
+        enemyPoolInfo.innerHTML = this.totalUsed + " / " + this.totalPooled;
+    }
 }
