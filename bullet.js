@@ -43,10 +43,12 @@ function Bullet(damage) {
     };
 
     var subtract = new THREE.Vector3();
-
+    //var dBox = new THREE.Mesh(new THREE.BoxGeometry(0.2,0.2,0.2),new THREE.MeshBasicMaterial({color:0x00ff00}));
+    //game.scene.add(dBox);
     this.update = function (delta, objectIndex) {
         //this.box.position.copy(new THREE.Vector3().addVectors(this.mesh.position,this.direction.normalize()));
-        this.raycaster.ray.origin.copy(this.mesh.position,this.direction);
+        //dBox.position.copy(subtract.subVectors(this.mesh.position,this.direction));
+        this.raycaster.ray.origin.copy(subtract.subVectors(this.mesh.position,this.direction));
         this.raycaster.ray.direction.copy(this.direction);
 
         var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
@@ -56,13 +58,15 @@ function Bullet(damage) {
         }
 
         //intercesoes com os inimigos + eficiente
-        for (var i=0;i<game.enemies.length;i++){
-            if (!game.enemies[i].isDying && game.enemies[i].mesh.position.distanceTo(this.mesh.position)<2){
-                intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
-                if (intersections.length>0){
-                    game.enemies[i].damage(this.damage,i,this.direction);
-                    this.destroy(objectIndex);
-                    return;
+        if (this.shotByPlayer){
+            for (var i=0;i<game.enemies.length;i++){
+                if (!game.enemies[i].isDying && game.enemies[i].mesh.position.distanceTo(this.mesh.position)<2){
+                    intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
+                    if (intersections.length>0){
+                        game.enemies[i].damage(this.damage,i,this.direction);
+                        this.destroy(objectIndex);
+                        return;
+                    }
                 }
             }
         }

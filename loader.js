@@ -50,6 +50,12 @@ function Loader(){
                     'floors.obj', 
                     function ( object ) {
                         object.scale.set(scale,scale,scale);
+                        object.traverse( function( node ) {
+                            if( node.material ) {
+                                node.material.side = THREE.DoubleSide;
+                            }
+                        });
+
                         loader.floors = object;
                     } 
                 );
