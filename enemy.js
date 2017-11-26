@@ -83,7 +83,6 @@ function Enemy() {
 
         if (cos > this.aimbotThreshold) {
             //autoaim
-            console.log("aimbot");
             direction = dirEP;
         } else {
             direction.y = 0;
