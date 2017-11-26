@@ -227,7 +227,7 @@ class Pistol extends Gun {
 
 class Automatic extends Gun { 
     constructor(mesh, bulletType,accuracyDistance,spread,bulletPosition){
-        var damage = 100;
+        var damage = 90;
         var bulletSpeed = 20;
         var fireRate = 4.5; // balas por segundo
         var maxAmmo = 40;

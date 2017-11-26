@@ -80,8 +80,6 @@ function Player() {
     // Muda a arma para a que esta no index passado
     // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
     this.switchWeapon = function(weaponId) {
-        this.takeDamage(20);
-
         if (this.currentWeapon == weaponId)
             return;
         for (i=0; i<this.weapons.length; i++){

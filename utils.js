@@ -10,8 +10,9 @@ var c_5 = "#000000";
 var colorDark = new THREE.Color("#111111");
 var colorBlack = new THREE.Color("#050505");
 var colorAccent = new THREE.Color("#037e93");
-var colorSecondary = new THREE.Color(hexMain);
+var colorSecondary = new THREE.Color("#ff6e00");
 var colorWhite = new THREE.Color("#ffffff");
+var colorRed = new THREE.Color("#ff0000");
 
 
 

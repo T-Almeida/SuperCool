@@ -23,7 +23,7 @@ function Game() {
     //gestao das fisicas
     this.gravity = 2;
 
-    this.enemySpawnTimer = 2;
+    this.enemySpawnTimer = 4;
     this.enemySpawnTimerCurrent = 1;
     this.score = 0;
 
@@ -130,7 +130,7 @@ function Game() {
             // Update dos inimigos
             for (var i=0; i<game.enemies.length; i++) {
                 // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
-                game.enemies[i].update(delta * game.currentTimeSpeed);
+                game.enemies[i].update(delta * game.currentTimeSpeed,i);
             }
         }
         
@@ -190,7 +190,7 @@ function Game() {
         this.controls.getObject().position.set( 0, 20, 0 );
         this.player.velocityVertical = 0;
         
-        this.enemySpawnTimer = 2;
+        this.enemySpawnTimer = 4;
         this.enemySpawnTimerCurrent = 1;
         this.score = 0;
         scoreDiv.innerHTML = "";

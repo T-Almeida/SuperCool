@@ -26,7 +26,7 @@ function Enemy() {
     this.pointBulletSpawn.position.set(28,13,-10);
     this.bulletSpeed = 15;
     this.enemyChar.meshWeapon.add(this.pointBulletSpawn);
-
+    this.isDying = false;
 
     this.mesh = this.enemyChar.root; // redundandte, mas para manter a consistencia
     this.mesh.position.copy(defaultPosition);
@@ -126,18 +126,26 @@ function Enemy() {
     this.update = function (delta,objectIndex) {
         if (!this.active) return;
 
+        //update fisica
+
+        if (this.isDying){
+            this.dyingAnimation(delta, objectIndex);
+            return;
+        }
+
+        
         if (outsideMap(this.mesh.position)) {
             this.mesh.position.y = 40;
             this.velocityVertical = 0;
         }
-
+        this.updatePhysics(delta);
+        
         //aplicar lógica dos boosts
         for (var i = 0;i<this.boosts.length; i++) {
             this.boosts[i].update(new THREE.Vector3().subVectors(this.mesh.position,new THREE.Vector3(0,this.enemyHeight,0)))//ver se é preciso passar o delta
         }
 
-        //update fisica
-        this.updatePhysics(delta);
+        
 
         if (this.fireCooldown <= 0) {
             this.controls.attack = true;
@@ -187,11 +195,10 @@ function Enemy() {
         game.scene.add(this.mesh);
     };
 
-    this.damage = function(damage, index) {
+    this.damage = function(damage, index, direction) {
         this.health -= damage;
-
         if (this.health <= 0){
-            this.destroy(index);
+            this.isDying = true;
             game.score += 1;
             scoreDiv.innerHTML = game.score;
         }
@@ -199,6 +206,20 @@ function Enemy() {
 
     this.activate = function (position) {
         this.active = true;
+        this.isDying = false;
+
+        // main model
+        this.mesh.children[0].materialWireframe.opacity = 1;
+        this.mesh.children[0].materialWireframe.transparent = true;
+        this.mesh.children[0].materialWireframe.emissive = colorSecondary;
+        this.mesh.children[0].materialWireframe.color = colorSecondary;
+
+         // gun
+         this.mesh.children[1].materialWireframe.opacity = 1;
+         this.mesh.children[1].materialWireframe.transparent = true;
+         this.mesh.children[1].materialWireframe.emissive = colorSecondary;
+         this.mesh.children[1].materialWireframe.color = colorSecondary;
+
         this.health = 100;
         game.enemies.push(this);
         this.setPosition(position);
@@ -214,6 +235,20 @@ function Enemy() {
     this.setPosition = function(position) {
         this.mesh.position.copy(position);
     };
+
+    this.dyingAnimation = function(delta, index) {
+        var ratio = 1 - 2 * delta * game.currentTimeSpeed
+        this.mesh.children[0].materialWireframe.emissive = colorRed;
+        this.mesh.children[0].materialWireframe.color = colorRed;
+        this.mesh.children[0].materialWireframe.opacity *= ratio; 
+        this.mesh.children[1].materialWireframe.emissive = colorRed;
+        this.mesh.children[1].materialWireframe.color = colorRed;
+        this.mesh.children[1].materialWireframe.opacity *= ratio;
+        
+        if (this.mesh.children[0].materialWireframe.opacity < 0.2) {
+            this.destroy(index);
+        }
+    }
 }
 
 

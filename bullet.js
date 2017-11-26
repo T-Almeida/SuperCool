@@ -53,12 +53,12 @@ function Bullet(damage) {
             return;
         }
 
-        //intercesoes com os enimigos + eficiente
+        //intercesoes com os inimigos + eficiente
         for (var i=0;i<game.enemies.length;i++){
-            if (game.enemies[i].mesh.position.distanceTo(this.mesh.position)<1){
+            if (!game.enemies[i].isDying && game.enemies[i].mesh.position.distanceTo(this.mesh.position)<1){
                 intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
                 if (intersections.length>0){
-                    game.enemies[i].damage(this.damage,i);
+                    game.enemies[i].damage(this.damage,i,this.direction);
                     this.destroy(objectIndex);
                     return;
                 }
