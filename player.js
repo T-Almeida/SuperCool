@@ -80,6 +80,8 @@ function Player() {
     // Muda a arma para a que esta no index passado
     // é necessário parar as outras armas, se estavam a recarregar e não acabaram depois tem que se recommeçar
     this.switchWeapon = function(weaponId) {
+        this.takeDamage(20);
+
         if (this.currentWeapon == weaponId)
             return;
         for (i=0; i<this.weapons.length; i++){
@@ -92,8 +94,6 @@ function Player() {
         var cw = this.weapons[weaponId];
         cw.mesh.visible = true;
         cw.changeState(cw.previousState);
-
-        console.log(game.controls.getObject().position);
     };
 
     this.mousedown = function () {
@@ -194,13 +194,8 @@ function Player() {
 
 
     this.updateBB = function () {
-
         this.playerBB.min.set(game.controls.getObject().position.x-this.bbSizeX,game.controls.getObject().position.y-this.playerheight,game.controls.getObject().position.z-1);
         this.playerBB.max.set(game.controls.getObject().position.x+this.bbSizeX,game.controls.getObject().position.y+1,game.controls.getObject().position.z+1);
-        //this.playerBB.min.applyQuaternion(game.controls.getObject().getWorldQuaternion());
-        //this.playerBB.max.applyQuaternion(game.controls.getObject().getWorldQuaternion());
-        //console.log("My pos " + strVector(game.controls.getObject().position));
-        //console.log("BB " + strVector(this.playerBB.min) + " " + strVector(this.playerBB.max))
     };
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
@@ -226,8 +221,6 @@ function Player() {
         //TODO otimizar as variaveis e tirar o bloco de debug
         var dirCopy = new THREE.Vector3().copy(this.directitionRay);
         var vectorDir = dirCopy.applyMatrix4(new THREE.Matrix4().extractRotation(game.controls.getObject().matrix)).normalize();
-        //console.log("Vector dir " + strVector(vectorDir));
-        //console.log("Vector directitionRay " + strVector(this.directitionRay));
         this.rayWallDebug.position.copy(new THREE.Vector3().addVectors(game.controls.getObject().position,vectorDir.multiplyScalar(this.wallDistance)));
         this.raycasterWalls.ray.origin.copy(game.controls.getObject().position);
         this.raycasterWalls.ray.direction.copy(vectorDir);
@@ -244,8 +237,6 @@ function Player() {
             this.boosts[i].update(new THREE.Vector3().subVectors(game.controls.getObject().position,new THREE.Vector3(0,this.playerheight,0)))//ver se é preciso passar o delta
         }
 
-
-        //console.log("Vector dir " + strVector(this.directitionRay));
 
         this.raycaster.ray.origin.copy(game.controls.getObject().position);
         //raycaster.ray.origin.y -= 10;
@@ -267,9 +258,6 @@ function Player() {
 
         game.controls.getObject().translateY(this.velocityVertical * delta);
 
-        //console.log("velocidade y " + this.velocityVertical);
-        //console.log("isJumping " + isJumping);
-        //console.log("player position x " + game.controls.getObject().position.x + " y "+  game.controls.getObject().position.y +" z "+  game.controls.getObject().position.z);
         
         // update da velocidade do tempo
         var acceleratingTimeStep = 5;
@@ -289,15 +277,13 @@ function Player() {
             var tempTimeSpeed = game.currentTimeSpeed - stoppingTimeStep * delta ;
             game.currentTimeSpeed = Math.max(tempTimeSpeed, game.minTimeSpeed);
         }
-
-        //console.log("-y speed " + this.velocityVertical);
     };
 
     this.takeDamage = function(damage) {
         this.health -= damage;
 
         if (this.health <= 0) {
-            console.log("game over");
+            game.endGame();
         }
         updateMapColor(this.health);
     }

@@ -7,7 +7,6 @@ function Boost(postion,actionFunction) {
     var self = this;
 
     this.update = function(posObject){
-        //console.log("threshold " + this.thresholdDistance);
         if (posObject.distanceTo(postion)<this.thresholdDistance){//conta o valor de Y por isso deve ser descontada a altura dos objetos
             this.actionFunction();// aplicação de forças para o jump!
         }

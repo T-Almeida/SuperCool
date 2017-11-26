@@ -19,32 +19,26 @@ function Game() {
 
     this.prevTime;
     this.stats1;
-    this.stats2;
 
     //gestao das fisicas
     this.gravity = 2;
 
-    this.enemySpawnTimer = 5;
+    this.enemySpawnTimer = 2;
     this.enemySpawnTimerCurrent = 1;
+    this.score = 0;
 
     this.init = function() {
-
         // SCENE
-
         this.scene = new THREE.Scene();
 
         // CAMERA
-
         this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
         // Mover a camara com o rato (FirstPerson)
         this.controls = new THREE.PointerLockControls( this.camera );
         this.scene.add( this.controls.getObject() ); // adiciona camera
         
 
-
         // LIGHTS
-        
-        //this.camera.add(new THREE.PointLight(0xffffff, 1, 30, 2))
         this.scene.add( new THREE.AmbientLight( 0x202020 ) );
         
         var mesh = new THREE.Mesh(
@@ -55,10 +49,7 @@ function Game() {
         mesh.position.set(0, 29, 0);
         this.scene.add(mesh);
 
-
-
         // RENDERER
-
         this.renderer = new THREE.WebGLRenderer({antialias: true});  // TODO ver o antialias 
         //this.renderer.shadowMapEnabled = true;
         //this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
@@ -68,10 +59,7 @@ function Game() {
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         container.appendChild( this.renderer.domElement );
         
-        
-
         // GAME MAP
-        
         this.scene.add(loader.map);
         this.scene.add(loader.floors);
         this.floors = loader.floors;
@@ -81,7 +69,6 @@ function Game() {
         this.walls.name="walls";
         
         //RAYCAST DEBUG
-
         var gem = new THREE.BoxGeometry(0.1,0.5,0.1);
         var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         this.rayInter = new THREE.Mesh(gem, lineMaterial);
@@ -101,16 +88,130 @@ function Game() {
         } , false);
 
         // POINTERLOCK
+        this.verifyPointerLock();
+        
+        //CRIAR OBJETOS
+        this.player = new Player();
+        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
+        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
 
+        // STATS
+
+        this.stats1 = new Stats();
+        this.stats1.showPanel(0); // Panel 0 = fps
+        this.stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
+        document.body.appendChild(this.stats1.domElement);
+    }
+
+    this.animate = function() {
+        if (game.gameOver) return;
+
+        var delta = clock.getDelta();
+        if (game.controlsEnabled) {
+            resetPlayer();
+            
+            // Update das balas
+            for (var i = 0 ; i < game.bullets.length ; i++){
+                game.bullets[i].update(delta,i);
+            }
+    
+            // Update do player
+            game.player.update(delta);
+            
+            // enemy spawns
+            game.enemySpawnTimerCurrent -= delta * game.currentTimeSpeed;
+            if (game.enemySpawnTimerCurrent<=0){
+                var enemy = enemyPool.allocate();
+                enemy.activate(getRandomEnemySpawn());
+                game.enemySpawnTimerCurrent = game.enemySpawnTimer;
+                game.enemySpawnTimer *= 1 - 0.5 * delta * game.currentTimeSpeed;
+            }
+    
+            // Update dos inimigos
+            for (var i=0; i<game.enemies.length; i++) {
+                // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
+                game.enemies[i].update(delta * game.currentTimeSpeed);
+            }
+        }
+        
+        
+        requestAnimationFrame( game.animate );
+        game.renderer.render( game.scene, game.camera );
+
+        game.stats1.update();
+
+        bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
+        enemyPoolInfo.innerHTML = enemyPool.totalUsed + " / " + enemyPool.totalPooled;
+    }
+
+
+    this.onWindowResize = function( event ) {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        game.renderer.setSize( width, height );
+        game.camera.aspect = width / height;
+        game.camera.updateProjectionMatrix();
+    }
+
+
+    this.endGame = function(){
+        document.exitPointerLock = document.exitPointerLock    ||
+        document.mozExitPointerLock;
+        // Attempt to unlock
+        document.exitPointerLock();
+
+        endgameDiv.style.display = "block";
+        finalScore.innerHTML = this.score;
+        this.gameOver = true;
+        retryButton.onclick = function(){
+            game.restartGame();
+        };
+    }
+
+    this.restartGame = function() {
+        clock.getDelta();
+
+        endgameDiv.style.display = "none";
+        this.gameOver = false;
+
+        // reset player health
+        this.player.health = 100;
+        updateMapColor(100);
+
+        // reset enemies and bulelts
+        var i = game.bullets.length;
+        while (i-- ) // esta assim porque remove se do array enquanto se esta a iterar
+            game.bullets[i].destroy(i);
+
+        var j = game.enemies.length;
+        while (j-- ) // esta assim porque remove se do array enquanto se esta a iterar
+            game.enemies[j].destroy(j);
+
+        this.controls.getObject().position.set( 0, 20, 0 );
+        this.player.velocityVertical = 0;
+        
+        this.enemySpawnTimer = 2;
+        this.enemySpawnTimerCurrent = 1;
+        this.score = 0;
+        scoreDiv.innerHTML = "";
+
+        document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock || document.body.webkitRequestPointerLock;
+        document.body.requestPointerLock();
+        this.animate();
+    }
+
+    this.verifyPointerLock = function(){
         var havePointerLock = 'pointerLockElement' in document 
-            || 'mozPointerLockElement' in document 
-            || 'webkitPointerLockElement' in document;
+        || 'mozPointerLockElement' in document 
+        || 'webkitPointerLockElement' in document;
 
         //verificar se o browser suporta pointerLock
         if ( havePointerLock ) {
             var element = document.body;
 
             function pointerlockchange( event ) {
+                if (game.gameOver) return;
+
                 if ( document.pointerLockElement === element 
                         || document.mozPointerLockElement === element 
                         || document.webkitPointerLockElement === element ) {
@@ -141,74 +242,6 @@ function Game() {
             container.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
         }
 
-        //CRIAR OBJETOS
-        
-        this.player = new Player();
-        this.player.addWeapon(new Pistol(loader.gun1, Bullet, 20, 1,  new THREE.Vector3(0, 0.15, -1)));
-        this.player.addWeapon(new Automatic(loader.gun2, Bullet, 30, 10, new THREE.Vector3(0, 0.1, -0.4)));
-
-        
-
-        // STATS
-
-        this.stats1 = new Stats();
-        this.stats1.showPanel(0); // Panel 0 = fps
-        this.stats1.domElement.style.cssText = 'position:absolute;top:0px;left:0px;';
-        document.body.appendChild(this.stats1.domElement);
-
-        this.stats2 = new Stats();
-        this.stats2.showPanel(1); // Panel 1 = ms
-        this.stats2.domElement.style.cssText = 'position:absolute;top:0px;left:80px;';
-        document.body.appendChild(this.stats2.domElement);
-    }
-
-    this.animate = function() {
-        var delta = clock.getDelta();
-
-        resetPlayer();
-
-        if ( game.controlsEnabled ) {
-            // Update das balas
-            for (var i = 0 ; i < game.bullets.length ; i++){
-                game.bullets[i].update(delta,i);
-            }
-
-            // Update do player
-            game.player.update(delta);
-            
-            // enemy spawns
-            game.enemySpawnTimerCurrent -= delta * game.currentTimeSpeed;
-            if (game.enemySpawnTimerCurrent<=0){
-                var enemy = enemyPool.allocate();
-                enemy.activate(getRandomEnemySpawn());
-                game.enemySpawnTimerCurrent = game.enemySpawnTimer;
-            }
-
-            // Update dos inimigos
-            for (var i=0; i<game.enemies.length; i++) {
-                // game.enemies[i].setPlaybackRate( game.currentTimeSpeed );
-                game.enemies[i].update(delta * game.currentTimeSpeed);
-            }
-
-        }
-        
-        requestAnimationFrame( game.animate );
-        game.renderer.render( game.scene, game.camera );
-
-        game.stats1.update();
-        game.stats2.update();
-
-        bulletPoolInfo.innerHTML = bPool.totalUsed + " / " + bPool.totalPooled;
-        enemyPoolInfo.innerHTML = enemyPool.totalUsed + " / " + enemyPool.totalPooled;
-    }
-
-
-    this.onWindowResize = function( event ) {
-        var width = window.innerWidth;
-        var height = window.innerHeight;
-        game.renderer.setSize( width, height );
-        game.camera.aspect = width / height;
-        game.camera.updateProjectionMatrix();
     }
 }
 

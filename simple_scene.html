@@ -27,6 +27,9 @@
     <div id="bulletPoolDiv" class="noselect"></div>
     <div id="enemyPoolDiv" class="noselect"></div>
 
+    <div id="scoreDiv" class="noselect"></div>
+    
+
     <div id="weaponui" class="weapon" >
         <img id="weaponicon" class="noselect transpGUI" src="icons/pistol.png"/>
         <div id="reload" class="noselect progressBarBG">
@@ -48,8 +51,18 @@
         </div>
     </div>
 
+    <div id="endgameDiv">
+       <div id="finalScoreDiv">
+        <span style="font-size:20px">YOUR FINAL SCORE</span>
+        <br>
+        <span id="finalScore" style="font-size:80px">80</span>
+        <br>
+        <button id="retryButton">PLAY AGAIN</button>        
+    </div>
+    </div>
 
-    <!-- SCRIPTS -->
+
+    <!-- THREEJS SCRIPTS -->
     <script src="threejs/three.js"></script>
     <script src="threejs/stats.min.js"></script>
     <script src="threejs/PointerLockControls.js"></script>
@@ -62,6 +75,7 @@
     <script src="threejs/TGALoader.js"></script>
     <script src="threejs/MD2Loader.js"></script>
 
+    <!-- CREATED SCRIPTS -->
     <script src="utils.js"></script>
     <script src="bullet.js"></script>
     <script src="weapon.js"></script>
@@ -70,8 +84,6 @@
     <script src="boost.js"></script>
     <script src="loader.js"></script>
     <script src="game.js"></script>
-    
-
 
     <script>
         var loader;
@@ -86,6 +98,11 @@
         var instructions = document.getElementById( 'instructions' );
         var bulletPoolInfo = document.getElementById( 'bulletPoolDiv' );
         var enemyPoolInfo = document.getElementById( 'enemyPoolDiv' );
+
+        var endgameDiv = document.getElementById( 'endgameDiv' );
+        var finalScore = document.getElementById( 'finalScore' );
+        var retryButton = document.getElementById( 'retryButton' );
+
         var crosshair = document.getElementById("crosshaircircle").style;
 
         // carregamento dos modelos 3d

@@ -17,7 +17,12 @@
     Foi feita uma ilusao de sombra usando dois materias diferentes
 
 - O mapa criado tinha 3 mil faces e depois de uma otimização passou para 1,5 mil
+    Posteriormente foi dividido em 3 para melhorar o desempenho
 
 - MD2Character não dava para copiar para varios inimigos. As animações não eram grande coisa
     Passou-se a usar MD2CharacterComplex
 
+- Bullet & Enemy Pool
+    O porque de se usar, falar do garbage collector e criação de modelos
+
+- firefox vs chrome

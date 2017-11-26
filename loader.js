@@ -146,7 +146,6 @@ function Loader(){
             // baseCharacter.setWeapon( 0 );
             //baseCharacter.setSkin( 0 );
             loader.enemy = baseCharacter;
-            console.log(loader.enemy);
         };
         baseCharacter.loadParts( configOgro );
 

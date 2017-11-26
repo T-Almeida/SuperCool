@@ -20,9 +20,9 @@ var min_box = new THREE.Vector3(-30,-5,-30);
 var max_box = new THREE.Vector3(30,40,30);
 
 function resetPlayer() {
-    if( game.controls.getObject().position.y < -10 ) {
+    if( game.controls.getObject().position.y < -1 ) {
 
-        game.controls.getObject().position.set( 1, 20, 1 );
+        game.controls.getObject().position.set( 0, 20, 0 );
         game.player.velocityVertical = 0;
 
         game.player.jumpDirection = [false,false,false,false];

@@ -78,7 +78,6 @@ function Enemy() {
         direction.y=0;
 
         var bullet = bPool.allocate();
-        console.log("shoot");
         bullet.activate(this.enemyDamage, pointBulletVec, direction, this.bulletSpeed, false);
     };
 
@@ -137,7 +136,6 @@ function Enemy() {
             this.boosts[i].update(new THREE.Vector3().subVectors(this.mesh.position,new THREE.Vector3(0,this.enemyHeight,0)))//ver se é preciso passar o delta
         }
 
-       // console.log(this.mesh.position)
         //update fisica
         this.updatePhysics(delta);
 
@@ -175,7 +173,6 @@ function Enemy() {
                 });//quando terminar de olhar para o player resta timeLook para 5
         }
 
-        //console.log("move " , this.timeLook)
 
         //this.mesh.rotateY(0.3*delta * superHotConstant);
         //this.mesh.translateZ(-this.speed*delta * superHotConstant);
@@ -195,11 +192,14 @@ function Enemy() {
 
         if (this.health <= 0){
             this.destroy(index);
+            game.score += 1;
+            scoreDiv.innerHTML = game.score;
         }
     };
 
     this.activate = function (position) {
         this.active = true;
+        this.health = 100;
         game.enemies.push(this);
         this.setPosition(position);
 

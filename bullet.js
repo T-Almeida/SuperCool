@@ -44,13 +44,11 @@ function Bullet(damage) {
 
     this.update = function (delta, objectIndex) {
         //this.box.position.copy(new THREE.Vector3().addVectors(this.mesh.position,this.direction.normalize()));
-        //console.log(this.mesh.position);
         this.raycaster.ray.origin.copy(this.mesh.position);
         this.raycaster.ray.direction.copy(this.direction);
 
         var intersections = this.raycaster.intersectObjects(this.objectStatic,true);
         if (intersections.length>0){
-            console.log("Colisão bala");
             this.destroy(objectIndex);
             return;
         }
@@ -61,7 +59,6 @@ function Bullet(damage) {
                 intersections = this.raycaster.intersectObject(game.enemies[i].mesh,true);
                 if (intersections.length>0){
                     game.enemies[i].damage(this.damage,i);
-                    console.log("Enemy hit");
                     this.destroy(objectIndex);
                     return;
                 }
@@ -70,7 +67,6 @@ function Bullet(damage) {
         
         if (!this.shotByPlayer && game.player.playerBB.containsPoint(this.mesh.position)){
             game.player.takeDamage(this.damage);
-            console.log("Player hit");
             this.destroy(objectIndex);
             return;
         }

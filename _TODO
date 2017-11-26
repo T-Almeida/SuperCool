@@ -1,31 +1,10 @@
-- Boosts funcionais (implementado o boost central)
-    Pode trazer alguns porblemas por causa do movimento atual da personagem
-    
+   
 - Melhorar o movimento da personagem.
     Provavelmente algo com um contador onde é simulada aceleração
 
-- BulletPool
-    Reutilizar as balas em vez de estar sempre a criar e a destruir
-
-- EnemyPool
-    Same
 
 - Octree Raycasting
     Ver se melhora o desempenho do Raycasting
-
-- Dividir o mapa em 3
-    Uma parte de chao para ser usado com o raycast para baixo
-    Outra parte de paredes para usar com raycast lateral
-    Outra parte só estética (tecto) para não empatar
-
-- Adicionar um trail à bala
-    Provavelmente ver as particulas se fica mais rapido / dá para fazer 
-    Se não, acrescentar um mesh atras da bala
-
-- Escolher e implementar o modo de jogo
-    Survival, onde inimigos aparecem sempre, cada vez mais, e tens um highscore de quantos mataste
-    TimeAttack, onde tens X segundos para matar os inimigos, e é por rondas (meh)
-    ...
 
 - Movimentos e ações dos inimigos
     Previsão da nossa posição para disparar contra nos
@@ -40,5 +19,3 @@
 
 - THREE.BufferGeometry para mapa   
     supostamente mais rapido para objetos que nao se mexem
-
-- Recoil da arma

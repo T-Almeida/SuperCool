@@ -85,7 +85,6 @@ class Gun {
 
     changeState(state){
         this.previousState = state;
-        //console.log(this.constructor.name,"Changing state to",state);
         switch(state){
             case 0:
             case 2:
