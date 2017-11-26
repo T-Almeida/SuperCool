@@ -36,6 +36,8 @@ function Player() {
     var playerBoost = function() {
         game.player.velocityVertical = 16;
         game.player.isJumping = true;
+        var audio = new Audio('audio/boost.wav');
+        audio.play();
     }
     var boostPos = 17;
     var posBoostCenter = new THREE.Vector3(0,0,0);

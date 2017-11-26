@@ -1,3 +1,6 @@
+var gun2Audio = new Audio('audio/gun2.mp3');
+
+
 class Gun {
     constructor(
         mesh, 
@@ -62,7 +65,7 @@ class Gun {
     shoot() {
         if (this.currentAmmo <= 0){
             this.changeState(4);
-            return;
+            return false;
         }
 
         this.currentAmmo -= 1;
@@ -85,6 +88,7 @@ class Gun {
         this.changeState(1); // SHOT  
 
         updateWeaponHUD(this);
+        return true;
     }
 
     changeState(state){
@@ -244,9 +248,13 @@ class Pistol extends Gun {
     // a pistola so dispara 1 vez por clique do rato
     shoot(){
         if (this.canShot){
-            super.shoot();
+            if (super.shoot()) {
+                var gun1Audio = new Audio('audio/gun2.mp3');
+                gun1Audio.play();
+            }
             this.canShot = false;
         }
+
     }
 }
 
@@ -271,5 +279,12 @@ class Automatic extends Gun {
             accuracyDistance, 
             spread
         );
+    }
+
+    shoot(){
+        if (super.shoot()){
+            var gunAudio = new Audio('audio/gun1.mp3');
+            gunAudio.play();
+        }
     }
 }
