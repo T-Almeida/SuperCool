@@ -26,8 +26,8 @@ function Player() {
     this.wallDistance = 0.8;
     this.raycasterWalls = new THREE.Raycaster(new THREE.Vector3(),new THREE.Vector3(),0,this.wallDistance+0.1);
     //RAYCAST DEBUG
-    this.rayWallDebug = new THREE.Mesh(new THREE.BoxGeometry(0.005,0.005,0.005), new THREE.MeshBasicMaterial({color:0xFF0000}) );
-    game.scene.add(this.rayWallDebug);
+    //this.rayWallDebug = new THREE.Mesh(new THREE.BoxGeometry(0.005,0.005,0.005), new THREE.MeshBasicMaterial({color:0xFF0000}) );
+    //game.scene.add(this.rayWallDebug);
 
     this.directitionRay = new THREE.Vector3(0,0,0);
 
@@ -38,7 +38,7 @@ function Player() {
         game.player.isJumping = true;
         var audio = new Audio('audio/boost.wav');
         audio.play();
-    }
+    };
     var boostPos = 17;
     var posBoostCenter = new THREE.Vector3(0,0,0);
     this.boosts.push(new Boost(posBoostCenter,playerBoost));
@@ -216,7 +216,7 @@ function Player() {
         //TODO otimizar as variaveis e tirar o bloco de debug
         var dirCopy = new THREE.Vector3().copy(this.directitionRay);
         var vectorDir = dirCopy.applyMatrix4(new THREE.Matrix4().extractRotation(game.controls.getObject().matrix)).normalize();
-        this.rayWallDebug.position.copy(new THREE.Vector3().addVectors(game.controls.getObject().position,vectorDir.multiplyScalar(this.wallDistance)));
+        //this.rayWallDebug.position.copy(new THREE.Vector3().addVectors(game.controls.getObject().position,vectorDir.multiplyScalar(this.wallDistance)));
         this.raycasterWalls.ray.origin.copy(game.controls.getObject().position);
         this.raycasterWalls.ray.direction.copy(vectorDir);
 
