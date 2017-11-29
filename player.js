@@ -58,7 +58,7 @@ function Player() {
     posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
     this.boosts.push(new Boost(posBoostCenter,playerBoost));
 
-
+    var takeShotAudio = new Audio('audio/Homer_DOH.mp3');
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
@@ -313,8 +313,8 @@ function Player() {
             this.timeCurrentGlitch = this.timeGlitchDead;
             return ;
         }
-        var gun1Audio = new Audio('audio/Homer_DOH.mp3');
-        gun1Audio.play();
+
+        takeShotAudio.play();
         this.tookDamage = true;
         this.timeCurrentGlitch = this.timeGlitchDamage;
         updateMapColor(this.health);
