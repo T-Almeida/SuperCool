@@ -11,7 +11,7 @@ function Game() {
     this.bullets = [];
     this.floors;
     this.walls;
-    this.rayInter;
+    //this.rayInter;
 
     // gestao do tempo
     this.minTimeSpeed = 0.01;
@@ -82,11 +82,11 @@ function Game() {
         this.walls.name="walls";
         
         //RAYCAST DEBUG
-        var gem = new THREE.BoxGeometry(0.1,0.5,0.1);
-        var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        this.rayInter = new THREE.Mesh(gem, lineMaterial);
-        this.rayInter.name = "DEBUG_RAY";
-        this.scene.add(this.rayInter);
+        //var gem = new THREE.BoxGeometry(0.1,0.5,0.1);
+        //var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        //this.rayInter = new THREE.Mesh(gem, lineMaterial);
+        //this.rayInter.name = "DEBUG_RAY";
+        //this.scene.add(this.rayInter);
 
         // EVENTS
 

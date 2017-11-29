@@ -40,10 +40,10 @@ function Player() {
 
     this.boosts = []; //lista de boost que se aplicam ao player
     //BOOSTS
+    var audio = new Audio('audio/boost.wav');
     var playerBoost = function() {
         game.player.velocityVertical = 16;
         game.player.isJumping = true;
-        var audio = new Audio('audio/boost.wav');
         audio.play();
     };
     var boostPos = 17;
@@ -267,10 +267,10 @@ function Player() {
 
         var intersection = this.raycaster.intersectObjects(game.floors.children, true);
 
-        game.rayInter.visible = false; //OBJETO DO CENARIO DEBUG
+        //game.rayInter.visible = false; //OBJETO DO CENARIO DEBUG
         if (intersection.length>=1){
-            game.rayInter.visible = true;
-            game.rayInter.position.copy(intersection[0].point);
+            //game.rayInter.visible = true;
+            //game.rayInter.position.copy(intersection[0].point);
             if (game.controls.getObject().position.y-this.playerheight <= intersection[0].point.y) { //colisao com o chao
                 if (this.velocityVertical<0) {
                     this.velocityVertical = 0;

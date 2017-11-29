@@ -21,8 +21,8 @@ function Enemy() {
     this.enemyChar.setWeapon( 0 );
     //enemyChar.setSkin( i );
     //adicionar ponto de disparo
-    //var pointBulletSpawn = new THREE.Object3D();
-    this.pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5), new THREE.MeshBasicMaterial({color:0xff0000}));
+    this.pointBulletSpawn = new THREE.Object3D();
+    //this.pointBulletSpawn = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5), new THREE.MeshBasicMaterial({color:0xff0000}));
     this.pointBulletSpawn.position.set(28,13,-10);
     this.bulletSpeed = 15;
     this.enemyChar.meshWeapon.add(this.pointBulletSpawn);
