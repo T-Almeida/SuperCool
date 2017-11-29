@@ -16,6 +16,13 @@ function Player() {
     this.moveRight = false;
     this.jumpPress = false;
     this.mousePress = false;
+    this.isDead = false;
+    this.tookDamage = false;
+
+    this.timeGlitchDamage= 0.5;
+    this.timeGlitchDead = 3;
+    this.timeCurrentGlitch = this.timeGlitch;
+
 
     this.weaponAtPreviousUpdate = -1;
 
@@ -50,6 +57,8 @@ function Player() {
     this.boosts.push(new Boost(posBoostCenter,playerBoost));
     posBoostCenter = new THREE.Vector3(-boostPos,0,-boostPos);
     this.boosts.push(new Boost(posBoostCenter,playerBoost));
+
+
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
@@ -195,6 +204,26 @@ function Player() {
 
     //FUNCAO CHAMADA EM TODOS OS FRAMES
     this.update = function (delta,objectIndex) {
+
+        if (this.isDead){
+            if (this.timeCurrentGlitch<0){
+                this.timeCurrentGlitch = this.timeGlitchDead;
+                game.stopGlitch();
+                game.endGame();
+            }
+            this.timeCurrentGlitch -= delta;
+            return;
+        }
+
+        if (this.tookDamage){
+            if (this.timeCurrentGlitch<0){
+                this.timeCurrentGlitch = this.timeGlitchDamage;
+                game.stopGlitch();
+                this.tookDamage=false;
+            }
+            this.timeCurrentGlitch -= delta;
+        }
+
         var cw = this.weapons[this.currentWeapon];
         cw.update(delta,0);
         // a arma foi trocada
@@ -257,13 +286,13 @@ function Player() {
         // update da velocidade do tempo
         var acceleratingTimeStep = 5;
         var stoppingTimeStep = 2;
-        if ( cw.isShooting || cw.isReloading) { 
+        if ( cw.isShooting || cw.isReloading) {
             /* TODO refazer isto, o tempo so devia andar se a arma disparar
                 Esta logica provavelmente deve passar para a arma (o oponent usa a mesma arma por isso nao passei agora)
                 se a arma nao tiver balas tambem nao devia parar
             */
             game.currentTimeSpeed = game.maxTimeSpeed;
-        } 
+        }
         else if (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight || this.isJumping ) {
             var tempTimeSpeed = game.currentTimeSpeed + acceleratingTimeStep * delta ;
             game.currentTimeSpeed = Math.min(tempTimeSpeed, game.maxTimeSpeed);
@@ -276,10 +305,18 @@ function Player() {
 
     this.takeDamage = function(damage) {
         this.health -= damage;
+        game.startGlitch();
 
         if (this.health <= 0) {
-            game.endGame();
+            game.currentTimeSpeed = game.minTimeSpeed;
+            this.isDead = true;
+            this.timeCurrentGlitch = this.timeGlitchDead;
+            return ;
         }
+        var gun1Audio = new Audio('audio/Homer_DOH.mp3');
+        gun1Audio.play();
+        this.tookDamage = true;
+        this.timeCurrentGlitch = this.timeGlitchDamage;
         updateMapColor(this.health);
-    }
+    };
 }

@@ -1,6 +1,7 @@
 function Game() {
     this.scene;
     this.renderer;
+    this.composer;
     this.camera;
     this.controls;
     this.controlsEnabled = false;
@@ -45,7 +46,7 @@ function Game() {
             new THREE.SphereGeometry(0.2,6,6),
             new THREE.MeshPhongMaterial({emissive:0xffffff}));
         var plight = new THREE.PointLight(0x555555, 1 , 30, 1);
-        mesh.add(plight)
+        mesh.add(plight);
         mesh.position.set(0, 29, 0);
         this.scene.add(mesh);
 
@@ -58,7 +59,19 @@ function Game() {
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         container.appendChild( this.renderer.domElement );
-        
+
+        this.composer = new THREE.EffectComposer( game.renderer );
+        this.renderPass = new THREE.RenderPass( game.scene, game.camera );
+        game.renderPass.renderToScreen = true;
+        this.composer.addPass( game.renderPass );
+
+        //glitch
+        game.glitchPass = new THREE.GlitchPass();
+        game.glitchPass.renderToScreen = false;
+        game.glitchPass.goWild = true;
+        game.composer.addPass( game.glitchPass );
+
+
         // GAME MAP
         this.scene.add(loader.map);
         this.scene.add(loader.floors);
@@ -100,8 +113,20 @@ function Game() {
         document.body.appendChild(this.stats1.domElement);
     }
 
+    this.startGlitch = function () {
+        //console.log("glitchPass " + game.glitchPass);
+        game.renderPass.renderToScreen = false;
+        game.glitchPass.renderToScreen = true;
+    };
+
+    this.stopGlitch = function () {
+        game.renderPass.renderToScreen = true;
+        game.glitchPass.renderToScreen = false;
+    };
 
     this.animate = function() {
+
+        requestAnimationFrame( game.animate );
         if (game.gameOver) return;
 
         var delta = clock.getDelta();
@@ -136,8 +161,8 @@ function Game() {
         }
         
         
-        requestAnimationFrame( game.animate );
-        game.renderer.render( game.scene, game.camera );
+
+        game.composer.render();
 
         game.stats1.update();       
     }
@@ -180,6 +205,8 @@ function Game() {
 
         // reset player health
         this.player.health = 100;
+        this.player.isDead = false;
+        this.player.tookDamage=false;
         updateMapColor(100);
 
         // reset enemies and bulelts
