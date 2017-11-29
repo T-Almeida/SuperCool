@@ -21,6 +21,7 @@ var bulletPoolInfo = document.getElementById( 'bulletPoolDiv' );
 var enemyPoolInfo = document.getElementById( 'enemyPoolDiv' );
 var endgameDiv = document.getElementById( 'endgameDiv' );
 var finalScore = document.getElementById( 'finalScore' );
+var scoreDiv = document.getElementById( 'scoreDiv' );
 var retryButton = document.getElementById( 'retryButton' );
 var crosshair = document.getElementById("crosshaircircle").style;
 var currentAmmoDiv = document.getElementById("currentAmmo");
