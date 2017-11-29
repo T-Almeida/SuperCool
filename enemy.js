@@ -15,9 +15,7 @@ function Enemy() {
     this.enemyChar.scale = 2/50;
     this.enemyChar.controls = this.controls;
     this.enemyChar.shareParts( loader.enemy );
-    // cast and receive shadows
     this.enemyChar.setWireframe (true) ;
-    this.enemyChar.enableShadows( true );
     this.enemyChar.setWeapon( 0 );
     //enemyChar.setSkin( i );
     //adicionar ponto de disparo
@@ -192,7 +190,7 @@ function Enemy() {
             this.controls.moveForward = false;
                 this.lookAtPlayer(function(){
                     self.timeLook = 1+Math.random();
-                });//quando terminar de olhar para o player resta timeLook para 5
+                });//quando terminar de olhar para o player resta timeLook para 1+random
         }
 
 
