@@ -59,6 +59,7 @@ function Player() {
     this.boosts.push(new Boost(posBoostCenter,playerBoost));
 
     var takeShotAudio = new Audio('audio/Homer_DOH.mp3');
+    var gameoverAudio = new Audio('audio/gameover.wav');
 
     var self = this; // utilizar a referencia self para funcinar em multplas callbacks (problema dos eventos)
 
@@ -310,6 +311,7 @@ function Player() {
         if (this.health <= 0) {
             game.currentTimeSpeed = game.minTimeSpeed;
             this.isDead = true;
+            gameoverAudio.play();
             this.timeCurrentGlitch = this.timeGlitchDead;
             return ;
         }
