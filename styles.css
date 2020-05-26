@@ -163,6 +163,7 @@ canvas {display: block}
     color: #ffffff;
     text-align: center;
     cursor: pointer;
+    margin-top: -25px;
 }
 
 #bulletPoolDiv {
