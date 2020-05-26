@@ -21,14 +21,14 @@ function Loader(){
     this.loadScene = function() {
         var scale = 2;
         var mtlLoader = new THREE.MTLLoader(manager);
-        mtlLoader.setPath('models/cena/');
+        mtlLoader.setPath('https://t-almeida.github.io/SuperCool/models/cena/');
         mtlLoader.load( 
             'cena.mtl', 
             function( materials ) {
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/cena/');
+                objLoader.setPath('https://t-almeida.github.io/SuperCool/models/cena/');
                 objLoader.load( 
                     'cena.obj', 
                     function ( object ) {
@@ -45,7 +45,7 @@ function Loader(){
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/cena/');
+                objLoader.setPath('https://t-almeida.github.io/SuperCool/models/cena/');
                 objLoader.load( 
                     'floors.obj', 
                     function ( object ) {
@@ -67,7 +67,7 @@ function Loader(){
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/cena/');
+                objLoader.setPath('https://t-almeida.github.io/SuperCool/models/cena/');
                 objLoader.load( 
                     'walls.obj', 
                     function ( object ) {
@@ -81,14 +81,14 @@ function Loader(){
 
     this.loadGun1 = function() {
         var mtlLoader = new THREE.MTLLoader(manager);
-        mtlLoader.setPath('models/pistol/');
+        mtlLoader.setPath('https://t-almeida.github.io/SuperCool/models/pistol/');
         mtlLoader.load( 
             'pistol.mtl', 
             function( materials ) {
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/pistol/');
+                objLoader.setPath('https://t-almeida.github.io/SuperCool/models/pistol/');
                 objLoader.load( 
                     'pistol.obj', 
                     function ( object ) {
@@ -103,14 +103,14 @@ function Loader(){
 
     this.loadGun2 = function() {
         var mtlLoader = new THREE.MTLLoader(manager);
-        mtlLoader.setPath('models/rifle/');
+        mtlLoader.setPath('https://t-almeida.github.io/SuperCool/models/rifle/');
         mtlLoader.load( 
             'rifle.mtl', 
             function( materials ) {
                 materials.preload();
                 var objLoader = new THREE.OBJLoader(manager);
                 objLoader.setMaterials( materials );
-                objLoader.setPath('models/rifle/');
+                objLoader.setPath('https://t-almeida.github.io/SuperCool/models/rifle/');
                 objLoader.load( 
                     'rifle.obj', 
                     function ( object ) {
@@ -127,7 +127,7 @@ function Loader(){
     this.loadEnemy = function() {
         
         var configOgro = {
-            baseUrl: "models/ogro/",
+            baseUrl: "https://t-almeida.github.io/SuperCool/models/ogro/",
             body: "ogro.md2",
             skins: [ "grok.jpg", "ogrobase.png", "arboshak.png", "ctf_r.png", "ctf_b.png", "darkam.png", "freedom.png",
                      "gib.png", "gordogh.png", "igdosh.png", "khorne.png", "nabogro.png",
